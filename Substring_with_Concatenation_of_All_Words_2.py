@@ -3,39 +3,33 @@ class Solution:
 	# @param {string[]} words
 	# @return {integer[]}
 	def findSubstring(self, s, words):
-		words = sorted(words)
+		#words = sorted(words)
+		words_dict = dict(((x, words.count(x)) for x in set(words)))
 		n = len(words)
 		m = len(words[0])
 		string_len = m*n
-		s_lst = []
-		for i in range(len(s)):
-			if (string_len+i) <= len(s):
-				s_lst.append(s[i:(string_len+i)])
-			else:
-				break
-		#print s_lst	
-
 		match_index = []
-
-		for idx in range(len(s_lst)):
-			item = s_lst[idx]
-			#print item
-			item_m_lst = set([item[i:i+m] for i in range(0,len(item),m)])
-			#print item_m_lst
-			if len(item_m_lst) != n:
-				continue
-			else:
-				#print words
-				#print idx
-				#print list(sorted(item_m_lst))
-				if list(sorted(item_m_lst)) == words:
-					match_index.append(idx)
+		
+		i = 0
+		while string_len+i <= len(s):
+			dict2 ={}
+			item = s[i:(string_len+i)]
+			
+			count = 0
+			for j in range(0,len(item),m):
+				ele = item[j:(j+m)]
+				if ele not in words_dict:
+					break
 				else:
-					continue
-				
+					dict2[ele]=dict2.get(ele,0)+1  
+					if dict2[ele] > words_dict[ele]:
+						break
+				count +=1
+			if count == n:
+				match_index.append(i)
+			i+=1		
+			
 		return match_index
-
-
 
 
 if __name__ == '__main__':
