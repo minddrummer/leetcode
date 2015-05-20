@@ -20,27 +20,29 @@ class Solution:
             return head
 
         dummy = ListNode(0)
+        #dummy here is the target variable for returning, and exactly that is dummy.next
         dummy.next = head
-
+        #pre and dummy point to the same object, but pre will update to change the order of the node
         pre = dummy
         cur = head
         for i in range(m-1):
             pre = cur
             cur = cur.next
-        
+        #after the above, pre to the node before the 'cur' node , and the cur node is at the 'm' position
         if cur is not None:
             p1 = cur.next
         if p1 is not None:
             p2 = p1.next
-
+        #run the loop to realize the switch between nodes from m to n
         for i in range(n-m):
             p1.next = cur
             cur = p1
             p1 = p2
             if p2 is not None:
                 p2 = p2.next
-
+        #last, first make the node after the pre's next node point to P1
         pre.next.next = p1
+        #second, make the pre node's next node is cur. These connect from the beginning to cur, and the ending to P1
         pre.next = cur
             
         return dummy.next
