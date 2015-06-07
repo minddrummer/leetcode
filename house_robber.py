@@ -10,7 +10,11 @@ class Solution:
     # @param {integer[]} nums
     # @return {integer}
     def rob(self, nums):
-
+    	'''
+    	this is a dynamic programming question; 
+    	dp: it is you segment the big problem into small steps; and solve the small question before you
+    	move into the next steps
+    	'''
 
 
 
