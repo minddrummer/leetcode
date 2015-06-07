@@ -15,10 +15,28 @@ class Solution:
     	dp: it is you segment the big problem into small steps; and solve the small question before you
     	move into the next steps
     	'''
+    	# if len(nums) == 0:
+    	# 	return 0
+    	# dp = {}
+    	# dp[0] = 0
+    	# dp[1] = nums[0]
+    	# for i in range(1, len(nums)):
+    	# 	dp[i+1] = max(nums[i]+dp[i+1-2], dp[i+1-1])
 
+    	# max_value = 0
+    	# for key in dp:
+    	# 	max_value = max(max_value, dp[key])
+    	# return max_value
+    	if len(nums) == 0: return 0
+    	pre = 0
+    	max_value = nums[0]
+    	for i in range(1, len(nums)):
+    		tmp = max(nums[i]+ pre, max_value)
+    		pre = max_value
+    		max_value = tmp
 
-
+    	return max_value
 
 if __name__ == '__main__':
 	test = Solution()
-	test.rob([1,2,1,7,2,4,10])
+	print test.rob([1,2,1,7,2,4,10])
