@@ -18,16 +18,15 @@ class Solution:
     def convertToTitle(self, n):
     	num_letter_dict = dict(zip(range(1,27), [chr(one) for one in range(97,123)]))
     	res_lst = []
-
-    	while n/26 > 1:
-    		print n%26
-    		res_lst.append(n%26)
-    		n = n - n%26
-    	print n
-    	if n != 26:		
-    		res_lst.append(n%26)
-    	else:
-    		res_lst.append(26)
+    	while n > 26:
+    		if n%26 == 0:
+    			res_lst.append(26)
+    			n = n - 26
+    		else:
+    			res_lst.append(n%26)
+    			n = n - n%26
+    		n = n/26
+    	res_lst.append(n)
 
     	res_lst = res_lst[::-1]
     	print res_lst
