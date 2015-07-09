@@ -15,25 +15,19 @@ class Solution:
     	'''in place algorithm, cannot make a new array'''
     	if len(nums) == 0 or len(nums) == 1:
     		return len(nums)
-    	# pres = nums[0]
-    	# i = 1
-    	# while i <= len(nums)-1:
-    	# 	#print 'the pres now is :',  pres
-    	# 	#print 'the index i is:', i
-    	# 	if nums[i] == pres:
-    	# 		#print 'the pop out number is : ', nums.pop(i) 
-    	# 		nums.pop(i)
-    	# 	else:
-    	# 		pres = nums[i]
-    	# 		i += 1
-    	# return len(nums)
     	pres = nums[0]
-    	count = 1
-    	for i in nums[1:]:
-    		if i > pres:
-    			count += 1
-    			pres = i
-    	return count
+    	i = 1
+    	while i <= len(nums)-1:
+    		#print 'the pres now is :',  pres
+    		#print 'the index i is:', i
+    		if nums[i] == pres:
+    			#print 'the pop out number is : ', nums.pop(i) 
+    			nums.pop(i)
+    		else:
+    			pres = nums[i]
+    			i += 1
+    	return len(nums)
+    	
 
 
 if __name__ == '__main__':
