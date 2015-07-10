@@ -55,6 +55,8 @@ class Solution:
     def hasPathSum(self, root, sum):
     	sum_lst = self.all_sum(root)
     	res = False
+    	if sum_lst is None:
+    		return res
     	for item in sum_lst:
     		if item == sum:
     			return True
