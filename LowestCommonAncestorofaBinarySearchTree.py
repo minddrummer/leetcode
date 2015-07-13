@@ -26,17 +26,17 @@ class Solution:
 	# @param {TreeNode} p
 	# @param {TreeNode} q
 	# @return {TreeNode}
-	def match_node(self, node, root):
-		if root is None:
-			return None
-		elif root is node:
-			return [node]
-		elif self.match_node(node, root.left) is not None and self.match_node(node, root.left)[-1] is node:
-			return [root]+self.match_node(node, root.left)
-		elif self.match_node(node, root.right) is not None and self.match_node(node, root.right)[-1] is node:
-			return [root]+self.match_node(node, root.right)
-		else:
-			return None
+	# def match_node(self, node, root):
+	# 	if root is None:
+	# 		return None
+	# 	elif root is node:
+	# 		return [node]
+	# 	elif self.match_node(node, root.left) is not None and self.match_node(node, root.left)[-1] is node:
+	# 		return [root]+self.match_node(node, root.left)
+	# 	elif self.match_node(node, root.right) is not None and self.match_node(node, root.right)[-1] is node:
+	# 		return [root]+self.match_node(node, root.right)
+	# 	else:
+	# 		return None
 			
 		# if root is None:
 		# 	return None
@@ -61,13 +61,29 @@ class Solution:
 		# 		if self.match_node(node, root.right)[-1] is node:
 		# 			return [root]+self.match_node(node, root.right)
 
+	# def lowestCommonAncestor(self, root, p, q):
+	# 	p_lst = self.match_node(p,root)[::-1]
+	# 	q_lst = self.match_node(q,root)
+	# 	for node in p_lst:
+	# 		for sec in q_lst:
+	# 			if node == sec:
+	# 				return node
+	
+#bottom up method	
 	def lowestCommonAncestor(self, root, p, q):
-		p_lst = self.match_node(p,root)[::-1]
-		q_lst = self.match_node(q,root)
-		for node in p_lst:
-			for sec in q_lst:
-				if node == sec:
-					return node
+		if root is None:
+			return None
+		if p == root or q == root:
+			return root
+		root_right_node = self.lowestCommonAncestor(root.right, p,q)
+		root_left_node = self.lowestCommonAncestor(root.left, p,q)
+		if root_right_node & root_left_node:
+			return root
+		if root_left_node:
+			return root_left_node
+		if root_right_node:
+			return root_right_node
+		return None
 
 
 if __name__ == '__main__':
