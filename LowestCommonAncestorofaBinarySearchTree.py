@@ -85,36 +85,30 @@
 # 			return root_right_node
 # 		return None
 
-# class Solution:
-# 	# @param {TreeNode} root
-# 	# @param {TreeNode} p
-# 	# @param {TreeNode} q
-# 	# @return {TreeNode}
-# 	def lowestCommonAncestor(self, root, p, q):
-# 		if root is None:
-# 			return None
-# 		elif p is root or q is root:
-# 			return root
-# 		else:	
-# 			root_right_node = self.lowestCommonAncestor(root.right, p,q)
-# 			root_left_node = self.lowestCommonAncestor(root.left, p,q)
-# 			if root_right_node and root_left_node:
-# 				return root
-# 			elif root_left_node:
-# 				return root_left_node
-# 			elif root_right_node:
-# 				return root_right_node
-# 			else:
-# 				return None
-
-
-
 class Solution:
 	# @param {TreeNode} root
 	# @param {TreeNode} p
 	# @param {TreeNode} q
 	# @return {TreeNode}
 	def lowestCommonAncestor(self, root, p, q):
+		if root is None:
+			return None
+		elif p is root or q is root:
+			return root
+		else:	
+			root_right_node = self.lowestCommonAncestor(root.right, p,q)
+			root_left_node = self.lowestCommonAncestor(root.left, p,q)
+			if root_right_node and root_left_node:
+				return root
+			elif root_left_node:
+				return root_left_node
+			elif root_right_node:
+				return root_right_node
+			else:
+				return None
+
+
+
 		
 
 
