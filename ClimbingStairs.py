@@ -7,12 +7,23 @@
 class Solution:
     # @param {integer} n
     # @return {integer}
+    global mm
+    mm = {}
+    mm[0] = 1
+    mm[1] = 1
     def climbStairs(self, n):
     	if n == 0:
-    		return 1
+    		return mm[0]
     	if n == 1:
-    		return 1
-    	return self.climbStairs(n-1) + self.climbStairs(n-2)
+    		return mm[1]
+    	if n-1 not in mm:
+    		res1 = self.climbStairs(n-1)
+    		mm[n-1] = res1
+    	if n-2 not in mm:
+    		res2 = self.climbStairs(n-2)
+    		mm[n-2] = res2
+
+    	return mm[n-1] + mm[n-2]
     	# 2 :11 2 
     	# 3: 111 12 21 
     	# 4: 1111 121 211 112 22 
