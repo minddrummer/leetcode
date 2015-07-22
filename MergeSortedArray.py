@@ -47,35 +47,60 @@ class Solution:
 	# @param n  an integer, length of B
 	# @return nothing
 	def merge(self, A, m, B, n):
-		tmp = [0 for i in range(m + n)]
-		i = 0; j = 0; k = 0
-		while i < m and j < n:
-			if A[i] <= B[j]:
-				tmp[k] = A[i]; i += 1
+		tmp = [0 for i in range(m+n)]
+		i =0 ; j = 0 ; k = 0
+		while i <m and j <n:
+			if A[i] <B[j]:
+				tmp[k] = A[i]; i+=1
 			else:
-				tmp[k] = B[j]; j += 1
+				tmp[k] = B[j]; j+=1
 			k += 1
 		if i == m:
-			while k < m + n:
-				tmp[k] = B[j]; k += 1; j += 1
+			while j <n:
+				tmp[k] = B[j]; j+=1;k+=1
 		else:
-			while k < m + n:
-				tmp[k] = A[i]; i += 1; k += 1
+			while i <m:
+				tmp[k] = A[i]; i+=1;k+=1
 		
 		thres = len(A)
-		for i in range(0, m + n):
+		for i in range(m+n):
 			if i < thres:
 				A[i] = tmp[i]
 			else:
 				A.append(tmp[i])
-		
 		if i < thres-1:
 			for x in range(thres-1-i):
 				A.pop(-1)
 
+		# tmp = [0 for i in range(m + n)]
+		# i = 0; j = 0; k = 0
+		# while i < m and j < n:
+		# 	if A[i] <= B[j]:
+		# 		tmp[k] = A[i]; i += 1
+		# 	else:
+		# 		tmp[k] = B[j]; j += 1
+		# 	k += 1
+		# if i == m:
+		# 	while k < m + n:
+		# 		tmp[k] = B[j]; k += 1; j += 1
+		# else:
+		# 	while k < m + n:
+		# 		tmp[k] = A[i]; i += 1; k += 1
+		
+		# thres = len(A)
+		# for i in range(0, m + n):
+		# 	if i < thres:
+		# 		A[i] = tmp[i]
+		# 	else:
+		# 		A.append(tmp[i])
+		
+		# if i < thres-1:
+		# 	for x in range(thres-1-i):
+		# 		A.pop(-1)
+
 
 if __name__ == '__main__':
 	test = Solution()
-	A = [1,2,3]
-	test.merge(A,3,[3,4],2)    	
+	A = [1,2,3,99,100]
+	test.merge(A,3,[3,4,100],3)    	
 	print A
