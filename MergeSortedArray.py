@@ -47,6 +47,10 @@ class Solution:
 	# @param n  an integer, length of B
 	# @return nothing
 	def merge(self, A, m, B, n):
+		'''note the two key in the qestion:
+		1)has not return anything, but keep changing the array A
+		2) m and n are the selecting length, if len(A) >m, then the rest of A wouldnot be used
+		and has to be removed from A'''
 		tmp = [0 for i in range(m+n)]
 		i =0 ; j = 0 ; k = 0
 		while i <m and j <n:
