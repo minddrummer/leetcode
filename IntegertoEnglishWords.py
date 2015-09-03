@@ -20,10 +20,12 @@ class Solution(object):
 		:type num: int
 		:rtype: str
 		"""
-		if num >= 2**31-1:
-			print 'the input in invalid'
+		if num > 2**31-1:
+			#print 'the input in invalid'
 			return None
-		pass
+		else:
+			res = self.seg(num)
+		return ' '.join(res)
 
 	def generate_str(self, ns):
 		'''ns is a string with exact three digits'''
@@ -38,9 +40,9 @@ class Solution(object):
 			if ns[0] == '1':
 				res.append(sdct[int(ns[0])] + ' Hundred')
 			else:
-				res.append(sdct[int(ns[0])] + ' Hundreds')
+				res.append(sdct[int(ns[0])] + ' Hundred')
 		if ns[1] != '0':
-			print ns
+			#print ns
 			if ns[1] == '1':
 				res.append(ddct[int(ns[1:])])
 				return res
@@ -51,18 +53,35 @@ class Solution(object):
 		return res
 
 	def seg(self,num):
-		if num < 1000:
-			ns = str(num)
-		else:
-			ns = str(num)
-		pass
-
+		'''num here is an int, and being checked to within the range'''
+		count_lst = ['Thousand', 'Million', 'Billion']
+		count_dct = dict(zip(range(1,4),count_lst))
+		if num == 0:
+			return ['Zero']
+		ns = str(num)
+		left = len(ns)%3
+		if left != 0:
+			ns = '0'*(3-left)+ns
+		count = len(ns)/3
+		i = 0
+		res = []
+		while i < count:
+			each_ns = ns[(i*3+0):(i*3+3)]
+			each_str = self.generate_str(each_ns)
+			each_term = None
+			if (count - i - 1) in count_dct:
+				each_term = count_dct[count-i-1]
+			if each_term is not None and len(each_str) != 0:
+				each_str = each_str + [each_term]
+			res = res + each_str
+			i += 1
+		return res
 
 
 
 
 if __name__ == '__main__':
 	test = Solution()
-	print test.generate_str('123')        
-	print test.generate_str('019')
-	print test.generate_str('112')        
+	print test.seg(123)        
+	print test.seg(123123)
+	print test.seg(9)
