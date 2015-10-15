@@ -11,23 +11,17 @@ class Solution(object):
 		:type prices: List[int]
 		:rtype: int
 		"""
-		if len(prices) == 0 or len(prices) == 1:
+		if len(prices) <= 1:
 			return 0
-		
-		profit = 0
-		min_num = prices[0]
-		max_num = max(prices[1:])
-		length  = len(prices)
-		for i in range(1, length):
-			min_num = min(min_num, prices[i])
-			if prices[i] == max_num:
-				if i < length -1:
-					max_num = max(prices[i+1:])
-				else:
-					max_num = 0
-			profit = max(profit, max_num - min_num)
+		max_p = 0
+		low = prices[0]
+		for i in range(1,len(prices)):
+			if prices[i] < low: 
+				low = prices[i]
+			else:
+				max_p = max(max_p, prices[i] - low)
+		return max_p
 
-		return profit
 
 
 if __name__ == '__main__':
