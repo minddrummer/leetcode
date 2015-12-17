@@ -6,56 +6,108 @@
 
 # Subscribe to see which companies asked this question
 
-class Solution:
-    # @param {integer[]} nums
-    # @param {integer} val
-    # @return {integer}
-    def removeElement(self, nums, val):
-    	if len(nums) == 0: return []
-    	#the piont is that how to manage array in place and with S_O(1)??
-        for i in nums:
-            if i != val:
-                res.append(i)
-        return count
-
-
-
-
-# Next Permutation My Submissions Question
-# Total Accepted: 53088 Total Submissions: 208120 Difficulty: Medium
-# Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
-
-# If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
-
-# The replacement must be in-place, do not allocate extra memory.
-
-# Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.
-# 1,2,3 → 1,3,2
-# 3,2,1 → 1,2,3
-# 1,1,5 → 1,5,1
-# Subscribe to see which companies asked this question
-
-# Show Tags
-# Show Similar Problems
-
-
-
-# class Solution(object):
-#     def nextPermutation(self, nums):
-#         """
-#         :type nums: List[int]
-#         :rtype: void Do not return anything, modify nums in-place instead.
-#         """
+# class Solution:
+#     # @param {integer[]} nums
+#     # @param {integer} val
+#     # @return {integer}
+#     def removeElement(self, nums, val):
+#     	if len(nums) == 0: return 0
+#     	#the piont is that how to manage array in place and with S_O(1)??
+#     	#use while loop, point to each index, and use pop to remove the responding element
+#     	#tracking the index pos and the length of the array dynamically
+#     	#method 1: remove the matched ele
+#         i = 0
+#         count = len(nums)
+#         while i < count:
+#         	if nums[i] == val:
+#         		#nums.pop(i)#this might reduce the speed
+#         		del nums[i]
+#         		count -= 1
+#         	else:
+#         		i += 1	
+#         return count
+#         #method ??: move all the element ahead--but for array, each time it can take up to T_O(n), so totally T_O(n^2)
         
 
 
+# Next Permutation 
+# Total Accepted: 53088 Total Submissions: 208120 Difficulty: Medium
+# Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+# If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
+# The replacement must be in-place, do not allocate extra memory.
+# Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.
+# 1,2,3 to 1,3, 2
+# 3,2,1 to  1,2,3
+# 1,1,5  to 1,5,1
+# Subscribe to see which companies asked this question
+#for example the order of {1,2,3} is : 123, 132, 213, 231,312, 321
+
+# Show Tags
+# Show Similar Problems
+#12345 is the smallest, and 54321 is the biggest
+#so image a number and its next, from right side, find the 1st digit X that is
+#smaller than its right, --because other than this digit on the right , it is like 54321-the biggest
+#then find the one Y just bigger than X, next time,  it will be starting from Y, and swtich the two, and then
+#do the revsering order of these digits on the right (because it is already sorted, no need for sorting, just reversing)
+#what if there is an euqal? we need to find the Y strictly > X
+
+class Solution(object):
+    def nextPermutation(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: void Do not return anything, modify nums in-place instead.
+        TO(n),SO(1)
+        """
+        xpos = None
+        len_nums = len(nums)
+        for i in range(len_nums-2,-1,-1):
+        	if nums[i] < nums[i+1]:
+        		xpos = i
+        		break
+        if xpos is None:
+        	#reverse and return
+        	#whenever(no matter which name you named) you make an new assignment( '=' + a variable name), it will be a local variable inside the function!!seriously about this!
+        	#to reverse in place, has to switch the two in the array itself!
+        	end = len_nums/2
+        	for i in range(end):
+        		nums[i], nums[len_nums-1-i] = nums[len_nums-1-i], nums[i]
+        	return
+        
+        X = nums[xpos]
+        for i in range(len_nums-1,xpos,-1):
+        	if nums[i] > X:
+        		ypos = i
+        		break
+        #switch
+        tmp = nums[xpos]
+        nums[xpos] = nums[ypos]
+        nums[ypos] = tmp
+        #reverse the rest
+        end2 = (len_nums-(xpos+1))/2
+        for i in range(end2):
+        	#to reverse in place, has to switch the two in the array itself!
+        	#Note could use the switch at the same time to save time, and be succint
+        	#python will first grab the right two, get values, and then assign to the left two, SO 	THERE IS NO MESS UP
+        	nums[xpos+1+i],nums[len_nums-1-i] = nums[len_nums-1-i], nums[xpos+1+i] 
+        # print nums
+        return 
+
+if __name__ == '__main__':
+	sk  = Solution()
+	s = [1,3,2]
+	sk.nextPermutation(s)
+	print s
+
+	s = [3,2,1]
+	sk.nextPermutation(s)
+	print s
 
 # 4Sum My Submissions Question
 # Total Accepted: 56316 Total Submissions: 250031 Difficulty: Medium
 # Given an array S of n integers, are there elements a, b, c, and d in S such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target.
 
 # Note:
-# Elements in a quadruplet (a,b,c,d) must be in non-descending order. (ie, a ≤ b ≤ c ≤ d)
+# Elements in a quadruplet (a,b,c,d) must be in non-descending order. (ie a<= b<= c <= d)
 # The solution set must not contain duplicate quadruplets.
 #     For example, given array S = {1 0 -1 0 -2 2}, and target = 0.
 
@@ -79,7 +131,7 @@ class Solution:
 
 # Permutation Sequence My Submissions Question
 # Total Accepted: 44522 Total Submissions: 186765 Difficulty: Medium
-# The set [1,2,3,…,n] contains a total of n! unique permutations.
+# The set [1,2,3,..,n] contains a total of n! unique permutations.
 
 # By listing and labeling all of the permutations in order,
 # We get the following sequence (ie, for n = 3):
@@ -583,7 +635,7 @@ class Solution:
 # Given an array S of n integers, are there elements a, b, c in S such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.
 
 # Note:
-# Elements in a triplet (a,b,c) must be in non-descending order. (ie, a ≤ b ≤ c)
+# Elements in a triplet (a,b,c) must be in non-descending order. (ie, a <= b <= c)
 # The solution set must not contain duplicate triplets.
 #     For example, given array S = {-1 0 1 2 -1 -4},
 
