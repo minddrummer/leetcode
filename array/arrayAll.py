@@ -27,7 +27,7 @@
 #         		i += 1	
 #         return count
 #         #method ??: move all the element ahead--but for array, each time it can take up to T_O(n), so totally T_O(n^2)
-        
+		
 
 
 # Next Permutation 
@@ -51,56 +51,56 @@
 #do the revsering order of these digits on the right (because it is already sorted, no need for sorting, just reversing)
 #what if there is an euqal? we need to find the Y strictly > X
 
-class Solution(object):
-    def nextPermutation(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: void Do not return anything, modify nums in-place instead.
-        TO(n),SO(1)
-        """
-        xpos = None
-        len_nums = len(nums)
-        for i in range(len_nums-2,-1,-1):
-        	if nums[i] < nums[i+1]:
-        		xpos = i
-        		break
-        if xpos is None:
-        	#reverse and return
-        	#whenever(no matter which name you named) you make an new assignment( '=' + a variable name), it will be a local variable inside the function!!seriously about this!
-        	#to reverse in place, has to switch the two in the array itself!
-        	end = len_nums/2
-        	for i in range(end):
-        		nums[i], nums[len_nums-1-i] = nums[len_nums-1-i], nums[i]
-        	return
-        
-        X = nums[xpos]
-        for i in range(len_nums-1,xpos,-1):
-        	if nums[i] > X:
-        		ypos = i
-        		break
-        #switch
-        tmp = nums[xpos]
-        nums[xpos] = nums[ypos]
-        nums[ypos] = tmp
-        #reverse the rest
-        end2 = (len_nums-(xpos+1))/2
-        for i in range(end2):
-        	#to reverse in place, has to switch the two in the array itself!
-        	#Note could use the switch at the same time to save time, and be succint
-        	#python will first grab the right two, get values, and then assign to the left two, SO 	THERE IS NO MESS UP
-        	nums[xpos+1+i],nums[len_nums-1-i] = nums[len_nums-1-i], nums[xpos+1+i] 
-        # print nums
-        return 
+# class Solution(object):
+#     def nextPermutation(self, nums):
+#         """
+#         :type nums: List[int]
+#         :rtype: void Do not return anything, modify nums in-place instead.
+#         TO(n),SO(1)
+#         """
+#         xpos = None
+#         len_nums = len(nums)
+#         for i in range(len_nums-2,-1,-1):
+#         	if nums[i] < nums[i+1]:
+#         		xpos = i
+#         		break
+#         if xpos is None:
+#         	#reverse and return
+#         	#whenever(no matter which name you named) you make an new assignment( '=' + a variable name), it will be a local variable inside the function!!seriously about this!
+#         	#to reverse in place, has to switch the two in the array itself!
+#         	end = len_nums/2
+#         	for i in range(end):
+#         		nums[i], nums[len_nums-1-i] = nums[len_nums-1-i], nums[i]
+#         	return
+		
+#         X = nums[xpos]
+#         for i in range(len_nums-1,xpos,-1):
+#         	if nums[i] > X:
+#         		ypos = i
+#         		break
+#         #switch
+#         tmp = nums[xpos]
+#         nums[xpos] = nums[ypos]
+#         nums[ypos] = tmp
+#         #reverse the rest
+#         end2 = (len_nums-(xpos+1))/2
+#         for i in range(end2):
+#         	#to reverse in place, has to switch the two in the array itself!
+#         	#Note could use the switch at the same time to save time, and be succint
+#         	#python will first grab the right two, get values, and then assign to the left two, SO 	THERE IS NO MESS UP
+#         	nums[xpos+1+i],nums[len_nums-1-i] = nums[len_nums-1-i], nums[xpos+1+i] 
+#         # print nums
+#         return 
 
-if __name__ == '__main__':
-	sk  = Solution()
-	s = [1,3,2]
-	sk.nextPermutation(s)
-	print s
+# if __name__ == '__main__':
+# 	sk  = Solution()
+# 	s = [1,3,2]
+# 	sk.nextPermutation(s)
+# 	print s
 
-	s = [3,2,1]
-	sk.nextPermutation(s)
-	print s
+# 	s = [3,2,1]
+# 	sk.nextPermutation(s)
+# 	print s
 
 # 4Sum My Submissions Question
 # Total Accepted: 56316 Total Submissions: 250031 Difficulty: Medium
@@ -115,8 +115,6 @@ if __name__ == '__main__':
 #     (-1,  0, 0, 1)
 #     (-2, -1, 1, 2)
 #     (-2,  0, 0, 2)
-# Subscribe to see which companies asked this question
-
 
 
 # class Solution(object):
@@ -234,7 +232,7 @@ if __name__ == '__main__':
 #         :type height: List[int]
 #         :rtype: int
 #         """
-        
+		
 
 
 # Rotate Image My Submissions Question
@@ -323,7 +321,7 @@ if __name__ == '__main__':
 #     		mm[n-2] = res2
 
 #     	return mm[n-1] + mm[n-2]
-    
+	
 # Gray Code My Submissions Question
 # Total Accepted: 48915 Total Submissions: 142225 Difficulty: Medium
 # The gray code is a binary numeral system where two successive values differ in only one bit.
@@ -509,7 +507,7 @@ if __name__ == '__main__':
 #     			pres = nums[i]
 #     			i += 1
 #     	return len(nums)
-    	
+		
 
 # Remove Duplicates from Sorted Array II My Submissions Question
 # Total Accepted: 60220 Total Submissions: 191996 Difficulty: Medium
@@ -529,7 +527,7 @@ if __name__ == '__main__':
 #         :type nums: List[int]
 #         :rtype: int
 #         """
-        
+		
 
 # Search in Rotated Sorted Array II My Submissions Question
 # Total Accepted: 51852 Total Submissions: 165205 Difficulty: Medium
@@ -550,7 +548,7 @@ if __name__ == '__main__':
 #         :type target: int
 #         :rtype: bool
 #         """
-        
+		
 # Search in Rotated Sorted Array My Submissions Question
 # Total Accepted: 82275 Total Submissions: 280662 Difficulty: Hard
 # Suppose a sorted array is rotated at some pivot unknown to you beforehand.
@@ -571,7 +569,7 @@ if __name__ == '__main__':
 #         :type target: int
 #         :rtype: int
 #         """
-        
+		
 
 # Median of Two Sorted Arrays My Submissions Question
 # Total Accepted: 76033 Total Submissions: 430337 Difficulty: Hard
@@ -586,7 +584,7 @@ if __name__ == '__main__':
 #         :type nums2: List[int]
 #         :rtype: float
 #         """
-        
+		
 
 # Longest Consecutive Sequence My Submissions Question
 # Total Accepted: 54947 Total Submissions: 178939 Difficulty: Hard
@@ -606,9 +604,9 @@ if __name__ == '__main__':
 #         :type nums: List[int]
 #         :rtype: int
 #         """
-        
+		
 
-# Two Sum My Submissions Question
+# Two Sum 
 # Total Accepted: 164673 Total Submissions: 834667 Difficulty: Medium
 # Given an array of integers, find two numbers such that they add up to a specific target number.
 
@@ -621,16 +619,47 @@ if __name__ == '__main__':
 
 # Subscribe to see which companies asked this question
 
-# class Solution(object):
-#     def twoSum(self, nums, target):
-#         """
-#         :type nums: List[int]
-#         :type target: int
-#         :rtype: List[int]
-#         """
-        
+class Solution(object):
+	def twoSum(self, nums, target):
+		"""
+		:type nums: List[int]
+		:type target: int
+		:rtype: List[int]
+		"""
+		#nlog(n)::sort and check:but because return the index, you then have to get a match up of index in order to do this
+		# lst = sorted(list(zip(nums, range(len(nums)))), key = lambda x:x[0])
+		# #nums.sort()
+		# count = len(nums)
+		# left, right = 0, count-1
+		# res = {}
+		# while left < right:
+		# 	if lst[left][0] + lst[right][0] == target:
+		# 		if (lst[left][0] + lst[right][0]) not in res:
+		# 			res[(lst[left][0],lst[right][0])] = (lst[left][1], lst[right][1])
+		# 		right -= 1
+		# 	elif lst[left][0] + lst[right][0] > target:
+		# 		right -= 1
+		# 	else:
+		# 		left += 1
+		# return res.values()
+		# #
+		#method2:O(n) unique -> duplicate
+# 		c_dct = {}
+# 		res = {}
+# 		for i in range(len(nums)):
+# 			if target-nums[i] not in c_dct:  
+# 				if nums[i] not in c_dct:
+# 					c_dct[nums[i]] = i+1
+# 			else:
+# 				key = (min(target-nums[i], nums[i]), max(target-nums[i], nums[i]))
+# 				if key not in res: res[key] = sorted([c_dct[target-nums[i]],i+1])
+# 		return res.values()
 
-# 3Sum My Submissions Question
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.twoSum([1,2,3,4,4,5,5,5,5,6,7,3,1],8)
+
+# 3Sum
 # Total Accepted: 89729 Total Submissions: 509590 Difficulty: Medium
 # Given an array S of n integers, are there elements a, b, c in S such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.
 
@@ -643,13 +672,44 @@ if __name__ == '__main__':
 #     (-1, 0, 1)
 #     (-1, -1, 2)
 
-# class Solution(object):
-#     def threeSum(self, nums):
-#         """
-#         :type nums: List[int]
-#         :rtype: List[List[int]]
-#         """
-        
+class Solution(object):
+    def threeSum(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        #sort nlog(n)
+
+        nums.sort()
+        count = len(nums)
+        if count <=2: return []
+        res = {}
+        #O(n^2) following:
+        for i in xrange(count):
+        	target = -nums[i]
+        	#because there are unique set, we donot have to count a number lots of times, so left is from i+1
+        	left, right = i+1, count-1
+        	while left<right:
+        		if nums[left]+nums[right] == target:
+        			#right use the dictionary key:value
+        			key =  sorted((nums[left],nums[right],nums[i]))
+        			res[tuple(key)] = key
+        			#if not return index, the below would be a problem here
+        			right -= 1
+        		elif nums[left]+nums[right] > target:
+        			right -= 1
+        		else:
+        			left += 1
+        		# print res.values()
+       	return res.values()
+
+		
+
+if __name__ == '__main__':
+	sk = Solution()
+	# print sk.threeSum([-1 ,0, 1, 2, -1, -4])
+	print sk.threeSum([-1 ,0,1, 0])
+	# print sk.threeSum([0,0,0])
 
 # 3Sum Closest My Submissions Question
 # Total Accepted: 60330 Total Submissions: 217255 Difficulty: Medium
@@ -671,6 +731,8 @@ if __name__ == '__main__':
 #         :type target: int
 #         :rtype: int
 #         """
+
+
 
 
 
