@@ -679,37 +679,44 @@ class Solution(object):
         :rtype: List[List[int]]
         """
         #sort nlog(n)
-
         nums.sort()
         count = len(nums)
         if count <=2: return []
-        res = {}
+        res = []
         #O(n^2) following:
-        for i in xrange(count):
-        	target = -nums[i]
-        	#because there are unique set, we donot have to count a number lots of times, so left is from i+1
-        	left, right = i+1, count-1
-        	while left<right:
-        		if nums[left]+nums[right] == target:
-        			#right use the dictionary key:value
-        			key =  sorted((nums[left],nums[right],nums[i]))
-        			res[tuple(key)] = key
-        			#if not return index, the below would be a problem here
-        			right -= 1
-        		elif nums[left]+nums[right] > target:
-        			right -= 1
-        		else:
-        			left += 1
-        		# print res.values()
-       	return res.values()
+        for i in xrange(count-2):
+        	#if the least value is bigger than 0, then it cannot be sum of 0
+        	if nums[i]>0: break
+        	if i == 0 or nums[i]>nums[i-1]:
+	        	target = -nums[i]
+	        	#because there are unique set, we donot have to count a number lots of times, so left is from i+1
+	        	left, right = i+1, count-1
+	        	while left<right:
+	        		if nums[left]+nums[right] == target:
+	        			#right use the dictionary key:value
+	        			res.append([nums[i], nums[left],nums[right]])
+	        			#if not return index, the below would be a problem here
+	        			right -= 1
+	        			left += 1
+	        			while nums[right+1] == nums[right] and right > left: right -= 1
+	        			while nums[left-1] == nums[left] and left < right: left += 1
+	        		elif nums[left]+nums[right] > target:
+	        			right -= 1
+	        			while nums[right] == nums[right+1] and right > left: right -= 1
+	        		else:
+	        			left += 1
+	        			while nums[left] == nums[left-1] and left < right: left += 1
+	        		# print res.values()
+       	return res
 
 		
 
 if __name__ == '__main__':
 	sk = Solution()
-	# print sk.threeSum([-1 ,0, 1, 2, -1, -4])
-	print sk.threeSum([-1 ,0,1, 0])
-	# print sk.threeSum([0,0,0])
+	print sk.threeSum([-1 ,0, 1, 2, -1, -4])
+	# print sk.threeSum([-1 ,0,1, 0])
+	print sk.threeSum([0,0,0])
+	print sk.threeSum([0,0,0,0,0,0])
 
 # 3Sum Closest My Submissions Question
 # Total Accepted: 60330 Total Submissions: 217255 Difficulty: Medium
