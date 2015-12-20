@@ -20,7 +20,7 @@
 #         count = len(nums)
 #         while i < count:
 #         	if nums[i] == val:
-#         		#nums.pop(i)#this might reduce the speed
+#				#inplace delete one element in the list: del lst[i]
 #         		del nums[i]
 #         		count -= 1
 #         	else:
@@ -158,76 +158,76 @@
 #        	# return res
 
 
-class Solution(object):
-	def find_pair(self,sum2,key1,key2,res,count):
-		pair1=sum2[key1]
-		pair2=sum2[key2]
-		for item1 in pair1:
-			for item2 in pair2:
-				each_count = {}
-				for each_num in item1+item2:
-					if each_num in each_count:
-						each_count[each_num] += 1
-					else:
-						each_count[each_num] = 1
-				over_limit = False			
-				for each_num in each_count:
-					if each_count[each_num] > count[each_num]:
-						over_limit=True
-						break
-				if not over_limit:
-					final_key = sorted(item1+item2)
-					res[tuple(final_key)] = final_key
+# class Solution(object):
+# 	def find_pair(self,sum2,key1,key2,res,count):
+# 		pair1=sum2[key1]
+# 		pair2=sum2[key2]
+# 		for item1 in pair1:
+# 			for item2 in pair2:
+# 				each_count = {}
+# 				for each_num in item1+item2:
+# 					if each_num in each_count:
+# 						each_count[each_num] += 1
+# 					else:
+# 						each_count[each_num] = 1
+# 				over_limit = False			
+# 				for each_num in each_count:
+# 					if each_count[each_num] > count[each_num]:
+# 						over_limit=True
+# 						break
+# 				if not over_limit:
+# 					final_key = sorted(item1+item2)
+# 					res[tuple(final_key)] = final_key
 
-	def fourSum(self, nums, target):
-		"""
-		:type nums: List[int]
-		:type target: int
-		:rtype: List[List[int]]
-		"""
-		nums.sort()
-		total = len(nums)
-		if total <= 3: return []
-		if total == 4 and sum(nums)== target: return [nums]
-		count = {}
-		for i in nums:
-			if i not in count: count[i] = 1
-			else: count[i] += 1
+# 	def fourSum(self, nums, target):
+# 		"""
+# 		:type nums: List[int]
+# 		:type target: int
+# 		:rtype: List[List[int]]
+# 		"""
+# 		nums.sort()
+# 		total = len(nums)
+# 		if total <= 3: return []
+# 		if total == 4 and sum(nums)== target: return [nums]
+# 		count = {}
+# 		for i in nums:
+# 			if i not in count: count[i] = 1
+# 			else: count[i] += 1
 		
-		#generate unique pair of sum of two and save it to a hashtable
-		sum2 = {}		
-		for i in range(total-1):
-			#use the following would generate unique pairs!!
-			if i==0 or nums[i]>nums[i-1]:
-				for j in range(i+1,total):
-					if j==i+1 or nums[j]>nums[j-1]:
-						if nums[i]+nums[j] not in sum2:
-							sum2[nums[i]+nums[j]] = [[nums[i],nums[j]]]
-						else:
-							sum2[nums[i]+nums[j]].append([nums[i],nums[j]])
-		#match for each key value, also includes itself
-		res = {}
-		visited = {}
-		for key in sum2:
-			#counting itself
-			if key*2==target:
-				self.find_pair(sum2,key,key,res,count)
-			#not counting iteself now
-			elif target-key not in visited:
-				#if the minus_left not matched any key in visited, just add the current key into visited dict
-				visited[key]=0
-			elif target-key in visited:
-				self.find_pair(sum2,key,target-key,res,count)
-		return res.values()
+# 		#generate unique pair of sum of two and save it to a hashtable
+# 		sum2 = {}		
+# 		for i in range(total-1):
+# 			#use the following would generate unique pairs!!
+# 			if i==0 or nums[i]>nums[i-1]:
+# 				for j in range(i+1,total):
+# 					if j==i+1 or nums[j]>nums[j-1]:
+# 						if nums[i]+nums[j] not in sum2:
+# 							sum2[nums[i]+nums[j]] = [[nums[i],nums[j]]]
+# 						else:
+# 							sum2[nums[i]+nums[j]].append([nums[i],nums[j]])
+# 		#match for each key value, also includes itself
+# 		res = {}
+# 		visited = {}
+# 		for key in sum2:
+# 			#counting itself
+# 			if key*2==target:
+# 				self.find_pair(sum2,key,key,res,count)
+# 			#not counting iteself now
+# 			elif target-key not in visited:
+# 				#if the minus_left not matched any key in visited, just add the current key into visited dict
+# 				visited[key]=0
+# 			elif target-key in visited:
+# 				self.find_pair(sum2,key,target-key,res,count)
+# 		return res.values()
 
 
 
-if __name__ == '__main__':
-	sk = Solution()
-	print	sk.fourSum([1, 0, -1 ,0 ,-2 ,2], 0)
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print	sk.fourSum([1, 0, -1 ,0 ,-2 ,2], 0)
 
 
-# Permutation Sequence My Submissions Question
+# Permutation Sequence
 # Total Accepted: 44522 Total Submissions: 186765 Difficulty: Medium
 # The set [1,2,3,..,n] contains a total of n! unique permutations.
 
@@ -241,20 +241,40 @@ if __name__ == '__main__':
 # "312"
 # "321"
 # Given n and k, return the kth permutation sequence.
-
 # Note: Given n will be between 1 and 9 inclusive.
-
 # Subscribe to see which companies asked this question
 
-
-
 # class Solution(object):
-#     def getPermutation(self, n, k):
-#         """
-#         :type n: int
-#         :type k: int
-#         :rtype: str
-#         """
+# 	def getPermutation(self, n, k):
+# 		"""
+# 		:type n: int
+# 		:type k: int
+# 		:rtype: str
+# 		"""
+# 		#use k and n relation to compute the number at each position
+# 		#not to generate all the possible/Or starting from 1...n to change, which both will be computational expensive
+# 		lst = range(1,n+1)
+# 		pos_divide = []
+# 		pos_1 = 1
+# 		for i in lst:
+# 			pos_1 = pos_1*i
+# 			pos_divide.append(pos_1)
+# 		pos_divide = pos_divide[::-1]
+# 		left_k = k-1
+# 		pos = 1
+# 		res=''        
+# 		while left_k > 0:
+# 			lst_pos = left_k/pos_divide[pos]
+# 			res=res+str(lst[lst_pos])
+# 			lst.pop(lst_pos)
+# 			left_k = left_k%pos_divide[pos]
+# 			pos += 1
+# 		#join inside has to be str, not other type of data
+# 		res = res + ''.join(str(i) for i in lst)	
+# 		return res
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.getPermutation(4,24)        
 
 # Valid Sudoku My Submissions Question
 # Total Accepted: 57231 Total Submissions: 199636 Difficulty: Easy
