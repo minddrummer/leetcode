@@ -672,53 +672,53 @@ class Solution(object):
 #     (-1, 0, 1)
 #     (-1, -1, 2)
 
-class Solution(object):
-    def threeSum(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: List[List[int]]
-        """
-        #sort nlog(n)
-        nums.sort()
-        count = len(nums)
-        if count <=2: return []
-        res = []
-        #O(n^2) following:
-        for i in xrange(count-2):
-        	#if the least value is bigger than 0, then it cannot be sum of 0
-        	if nums[i]>0: break
-        	if i == 0 or nums[i]>nums[i-1]:
-	        	target = -nums[i]
-	        	#because there are unique set, we donot have to count a number lots of times, so left is from i+1
-	        	left, right = i+1, count-1
-	        	while left<right:
-	        		if nums[left]+nums[right] == target:
-	        			#right use the dictionary key:value
-	        			res.append([nums[i], nums[left],nums[right]])
-	        			#if not return index, the below would be a problem here
-	        			right -= 1
-	        			left += 1
-	        			while nums[right+1] == nums[right] and right > left: right -= 1
-	        			while nums[left-1] == nums[left] and left < right: left += 1
-	        		elif nums[left]+nums[right] > target:
-	        			right -= 1
-	        			while nums[right] == nums[right+1] and right > left: right -= 1
-	        		else:
-	        			left += 1
-	        			while nums[left] == nums[left-1] and left < right: left += 1
-	        		# print res.values()
-       	return res
+# class Solution(object):
+#     def threeSum(self, nums):
+#         """
+#         :type nums: List[int]
+#         :rtype: List[List[int]]
+#         """
+#         #sort nlog(n)
+#         nums.sort()
+#         count = len(nums)
+#         if count <=2: return []
+#         res = []
+#         #O(n^2) following:
+#         for i in xrange(count-2):
+#         	#if the least value is bigger than 0, then it cannot be sum of 0
+#         	if nums[i]>0: break
+#         	if i == 0 or nums[i]>nums[i-1]:
+# 	        	target = -nums[i]
+# 	        	#because there are unique set, we donot have to count a number lots of times, so left is from i+1
+# 	        	left, right = i+1, count-1
+# 	        	while left<right:
+# 	        		if nums[left]+nums[right] == target:
+# 	        			#right use the dictionary key:value
+# 	        			res.append([nums[i], nums[left],nums[right]])
+# 	        			#if not return index, the below would be a problem here
+# 	        			right -= 1
+# 	        			left += 1
+# 	        			while nums[right+1] == nums[right] and right > left: right -= 1
+# 	        			while nums[left-1] == nums[left] and left < right: left += 1
+# 	        		elif nums[left]+nums[right] > target:
+# 	        			right -= 1
+# 	        			while nums[right] == nums[right+1] and right > left: right -= 1
+# 	        		else:
+# 	        			left += 1
+# 	        			while nums[left] == nums[left-1] and left < right: left += 1
+# 	        		# print res.values()
+#        	return res
 
 		
 
-if __name__ == '__main__':
-	sk = Solution()
-	print sk.threeSum([-1 ,0, 1, 2, -1, -4])
-	# print sk.threeSum([-1 ,0,1, 0])
-	print sk.threeSum([0,0,0])
-	print sk.threeSum([0,0,0,0,0,0])
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.threeSum([-1 ,0, 1, 2, -1, -4])
+# 	# print sk.threeSum([-1 ,0,1, 0])
+# 	print sk.threeSum([0,0,0])
+# 	print sk.threeSum([0,0,0,0,0,0])
 
-# 3Sum Closest My Submissions Question
+# 3Sum Closest 
 # Total Accepted: 60330 Total Submissions: 217255 Difficulty: Medium
 # Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target. Return the sum of the three integers. You may assume that each input would have exactly one solution.
 
@@ -731,14 +731,56 @@ if __name__ == '__main__':
 # Show Similar Problems
 
 
-# class Solution(object):
-#     def threeSumClosest(self, nums, target):
-#         """
-#         :type nums: List[int]
-#         :type target: int
-#         :rtype: int
-#         """
+class Solution(object):
+	def threeSumClosest(self, nums, target):
+		"""
+		:type nums: List[int]
+		:type target: int
+		:rtype: int
+		"""
+		#sort
+		nums.sort()
+		c = len(nums)
+		if c <= 2: return 0
+		if c == 3: return sum(nums)
+		#initiate the res with the first 3 element sum:
+		res =  abs(sum(nums[0:3]) - target)
+		res_lst = nums[0:3]
+		# no need to run all c, because you have to check left and right, these two count two
+		for i in range(c-2):
+			if i == 0 or nums[i]>nums[i-1]:
+				left, right = i+1, c-1
+				while left < right:
+					if nums[i]+nums[left]+nums[right] - target == 0:
+						return target
+					elif nums[i]+nums[left]+nums[right] - target > 0:
+						#compare values and save
+						if abs(nums[i]+nums[left]+nums[right] - target) < res:
+							#the bug is here::::: update both, not only one
+							res = abs(nums[i]+nums[left]+nums[right] - target)
+							res_lst = [nums[i],nums[left],nums[right]]
+						#move right
+						right -= 1
+						while nums[right] == nums[right+1] and left < right: right -= 1
+					else:
+						#compare values and save 
+						if abs(nums[i]+nums[left]+nums[right] - target) < res:
+							res = abs(nums[i]+nums[left]+nums[right] - target)
+							res_lst = [nums[i],nums[left],nums[right]]
+						#move left
+						left += 1
+						while nums[left] == nums[left-1] and left < right: left+=1
+		return sum(res_lst)
 
+
+
+if __name__ == '__main__':
+	sk = Solution()
+	# print sk.threeSumClosest([-1, 2 ,1 ,-4],1)
+	# print sk.threeSumClosest([-1, 0 ,0 ,0],0)
+	# print sk.threeSumClosest([0 ,0 ,0],0)
+	# print sk.threeSumClosest(range(100),100)
+	print sk.threeSumClosest([0,2,1,-3],1)
 
 
 
