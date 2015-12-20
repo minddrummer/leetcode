@@ -102,7 +102,7 @@
 # 	sk.nextPermutation(s)
 # 	print s
 
-# 4Sum My Submissions Question
+# 4Sum 
 # Total Accepted: 56316 Total Submissions: 250031 Difficulty: Medium
 # Given an array S of n integers, are there elements a, b, c, and d in S such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target.
 
@@ -124,7 +124,107 @@
 #         :type target: int
 #         :rtype: List[List[int]]
 #         """
+#         #method1: double close O(n^3)--but not good enough
+#         # nums.sort()
+#         # count = len(nums)
+#         # if count <= 3: return []
+#         # res= []
+#         # for i in range(count-3):
+#         # 	#it is not about speed first, it is more about the repeated/rightness about the algorithm
+#         # 	#not adding the following will result in duplicates in the return res
+#         # 	if i == 0 or nums[i]>nums[i-1]:
+# 	       #  	for j in range(i+1, count-2):
+# 	       #  		#it is not about speed first, it is more about the repeated/rightness about the algorithm
+# 		      #   	#not adding the following will result in duplicates in the return res
+# 	       #  		if j==i+1 or nums[j]>nums[j-1]:
+# 		      #   		left,right = j+1, count-1
+# 		      #   		while left < right:
+# 		      #   			if nums[i]+nums[j]+nums[left]+nums[right] == target:
+# 		      #   				res.append([nums[i],nums[j],nums[left],nums[right]])
+# 		      #   				right -= 1
+# 		      #   				#this part is not about speed, it is more about remove duplicates and debuging....
+# 		      #   				while nums[right]==nums[right+1] and left<right: right -=1
+# 		      #   				left +=1
+# 		      #   				#this part is not about speed, it is more about remove duplicates and debuging....
+# 		      #   				while nums[left] == nums[left-1] and left<right: left+=1
+# 		      #   			elif nums[i]+nums[j]+nums[left]+nums[right] > target:
+# 		      #   				right -= 1
+# 		      #   				#this part is more about speed
+# 		      #   				while nums[right]==nums[right+1] and left<right: right -=1
+# 		      #   			else:
+# 		      #   				left += 1
+# 		      #   				#this part is more about speed
+# 		      #   				while nums[left] == nums[left-1] and left<right: left+=1
+#        	# return res
 
+
+class Solution(object):
+	def find_pair(self,sum2,key1,key2,res,count):
+		pair1=sum2[key1]
+		pair2=sum2[key2]
+		for item1 in pair1:
+			for item2 in pair2:
+				each_count = {}
+				for each_num in item1+item2:
+					if each_num in each_count:
+						each_count[each_num] += 1
+					else:
+						each_count[each_num] = 1
+				over_limit = False			
+				for each_num in each_count:
+					if each_count[each_num] > count[each_num]:
+						over_limit=True
+						break
+				if not over_limit:
+					final_key = sorted(item1+item2)
+					res[tuple(final_key)] = final_key
+
+	def fourSum(self, nums, target):
+		"""
+		:type nums: List[int]
+		:type target: int
+		:rtype: List[List[int]]
+		"""
+		nums.sort()
+		total = len(nums)
+		if total <= 3: return []
+		if total == 4 and sum(nums)== target: return [nums]
+		count = {}
+		for i in nums:
+			if i not in count: count[i] = 1
+			else: count[i] += 1
+		
+		#generate unique pair of sum of two and save it to a hashtable
+		sum2 = {}		
+		for i in range(total-1):
+			#use the following would generate unique pairs!!
+			if i==0 or nums[i]>nums[i-1]:
+				for j in range(i+1,total):
+					if j==i+1 or nums[j]>nums[j-1]:
+						if nums[i]+nums[j] not in sum2:
+							sum2[nums[i]+nums[j]] = [[nums[i],nums[j]]]
+						else:
+							sum2[nums[i]+nums[j]].append([nums[i],nums[j]])
+		#match for each key value, also includes itself
+		res = {}
+		visited = {}
+		for key in sum2:
+			#counting itself
+			if key*2==target:
+				self.find_pair(sum2,key,key,res,count)
+			#not counting iteself now
+			elif target-key not in visited:
+				#if the minus_left not matched any key in visited, just add the current key into visited dict
+				visited[key]=0
+			elif target-key in visited:
+				self.find_pair(sum2,key,target-key,res,count)
+		return res.values()
+
+
+
+if __name__ == '__main__':
+	sk = Solution()
+	print	sk.fourSum([1, 0, -1 ,0 ,-2 ,2], 0)
 
 
 # Permutation Sequence My Submissions Question
@@ -644,16 +744,17 @@ class Solution(object):
 		# return res.values()
 		# #
 		#method2:O(n) unique -> duplicate
-# 		c_dct = {}
-# 		res = {}
-# 		for i in range(len(nums)):
-# 			if target-nums[i] not in c_dct:  
-# 				if nums[i] not in c_dct:
-# 					c_dct[nums[i]] = i+1
-# 			else:
-# 				key = (min(target-nums[i], nums[i]), max(target-nums[i], nums[i]))
-# 				if key not in res: res[key] = sorted([c_dct[target-nums[i]],i+1])
-# 		return res.values()
+		# c_dct = {}
+		# res = {}
+		# for i in range(len(nums)):
+		# 	if target-nums[i] not in c_dct:  
+		# 		#here it is optional: not necessary to if nums[i] not in c_dct:
+		# 		# if nums[i] not in c_dct:
+		# 			c_dct[nums[i]] = i+1
+		# 	else:
+		# 		key = (min(target-nums[i], nums[i]), max(target-nums[i], nums[i]))
+		# 		if key not in res: res[key] = [c_dct[target-nums[i]],i+1]
+		# return res.values() #in the leetcode, you need to add res.values()[0] to get the first elements assume there is only one pair
 
 # if __name__ == '__main__':
 # 	sk = Solution()
@@ -731,56 +832,56 @@ class Solution(object):
 # Show Similar Problems
 
 
-class Solution(object):
-	def threeSumClosest(self, nums, target):
-		"""
-		:type nums: List[int]
-		:type target: int
-		:rtype: int
-		"""
-		#sort
-		nums.sort()
-		c = len(nums)
-		if c <= 2: return 0
-		if c == 3: return sum(nums)
-		#initiate the res with the first 3 element sum:
-		res =  abs(sum(nums[0:3]) - target)
-		res_lst = nums[0:3]
-		# no need to run all c, because you have to check left and right, these two count two
-		for i in range(c-2):
-			if i == 0 or nums[i]>nums[i-1]:
-				left, right = i+1, c-1
-				while left < right:
-					if nums[i]+nums[left]+nums[right] - target == 0:
-						return target
-					elif nums[i]+nums[left]+nums[right] - target > 0:
-						#compare values and save
-						if abs(nums[i]+nums[left]+nums[right] - target) < res:
-							#the bug is here::::: update both, not only one
-							res = abs(nums[i]+nums[left]+nums[right] - target)
-							res_lst = [nums[i],nums[left],nums[right]]
-						#move right
-						right -= 1
-						while nums[right] == nums[right+1] and left < right: right -= 1
-					else:
-						#compare values and save 
-						if abs(nums[i]+nums[left]+nums[right] - target) < res:
-							res = abs(nums[i]+nums[left]+nums[right] - target)
-							res_lst = [nums[i],nums[left],nums[right]]
-						#move left
-						left += 1
-						while nums[left] == nums[left-1] and left < right: left+=1
-		return sum(res_lst)
+# class Solution(object):
+# 	def threeSumClosest(self, nums, target):
+# 		"""
+# 		:type nums: List[int]
+# 		:type target: int
+# 		:rtype: int
+# 		"""
+# 		#sort
+# 		nums.sort()
+# 		c = len(nums)
+# 		if c <= 2: return 0
+# 		if c == 3: return sum(nums)
+# 		#initiate the res with the first 3 element sum:
+# 		res =  abs(sum(nums[0:3]) - target)
+# 		res_lst = nums[0:3]
+# 		# no need to run all c, because you have to check left and right, these two count two
+# 		for i in range(c-2):
+# 			if i == 0 or nums[i]>nums[i-1]:
+# 				left, right = i+1, c-1
+# 				while left < right:
+# 					if nums[i]+nums[left]+nums[right] - target == 0:
+# 						return target
+# 					elif nums[i]+nums[left]+nums[right] - target > 0:
+# 						#compare values and save
+# 						if abs(nums[i]+nums[left]+nums[right] - target) < res:
+# 							#the bug is here::::: update both, not only one
+# 							res = abs(nums[i]+nums[left]+nums[right] - target)
+# 							res_lst = [nums[i],nums[left],nums[right]]
+# 						#move right
+# 						right -= 1
+# 						while nums[right] == nums[right+1] and left < right: right -= 1
+# 					else:
+# 						#compare values and save 
+# 						if abs(nums[i]+nums[left]+nums[right] - target) < res:
+# 							res = abs(nums[i]+nums[left]+nums[right] - target)
+# 							res_lst = [nums[i],nums[left],nums[right]]
+# 						#move left
+# 						left += 1
+# 						while nums[left] == nums[left-1] and left < right: left+=1
+# 		return sum(res_lst)
 
 
 
-if __name__ == '__main__':
-	sk = Solution()
-	# print sk.threeSumClosest([-1, 2 ,1 ,-4],1)
-	# print sk.threeSumClosest([-1, 0 ,0 ,0],0)
-	# print sk.threeSumClosest([0 ,0 ,0],0)
-	# print sk.threeSumClosest(range(100),100)
-	print sk.threeSumClosest([0,2,1,-3],1)
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	# print sk.threeSumClosest([-1, 2 ,1 ,-4],1)
+# 	# print sk.threeSumClosest([-1, 0 ,0 ,0],0)
+# 	# print sk.threeSumClosest([0 ,0 ,0],0)
+# 	# print sk.threeSumClosest(range(100),100)
+# 	print sk.threeSumClosest([0,2,1,-3],1)
 
 
 
