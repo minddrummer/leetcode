@@ -276,23 +276,20 @@
 # 	sk = Solution()
 # 	print sk.getPermutation(4,24)        
 
-# Valid Sudoku My Submissions Question
+
+
+# Valid Sudoku 
 # Total Accepted: 57231 Total Submissions: 199636 Difficulty: Easy
 # Determine if a Sudoku is valid, according to: Sudoku Puzzles - The Rules.
-
 # The Sudoku board could be partially filled, where empty cells are filled with the character '.'.
-
-
 # A partially filled sudoku which is valid.
-
 # Note:
 # A valid Sudoku board (partially filled) is not necessarily solvable. Only the filled cells need to be validated.
-
 # Subscribe to see which companies asked this question                
-
 # class Solution:
 # 	# @param {character[][]} board
 # 	# @return {boolean}
+#'''it is no repeat for all rows, all columns and all square of 3*3 partial square'''
 # 	def isValidSudoku(self, board):
 # 		res = True
 # 		for i in range(9):
@@ -317,6 +314,7 @@
 # 		#ssquare = []
 # 		for i in range(3):
 # 			for j in range(3):
+				##here is so important to segment the list first, instead of segment each time below to improve the speed
 # 				s0 = board[(3*i):(3*i+3)]
 # 				ss = []
 # 				for item in s0:
@@ -333,26 +331,73 @@
 
 
 
-# Trapping Rain Water My Submissions Question
+# Trapping Rain Water 
 # Total Accepted: 54854 Total Submissions: 176832 Difficulty: Hard
 # Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it is able to trap after raining.
-
 # For example, 
 # Given [0,1,0,2,1,0,1,3,2,1,2,1], return 6.
-
-
 # The above elevation map is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section) are being trapped. Thanks Marcos for contributing this image!
-
 # Subscribe to see which companies asked this question
 
-
 # class Solution(object):
-#     def trap(self, height):
-#         """
-#         :type height: List[int]
-#         :rtype: int
-#         """
-		
+# 	def trap(self, height):
+# 		"""
+# 		:type height: List[int]
+# 		:rtype: int
+# 		"""
+# 		#this seems not so hard: from left count the max, from the right count the max
+# 		#it is the first or the max, just make it as the value; take the min of the two, and use the min of max - value to get the water for each cell
+# 		#it is TO(n), SO(n)
+# 		# count = len(height)
+# 		# if count <=2: return 0
+# 		# left0 = height[0]
+# 		# left_max = [left0]
+# 		# for i in range(1,count):
+# 		# 	if height[i]>left0:
+# 		# 		left0 = height[i]
+# 		# 		left_max.append(left0)
+# 		# 	else:
+# 		# 		left_max.append(left0)
+
+# 		# right0 = height[-1]
+# 		# right_max = [right0]
+# 		# for i in range(count-2,-1,-1):
+# 		# 	if height[i]>right0:
+# 		# 		right0=height[i]
+# 		# 		right_max.append(right0)
+# 		# 	else:
+# 		# 		right_max.append(right0)
+# 		# right_max = right_max[::-1]
+# 		# water = 0
+# 		# for i in range(count):
+# 		# 	water += min(right_max[i],left_max[i])-height[i]
+# 		# return water
+
+# 		#now we want a it is TO(n), SO(1) solution
+# 		#divide into the left and right by the maxheight index
+# 		max_index = 0
+# 		count = len(height)
+# 		if count <=2: return 0
+# 		for i in range(count):
+# 			if height[i]>height[max_index]: max_index = i
+# 		water = 0
+# 		#for the left
+# 		peak = 0
+# 		for i in range(max_index):
+# 			if height[i]>peak: peak=height[i]
+# 			else: water += peak-height[i]
+# 		#for the right
+# 		peak=0
+# 		for i in range(count-1,max_index,-1):
+# 			if height[i]>peak: peak=height[i]
+# 			else: water += peak-height[i]
+# 		return water
+
+
+
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.trap([0,1,0,2,1,0,1,3,2,1,2,1])		
 
 
 # Rotate Image My Submissions Question
@@ -380,11 +425,8 @@
 # Plus One My Submissions Question
 # Total Accepted: 76780 Total Submissions: 241904 Difficulty: Easy
 # Given a non-negative number represented as an array of digits, plus one to the number.
-
 # The digits are stored such that the most significant digit is at the head of the list.
-
 # Subscribe to see which companies asked this question
-
 # Show Tags
 # Show Similar Problems
 # Have you met this question in a real interview? Yes  No
@@ -401,14 +443,29 @@
 # 				break
 # 			else:	
 # 				digits[i] = digits[i] + 1
-# 				up = 0 
-			
+# 				up = 0 		
+# 		if up == 1:
+#			#list.insert method is happening in place!!
+# 			digits.insert(0,1)
+# 		return digits
+# class Solution:
+# 	def plusOne(self, digits):  
+# 		up = 1
+# 		for i in range(len(digits)-1, -1, -1):
+# 			if up == 1:
+# 				if digits[i] + up == 10:
+# 					digits[i] = 0
+# 					up = 1
+# 				else:
+# 					digits[i] += 1
+# 					up = 0
+# 			else:
+# 				break
 # 		if up == 1:
 # 			digits.insert(0,1)
 # 		return digits
 
-
-
+#===============================================================
 # Climbing Stairs My Submissions Question
 # Total Accepted: 84084 Total Submissions: 236761 Difficulty: Easy
 # You are climbing a stair case. It takes n steps to reach to the top.
@@ -739,13 +796,13 @@
 
 # Subscribe to see which companies asked this question
 
-class Solution(object):
-	def twoSum(self, nums, target):
-		"""
-		:type nums: List[int]
-		:type target: int
-		:rtype: List[int]
-		"""
+# class Solution(object):
+# 	def twoSum(self, nums, target):
+# 		"""
+# 		:type nums: List[int]
+# 		:type target: int
+# 		:rtype: List[int]
+# 		"""
 		#nlog(n)::sort and check:but because return the index, you then have to get a match up of index in order to do this
 		# lst = sorted(list(zip(nums, range(len(nums)))), key = lambda x:x[0])
 		# #nums.sort()
