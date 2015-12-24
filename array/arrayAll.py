@@ -465,7 +465,7 @@
 # 			digits.insert(0,1)
 # 		return digits
 
-#===============================================================
+
 # Climbing Stairs My Submissions Question
 # Total Accepted: 84084 Total Submissions: 236761 Difficulty: Easy
 # You are climbing a stair case. It takes n steps to reach to the top.
@@ -477,91 +477,167 @@
 # Show Tags
 # Have you met this question in a real interview? Yes  No
 # Discuss
-
+#use dynamic programming, TO(n), in order to get SO(1),you only need to save the last 3 results
 # class Solution:
-#     # @param {integer} n
-#     # @return {integer}
-#     global mm
-#     mm = {}
-#     mm[0] = 1
-#     mm[1] = 1
+	# @param {integer} n
+	# @return {integer}
+	#method1: resursion dynamical programming: TO(n), SO(n)
+	# global mm
+	# mm = {}
+	# mm[0] = 1
+	# mm[1] = 1
+	# def climbStairs(self, n):
+	# 	'''dynamic programming has two version typically: iterative
+	# 	and recursion:the following is recursion:::use recursion you 
+	# 	have to save each result in a gobal variable to save the results to avoid exponential computational cost;
+	# 	for the two methods: the speed varies from situation to situtation'''
+	# 	if n == 0:
+	# 		return mm[0]
+	# 	if n == 1:
+	# 		return mm[1]
+	# 	if n-1 not in mm:
+	# 		res1 = self.climbStairs(n-1)
+	# 		mm[n-1] = res1
+	# 	if n-2 not in mm:
+	# 		res2 = self.climbStairs(n-2)
+	# 		mm[n-2] = res2
+	# 	return mm[n-1] + mm[n-2]
+	#method2:iterative: TO(n),SO(1)
 #     def climbStairs(self, n):
-#     	if n == 0:
-#     		return mm[0]
-#     	if n == 1:
-#     		return mm[1]
-#     	if n-1 not in mm:
-#     		res1 = self.climbStairs(n-1)
-#     		mm[n-1] = res1
-#     	if n-2 not in mm:
-#     		res2 = self.climbStairs(n-2)
-#     		mm[n-2] = res2
+#     	if n<=1: return 1
+#     	pre0=1
+#     	pre1=1
+#     	for i in range(2,n+1):
+#     		cur = pre0+pre1
+#     		#first assing pre0
+#     		pre0=pre1
+#     		#then change pre1 to cur
+#     		pre1=cur
+#     	return cur
+			
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.climbStairs(2)
+# 	print sk.climbStairs(3)
+# 	print sk.climbStairs(100)
 
-#     	return mm[n-1] + mm[n-2]
+
 	
 # Gray Code My Submissions Question
 # Total Accepted: 48915 Total Submissions: 142225 Difficulty: Medium
 # The gray code is a binary numeral system where two successive values differ in only one bit.
-
 # Given a non-negative integer n representing the total number of bits in the code, print the sequence of gray code. A gray code sequence must begin with 0.
-
 # For example, given n = 2, return [0,1,3,2]. Its gray code sequence is:
-
 # 00 - 0
 # 01 - 1
 # 11 - 3
 # 10 - 2
 # Note:
 # For a given n, a gray code sequence is not uniquely defined.
-
 # For example, [0,2,3,1] is also a valid gray code sequence according to the above definition.
-
 # For now, the judge is able to judge based on one instance of gray code sequence. Sorry about that.
-
 # Subscribe to see which companies asked this question
-
-
 # class Solution(object):
 #     def grayCode(self, n):
 #         """
 #         :type n: int
 #         :rtype: List[int]
 #         """
+#         #movitation: gray code: we want the integer next to each other has only one difference in bit, that would be 
+#         #important for some system to aviod ambuguity. binary encoding doesnot work
+#         #gray code transfer directly to decimal value would not be the original sequence
+#         #there is a forumal to generate this
+#         #method1, direct, n xor n>>1(or n/2) will give us the gray code for this integer n
+#         #return [i^(i>>1) for i in xrange(2**n)]
+#         #there are different sets that could work for gray code--not only one encoding results
+#         #use string, directly
+#         # if n==0: return [0]
+#         # res = ['']
+#         # for i in range(1,n+1):
+#         # 	#add 0
+#         # 	tmp0 = ['0'+i for i in res]
+#         # 	tmp1 = ['1'+i for i in res[::-1]]
+#         # 	res =tmp0 + tmp1
+#         # return [int(i,2) for i in res]
+#         #can use integers directly, rather than string
+#         # if n ==0 : return [0]
+#         # L = [0,1]
+#         # for i in xrange(2,n+1):
+#         # 	#the first part is constant, no change
+#         # 	#the second part add 1 at the left most
+#         # 	left_shift1 = 1<<i-1
+#         # 	L = L + [j+left_shift1 for j in L[::-1]]
+#         # return L
+# if __name__ == '__main__':
+# 	sk =Solution()
+# 	print sk.grayCode(2)
 
 
 # Set Matrix Zeroes My Submissions Question
 # Total Accepted: 53816 Total Submissions: 166394 Difficulty: Medium
 # Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place.
-
 # click to show follow up.
-
 # Subscribe to see which companies asked this question
-
 # Show Tags
 # Show Similar Problems
 # Have you met this question in a real interview? Yes  No
-# Discuss
-
+# # Discuss
 # class Solution(object):
 #     def setZeroes(self, matrix):
 #         """
 #         :type matrix: List[List[int]]
 #         :rtype: void Do not return anything, modify matrix in-place instead.
 #         """
+#         #want TO(m*n) SO(1), mark the first row and col, so that we track which col and row would be 0
+#         m = len(matrix)
+#         n = len(matrix[0])
+#         #the easy bug is missing checking and saving the first col and first row info, 
+#         #because later,we will mess their info with other row/col info
+#         row0 = False
+#       	col0 = False
+#       	for i in range(m):
+#       		if matrix[i][0] == 0:
+#       			col0=True
+#       			break
+#       	for j in range(n):
+#       		if matrix[0][j] == 0:
+#       			row0=True
+#       			break
+#         for i in range(1,m):
+#         	for j in range(1,n):
+#         		if matrix[i][j] == 0:
+#         			matrix[i][0] = 0
+#         			matrix[0][j] = 0
+#         #donot change the first row and col first
+#         for i in range(m):
+#         	if matrix[i][0] == 0:
+#         		if i!=0:
+#         			matrix[i]=[0]*n 
+#         for j in range(n):
+#         	if matrix[0][j]==0:
+#         		for i in range(1,m):
+#         			matrix[i][j] = 0
+#        	if row0:
+#        		matrix[0] =[0]*n
+#        	if col0:
+#        		for i in range(m):
+#        			matrix[i][0] = 0
+#         return
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	test = [[1,2,3],[4,5,0],[0,1,2]]
+# 	sk.setZeroes(test)
+# 	print test
+
 
 # Gas Station My Submissions Question
 # Total Accepted: 52562 Total Submissions: 198745 Difficulty: Medium
 # There are N gas stations along a circular route, where the amount of gas at station i is gas[i].
-
 # You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from station i to its next station (i+1). You begin the journey with an empty tank at one of the gas stations.
-
 # Return the starting gas station's index if you can travel around the circuit once, otherwise return -1.
-
 # Note:
 # The solution is guaranteed to be unique.
-
 # Subscribe to see which companies asked this question
-
 # Show Tags
 
 # class Solution(object):
@@ -571,6 +647,27 @@
 #         :type cost: List[int]
 #         :rtype: int
 #         """
+#         #the trick here is tracking the total of all, and the current valid
+#         #for the current valid:whenever the current is invalid, just reset the value to 0
+#         #because of reset, we have to tracking the total sum
+#         total=0
+#         cur_total=0
+#         pos = -1
+#         for i in range(len(gas)):
+#         	cur_total += gas[i] - cost[i]
+#         	total += gas[i] - cost[i]
+#         	if cur_total<0:
+#         		cur_total=0
+#         		pos=i
+# 		#if total =0, you can make it; if total<0, then there is a failure        		
+#        	if total<0:
+#        		return -1
+#    		return pos+1
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.canCompleteCircuit([4,5,6,9],[4,6,7,5])        
+
+
 
 # Candy My Submissions Question
 # Total Accepted: 45474 Total Submissions: 211263 Difficulty: Hard
@@ -587,43 +684,72 @@
 # Show Tags
 
 # class Solution(object):
-#     def candy(self, ratings):
-#         """
-#         :type ratings: List[int]
-#         :rtype: int
-#         """
+# 	def candy(self, ratings):
+# 		"""
+# 		:type ratings: List[int]
+# 		:rtype: int
+# 		"""
+# 		count = len(ratings)
+# 		if count <1:return 0
+# 		res0 = [1]
+		
+# 		for i in xrange(1,count):
+# 			if ratings[i]>ratings[i-1]:
+# 				res0.append(res0[i-1]+1)
+# 			else:
+# 				res0.append(1)
+# 		res1=[1]				
+# 		for i in xrange(count-2,-1,-1):
+# 			if ratings[i]>ratings[i+1]:
+# 				res1.append(res1[count-(i+2)]+1)
+# 			else:
+# 				res1.append(1)
+# 		#res1= res1[::-1]
+# 		total = 0
+# 		for i in xrange(count):
+# 			total += max(res0[i],res1[count-1-i])
+# 		return total
+
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.candy([0,1,2,3,4,5])
+# 	print sk.candy([0,0,0,0])
+# 	print sk.candy([])
+# 	print sk.candy([0,0,0,1,1,1,1,0,0,0])
+# 	print sk.candy([5,3,4,4,4,7,9,10,8,6])
 
 # Single Number My Submissions Question
 # Total Accepted: 103759 Total Submissions: 218673 Difficulty: Medium
 # Given an array of integers, every element appears twice except for one. Find that single one.
-
 # Note:
 # Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
-
 # Subscribe to see which companies asked this question
-
 # Show Tags
 # Show Similar Problems
-
+#number can be binary computation, xor would be both 1 or both 0 be 0, only thing left would be the single value
 # class Solution:
 #     # @param A, a list of integer
 #     # @return an integer
 #     def singleNumber(self, A):
-#     	#if len(A) == 0: return None
-#         res = 0
-#         for a in A:
-#             res = res ^ a
-#         return res
+#     	res = 0
+#     	for i in A:
+#     		res = res^i
+#     	return res
 
-# Single Number II My Submissions Question
+# if __name__ == '__main__':
+#    sk = Solution()
+#    print sk.singleNumber([1,1,2,3,3,8,9,9,8])    	
+#    print sk.singleNumber([1])    	
+
+# Single Number II 
 # Total Accepted: 69349 Total Submissions: 191750 Difficulty: Medium
 # Given an array of integers, every element appears three times except for one. Find that single one.
-
 # Note:
 # Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
-
 # Subscribe to see which companies asked this question
-
+#method1: get an array of length of the nums[0],and count the 1 appear at each digits, skip all the counts that is
+#mutiple of 3, and extract all the digits that are not %3 =0
+#method2 as following: use binary for substittue of three-nary, whenever the 1 and 2 get 1 at the same time, make it as 0
 # class Solution(object):
 #     def singleNumber(self, nums):
 #         """
@@ -634,9 +760,15 @@
 #         t2 = 0
 #         t3 = 0
 #         for a in nums:
+#         	#t1 and a both have 1, so go as t2 having 1 as jingwei,combine with the previous existing t2's 1  
 #             t2 = t2|(a&t1)
+#             #has to update t2 first, because we need the old t1 to update t2; if we update t1 first,
+#             #then if one number show twice, we will remove it first, and then update t2, that would be a problem
+#             #only count 1 time, so use ^
 #             t1 = t1^a
+#             #check t3 get 1?
 #             t3 = t1&t2
+#             #whenever t3 has 1, make t1 and t2 the same digits as 0s
 #             t1 = t1&(~t3)
 #             t2 = t2&(~t3)
 #         return t1
@@ -644,24 +776,17 @@
 # Remove Duplicates from Sorted Array My Submissions Question
 # Total Accepted: 98967 Total Submissions: 309169 Difficulty: Easy
 # Given a sorted array, remove the duplicates in place such that each element appear only once and return the new length.
-
 # Do not allocate extra space for another array, you must do this in place with constant memory.
-
 # For example,
 # Given input array nums = [1,1,2],
-
 # Your function should return length = 2, with the first two elements of nums being 1 and 2 respectively. It doesn't matter what you leave beyond the new length.
-
 # Subscribe to see which companies asked this question
 
 
 # # Given a sorted array, remove the duplicates in place such that each element appear only once and return the new length.
-
 # # Do not allocate extra space for another array, you must do this in place with constant memory.
-
 # # For example,
 # # Given input array nums = [1,1,2],
-
 # # Your function should return length = 2, with the first two elements of nums being 1 and 2 respectively. It doesn't matter what you leave beyond the new length.
 
 
@@ -684,40 +809,74 @@
 #     			pres = nums[i]
 #     			i += 1
 #     	return len(nums)
+# class Solution:
+#     # @param {integer[]} nums
+#     # @return {integer}
+#     def removeDuplicates(self, nums):
+#     	'''in place algorithm, cannot make a new array'''
+#     	count = len(nums)
+#     	if count<=1:return count
+#     	i=1 
+#     	while i<count:
+#     	   if nums[i]==nums[i-1]:
+#     	       del nums[i]
+#     	       count -=1
+#     	   else:
+#     	       i += 1
+#     	return count
 		
 
 # Remove Duplicates from Sorted Array II My Submissions Question
 # Total Accepted: 60220 Total Submissions: 191996 Difficulty: Medium
 # Follow up for "Remove Duplicates":
 # What if duplicates are allowed at most twice?
-
 # For example,
 # Given sorted array nums = [1,1,1,2,2,3],
-
 # Your function should return length = 5, with the first five elements of nums being 1, 1, 2, 2 and 3. It doesn't matter what you leave beyond the new length.
-
 # Subscribe to see which companies asked this question
 
 # class Solution(object):
-#     def removeDuplicates(self, nums):
-#         """
-#         :type nums: List[int]
-#         :rtype: int
-#         """
-		
+# 	def removeDuplicates(self, nums):
+# 		"""
+# 		:type nums: List[int]
+# 		:rtype: int
+# 		"""
+# 		c = len(nums)
+# 		if c<=2: return c
+# 		res = [nums[0]]
+# 		#use a variable to count the repeated times
+# 		repeat = 0
+# 		#starts from the second place/not the 1st place to count
+# 		i = 1
+# 		while i < c:
+# 			if nums[i]==nums[i-1]:
+# 				repeat += 1
+# 				if repeat == 2:
+# 					del nums[i]
+# 					repeat -= 1
+# 					c -= 1
+# 				else:
+# 					i += 1
+# 			else:
+# 				repeat = 0
+# 				i += 1
+# 		return c
 
+# if __name__ == '__main__':
+# 	sk =Solution()
+# 	#s = [3,3,3,1,1,1,1]
+# 	s=[1,1,1,1,1]
+# 	sk.removeDuplicates(s)
+# 	print s
+
+
+# =============================================================
 # Search in Rotated Sorted Array II My Submissions Question
 # Total Accepted: 51852 Total Submissions: 165205 Difficulty: Medium
 # Follow up for "Search in Rotated Sorted Array":
 # What if duplicates are allowed?
-
 # Would this affect the run-time complexity? How and why?
-
 # Write a function to determine if a given target is in the array.
-
-# Subscribe to see which companies asked this question
-
-
 # class Solution(object):
 #     def search(self, nums, target):
 #         """
@@ -729,24 +888,60 @@
 # Search in Rotated Sorted Array My Submissions Question
 # Total Accepted: 82275 Total Submissions: 280662 Difficulty: Hard
 # Suppose a sorted array is rotated at some pivot unknown to you beforehand.
-
 # (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
-
 # You are given a target value to search. If found in the array return its index, otherwise return -1.
-
 # You may assume no duplicate exists in the array.
-
 # Subscribe to see which companies asked this question
+#O(n) is not the target speed, we want O(logn), SO(1)
+#if it is just sorted, then you compare the half and the other half directly, without using binary search tree would work to get O(logn)
+class Solution(object):
+    def search(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        """
+        #check the first and the middle to decide which way to go
+        c = len(nums)	
+        if c==0: return -1
+        if c==1: 
+        	if nums[0]==target: return 0 
+        	else: return -1
+        if nums[0] == target:
+        	return 0
+        if nums[c/2] == target:
+        	return c/2
+        if c==2: return -1
+        #can only decide two situations
+        if nums[0]>target and nums[c/2]<target:
+        	y=self.search(nums[(c/2+1):], target)
+        	if y != -1:	
+	        	return c/2+1+y
+	        else:
+	        	return y	
+        elif nums[0]<target and nums[c/2]>target:
+        	x = self.search(nums[1:c/2], target)
+        	if x != -1:	
+        		return 1+x
+        	else:
+        		return -1
+       	else:
+       		x=self.search(nums[1:c/2], target)
+       		if x != -1: return 1+x
+       		y=self.search(nums[(c/2+1):], target)	
+       		if y != -1: return c/2+1+y
+       		return -1
 
 
-# class Solution(object):
-#     def search(self, nums, target):
-#         """
-#         :type nums: List[int]
-#         :type target: int
-#         :rtype: int
-#         """
-		
+if __name__ == '__main__':
+	sk = Solution()
+	print sk.search([4,5,6,7,8,0,1,2], 2)
+	print sk.search([2], 2)
+	print sk.search([1,2,3,4,5,6,7], 2)
+	print sk.search([], 2)
+	print sk.search([3,4,6,-1,0,1], 2)
+	print sk.search([1,3],2)
+
 
 # Median of Two Sorted Arrays My Submissions Question
 # Total Accepted: 76033 Total Submissions: 430337 Difficulty: Hard
