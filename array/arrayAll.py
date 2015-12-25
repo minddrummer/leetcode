@@ -877,13 +877,16 @@
 # What if duplicates are allowed?
 # Would this affect the run-time complexity? How and why?
 # Write a function to determine if a given target is in the array.
-# class Solution(object):
-#     def search(self, nums, target):
-#         """
-#         :type nums: List[int]
-#         :type target: int
-#         :rtype: bool
-#         """
+class Solution(object):
+    def search(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: bool
+        """
+
+
+        
 		
 # Search in Rotated Sorted Array My Submissions Question
 # Total Accepted: 82275 Total Submissions: 280662 Difficulty: Hard
@@ -894,53 +897,93 @@
 # Subscribe to see which companies asked this question
 #O(n) is not the target speed, we want O(logn), SO(1)
 #if it is just sorted, then you compare the half and the other half directly, without using binary search tree would work to get O(logn)
-class Solution(object):
-    def search(self, nums, target):
-        """
-        :type nums: List[int]
-        :type target: int
-        :rtype: int
-        """
-        #check the first and the middle to decide which way to go
-        c = len(nums)	
-        if c==0: return -1
-        if c==1: 
-        	if nums[0]==target: return 0 
-        	else: return -1
-        if nums[0] == target:
-        	return 0
-        if nums[c/2] == target:
-        	return c/2
-        if c==2: return -1
-        #can only decide two situations
-        if nums[0]>target and nums[c/2]<target:
-        	y=self.search(nums[(c/2+1):], target)
-        	if y != -1:	
-	        	return c/2+1+y
-	        else:
-	        	return y	
-        elif nums[0]<target and nums[c/2]>target:
-        	x = self.search(nums[1:c/2], target)
-        	if x != -1:	
-        		return 1+x
-        	else:
-        		return -1
-       	else:
-       		x=self.search(nums[1:c/2], target)
-       		if x != -1: return 1+x
-       		y=self.search(nums[(c/2+1):], target)	
-       		if y != -1: return c/2+1+y
-       		return -1
+# class Solution(object):
+# 	def search(self, nums, target):
+# 		"""
+# 		:type nums: List[int]
+# 		:type target: int
+# 		:rtype: int
+# 		"""
+# 		#check the first and the middle to decide which way to go
+# 		#method1: only consider the relation between target VS first and middle
+# 		#at worst, it can be O(n), but in general O(logn)
+# 		# c = len(nums)	
+# 		# if c==0: return -1
+# 		# if c==1: 
+# 		# 	if nums[0]==target: return 0 
+# 		# 	else: return -1
+# 		# if nums[0] == target:
+# 		# 	return 0
+# 		# if nums[c/2] == target:
+# 		# 	return c/2
+# 		# if c==2: return -1
+# 		# #can only decide two situations
+# 		# if nums[0]>target and nums[c/2]<target:
+# 		# 	#can NOT assume that you will must find it
+# 		# 	y=self.search(nums[(c/2+1):], target)
+# 		# 	if y != -1:	
+# 		   #  	return c/2+1+y
+# 		   #  else:
+# 		   #  	return y	
+# 		# elif nums[0]<target and nums[c/2]>target:
+# 		# 	x = self.search(nums[1:c/2], target)
+# 		# 	if x != -1:	
+# 		# 		return 1+x
+# 		# 	else:
+# 		# 		return -1
+# 		# else:
+# 		# 	x=self.search(nums[1:c/2], target)
+# 		# 	if x != -1: return 1+x
+# 		# 	y=self.search(nums[(c/2+1):], target)	
+# 		# 	if y != -1: return c/2+1+y
+# 		# 	return -1
+# 		#method2: consider the relation between first VS middle point first,  and then VS target point
+# 		#this method is truly O(log(n))
+# 		count =len(nums)
+# 		if count==0: return -1
+# 		if nums[0]==target: return 0
+# 		if count==1: return -1
+# 		if nums[count/2]==target:return count/2
+# 		if count==2:return -1
+# 		#compare 0 and count/2 first
+# 		if nums[0]>nums[count/2]:
+# 			#mean that the rotated beginning is in the first half
+# 			if nums[0]>target and nums[count/2]<target:
+# 				tmp = self.search(nums[count/2+1:], target)
+# 				if tmp != -1:
+# 					return count/2+1+tmp
+# 				else:
+# 					return tmp
+# 			else:
+# 				tmp = self.search(nums[1:count/2], target)
+# 				if tmp != -1:
+# 					return 1+tmp
+# 				else:
+# 					return tmp
+# 		else:
+# 			#nums[0]<nums[count/2]
+# 			#mean the rotated beginning is in the second half
+# 			if nums[0]<target and nums[count/2]>target:
+# 				tmp = self.search(nums[1:count/2], target)
+# 				if tmp != -1:
+# 					return 1+tmp
+# 				else:
+# 					return tmp
+# 			else:
+# 				tmp = self.search(nums[count/2+1:], target)
+# 				if tmp != -1:
+# 					return count/2+1+tmp
+# 				else:
+# 					return tmp
 
-
-if __name__ == '__main__':
-	sk = Solution()
-	print sk.search([4,5,6,7,8,0,1,2], 2)
-	print sk.search([2], 2)
-	print sk.search([1,2,3,4,5,6,7], 2)
-	print sk.search([], 2)
-	print sk.search([3,4,6,-1,0,1], 2)
-	print sk.search([1,3],2)
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.search([4,5,6,7,8,0,1,2], 2)
+# 	print sk.search([2], 2)
+# 	print sk.search([1,2,3,4,5,6,7], 2)
+# 	print sk.search([], 2)
+# 	print sk.search([3,4,6,-1,0,1], 2)
+# 	print sk.search([1,3],2)
 
 
 # Median of Two Sorted Arrays My Submissions Question
