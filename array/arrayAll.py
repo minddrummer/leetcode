@@ -877,16 +877,44 @@
 # What if duplicates are allowed?
 # Would this affect the run-time complexity? How and why?
 # Write a function to determine if a given target is in the array.
-class Solution(object):
-    def search(self, nums, target):
-        """
-        :type nums: List[int]
-        :type target: int
-        :rtype: bool
-        """
+# class Solution(object):
+#     def search(self, nums, target):
+#         """
+#         :type nums: List[int]
+#         :type target: int
+#         :rtype: bool
+#         """
+#         #method that could be on average log(n), but at worst would be O(n)
+#         count = len(nums)
+#         if count==0: return False
+#         if nums[0]==target: return True
+#         if count==1: return False
+#         if nums[count/2]==target: return True
 
+#         if nums[0]>nums[count/2]:
+#         	if nums[0]>target and nums[count/2]<target:
+#         		#on the right
+#         		return self.search(nums[count/2+1:],target)
+#         	else:
+#         		#to the left
+#         		return self.search(nums[1:count/2],target)
+#         elif nums[0]<nums[count/2]:
+#         	if nums[0]<target and nums[count/2]>target:
+#         		#to the left
+#         		return self.search(nums[1:count/2], target)
+#         	else:
+#         		#to the right
+#         		return self.search(nums[count/2+1:],target)
+#         else: #nums[0]=nums[count/2]
+#         	#can either to the right or to the left
+#         	#to the left
+#         	if self.search(nums[1:count/2],target):
+#         		return True
+#         	#to the right
+#          	if self.search(nums[count/2+1:],target):
+#         		return True
+#         	return False
 
-        
 		
 # Search in Rotated Sorted Array My Submissions Question
 # Total Accepted: 82275 Total Submissions: 280662 Difficulty: Hard
