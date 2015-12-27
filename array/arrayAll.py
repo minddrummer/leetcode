@@ -890,7 +890,6 @@
 #         if nums[0]==target: return True
 #         if count==1: return False
 #         if nums[count/2]==target: return True
-
 #         if nums[0]>nums[count/2]:
 #         	if nums[0]>target and nums[count/2]<target:
 #         		#on the right
@@ -1011,43 +1010,7 @@
 # 	print sk.search([1,2,3,4,5,6,7], 2)
 # 	print sk.search([], 2)
 # 	print sk.search([3,4,6,-1,0,1], 2)
-# 	print sk.search([1,3],2)
-
-
-# Median of Two Sorted Arrays My Submissions Question
-# Total Accepted: 76033 Total Submissions: 430337 Difficulty: Hard
-# There are two sorted arrays nums1 and nums2 of size m and n respectively. Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
-
-# Subscribe to see which companies asked this question
-
-# class Solution(object):
-#     def findMedianSortedArrays(self, nums1, nums2):
-#         """
-#         :type nums1: List[int]
-#         :type nums2: List[int]
-#         :rtype: float
-#         """
-		
-
-# Longest Consecutive Sequence My Submissions Question
-# Total Accepted: 54947 Total Submissions: 178939 Difficulty: Hard
-# Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
-
-# For example,
-# Given [100, 4, 200, 1, 3, 2],
-# The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4.
-
-# Your algorithm should run in O(n) complexity.
-
-# Subscribe to see which companies asked this question
-
-# class Solution(object):
-#     def longestConsecutive(self, nums):
-#         """
-#         :type nums: List[int]
-#         :rtype: int
-#         """
-		
+# 	print sk.search([1,3],2)	
 
 # Two Sum 
 # Total Accepted: 164673 Total Submissions: 834667 Difficulty: Medium
@@ -1216,8 +1179,6 @@
 # 						while nums[left] == nums[left-1] and left < right: left+=1
 # 		return sum(res_lst)
 
-
-
 # if __name__ == '__main__':
 # 	sk = Solution()
 # 	# print sk.threeSumClosest([-1, 2 ,1 ,-4],1)
@@ -1228,6 +1189,112 @@
 
 
 
+# Median of Two Sorted Arrays
+# Total Accepted: 76033 Total Submissions: 430337 Difficulty: Hard
+# There are two sorted arrays nums1 and nums2 of size m and n respectively. Find the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).
+# Subscribe to see which companies asked this question
+
+# class Solution(object):
+#     def findMedianSortedArrays(self, nums1, nums2):
+#         """
+#         :type nums1: List[int]
+#         :type nums2: List[int]
+#         :rtype: float
+#         """
+#         #if you use a pointer to both nums1 and nums2, then you would get O(k), k is the target kth smalllest value
+#         #but the issue is that if k is much closer to m+n, then you would get O(m+n), and the SO(1)
+#         #how can we get O(log(m+n)), we just search half of it, not just 1 each time
+#         #this method applies to kth smallest/biggest value, not only the median value
+#         #the following is TO(log(m+n)), SO(1)
+#         m=len(nums1)
+#         n=len(nums2)
+#         #judge even or odd
+#         if (m+n)%2==0:
+#         	next = True
+#         else:
+#         	next = False
+#         k=(m+n)/2+1 #here k is the len-related, donot be the index
+#         #even, k will be first of the second half; odd will be the middle
+#         if m==0 and n==0: return None
+#         #not necessary to include the following two lines, because the following covers them
+#         # if m!=0 and n==0: return (nums1[k-1]+nums1[k-1-next])/2.0
+#         # if m==0 and n!=0: return (nums2[k-1]+nums2[k-1-next])/2.0
+
+#         #the point is that every time you cut k/2 numbers to close to k, so that at most you would get
+#         #O(log(m+n)), you only need k, p1,p2 , so that the SO(1)
+#         #p1 and p2 are index here
+#         p1=0
+#         p2=0
+#         #if k==2 or 1, there would be bugs at the end
+#         while k > 3 and p1+k/2-1<m and p2+k/2-1<n:
+#         	if nums1[p1+k/2-1] == nums2[p2+k/2-1]:
+#         		p1 += k/2-1
+#         		p2 += k/2-1
+#         		k  -= (k/2-1)*2
+#         	elif nums1[p1+k/2-1] > nums2[p2+k/2-1]:
+#         		p2 += k/2-1
+#         		k -= k/2-1
+#         	else: #	nums1[p1+k/2] < nums2[p2+k/2]
+#         		p1 += k/2-1
+#         		k -= k/2-1
+#         #two steps, the above doing the cut, the following doing the pointer to pick up values
+#         if p1>=m and k>=2: return (nums2[p2+k-1]+nums2[p2+k-1-next])/2.0
+#         if p2>=n and k>=2: return (nums1[p1+k-1]+nums1[p1+k-1-next])/2.0
+
+#         lst=[]
+#         index = k
+#         while k>0 and p1<m and p2<n:
+#         	if nums1[p1] > nums2[p2]:
+#         		lst.append(nums2[p2])
+#         		p2+=1
+#         		k -=1
+#         	elif nums1[p1] < nums2[p2]:
+#         		lst.append(nums1[p1])
+#         		p1+=1
+#         		k -=1
+#         	else: #=
+#         		lst.append(nums1[p1])
+#         		p1+=1
+#         		k -=1
+#        	if p1>=m: 
+#         	for i in range(k):
+#         		lst.append(nums2[p2+i])
+#         if p2>=n:
+#         	for i in range(k):
+#         		lst.append(nums1[p1+i])
+#         # print lst,k,p1, p2
+#        	return (lst[index-1]+lst[index-1-next])/2.0
+
+# if __name__ == '__main__':
+# 	sk=Solution()
+# 	print sk.findMedianSortedArrays([1,2,3], [4,5,6])
+# 	print sk.findMedianSortedArrays([1,2,3], [1,2,3])
+# 	print sk.findMedianSortedArrays([1,1,11], [1,1,1])
+# 	print sk.findMedianSortedArrays([1,1,3,3], [1,1,3,3])
+# 	print sk.findMedianSortedArrays([1,3], [2,4,5,6])
+# 	print sk.findMedianSortedArrays(range(1,100), [0])
+
+
+
+# Longest Consecutive Sequence My Submissions Question
+# Total Accepted: 54947 Total Submissions: 178939 Difficulty: Hard
+# Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
+
+# For example,
+# Given [100, 4, 200, 1, 3, 2],
+# The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4.
+
+# Your algorithm should run in O(n) complexity.
+
+# Subscribe to see which companies asked this question
+
+# class Solution(object):
+#     def longestConsecutive(self, nums):
+#         """
+#         :type nums: List[int]
+#         :rtype: int
+#         """
+	
 
 
 
