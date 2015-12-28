@@ -154,23 +154,20 @@
 # 86. Partition List My Submissions Question
 # Total Accepted: 54817 Total Submissions: 193320 Difficulty: Medium
 # Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
-
 # You should preserve the original relative order of the nodes in each of the two partitions.
 
 # For example,
 # Given 1->4->3->2->5->2 and x = 3,
 # return 1->2->2->4->3->5.
-
 # Subscribe to see which companies asked this question
-
 # Show Tags
 
 
-# # Definition for singly-linked list.
-# # class ListNode(object):
-# #     def __init__(self, x):
-# #         self.val = x
-# #         self.next = None
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
 
 # class Solution(object):
 #     def partition(self, head, x):
@@ -179,7 +176,26 @@
 #         :type x: int
 #         :rtype: ListNode
 #         """
-
+#         if head is None or head.next is None: return head
+#         p1 = ListNode(0)
+#         head1=p1
+#         p2 = ListNode(0)
+#         head2=p2
+#         while head is not None:
+#         	if head.val <x:
+#         		p1.next=head
+#         		p1=p1.next
+#         		head=head.next
+#         		#has to reset the p1's next node to remove the bug of loop
+#         		p1.next=None
+#         	else:
+#         		p2.next=head
+#         		p2=p2.next
+#         		head=head.next
+#         		#has to reset the p2's next node to remove the bug of loop
+#         		p2.next=None
+#        	p1.next=head2.next
+#        	return head1.next
 
 
 # 83. Remove Duplicates from Sorted List My Submissions Question
@@ -191,21 +207,18 @@
 # Given 1->1->2->3->3, return 1->2->3.
 
 # Subscribe to see which companies asked this question
-
-
 # # Definition for singly-linked list.
 # # class ListNode:
 # #     def __init__(self, x):
 # #         self.val = x
 # #         self.next = None
-
+#time1
 # class Solution:
 #     # @param {ListNode} head
 #     # @return {ListNode}
 #     def deleteDuplicates(self, head):
 #     	if head is None:
 #     		return head
-
 #     	pre = head
 #     	cur = head.next
 #     	while cur is not None:
@@ -217,18 +230,37 @@
 #     			pre.next = cur.next
 #     			cur = cur.next
 #     	return head
-		
+#time2: my own way, it is more clear to understand the whole process, and also quicker
+
+# class Solution:
+#     # @param {ListNode} head
+#     # @return {ListNode}
+#     def deleteDuplicates(self, head):
+#     	#boundary when 0 or 1 actually
+#     	if head is None or head.next is None: return head
+#     	#assgin value and intial the state
+#     	value = head.val
+#     	preNode = head
+#     	res=preNode
+#     	head = head.next
+#     	while head is not None:
+#     	    if value == head.val:
+#     	        preNode.next = head.next
+#     	        head = head.next
+#     	    else:
+#     	        value = head.val
+#                 preNode = head
+#                 head = head.next
+#         return res 
+						
 
 # 82. Remove Duplicates from Sorted List II My Submissions Question
 # Total Accepted: 60528 Total Submissions: 233708 Difficulty: Medium
 # Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list.
-
 # For example,
 # Given 1->2->3->3->4->4->5, return 1->2->5.
 # Given 1->1->1->2->3, return 2->3.
-
 # Subscribe to see which companies asked this question
-
 # Show Tags
 
 
@@ -239,12 +271,40 @@
 # #         self.next = None
 
 # class Solution(object):
-#     def deleteDuplicates(self, head):
-#         """
-#         :type head: ListNode
-#         :rtype: ListNode
-#         """
-		
+# 	def deleteDuplicates(self, head):
+# 		"""
+# 		:type head: ListNode
+# 		:rtype: ListNode
+# 		"""
+# 		if head is None or head.next is None: return head
+# 		#pre-linked  a node
+# 		res = ListNode(0)
+# 		#linked to head
+# 		res.next = head
+# 		#set node0, node0 is a safe node in the linked-list
+# 		node0 = res
+# 		#preNode is the true node start to check on, it is not safe
+# 		preNode = head
+# 		#head node now is the second possible duplicate valued node here
+# 		#and it is the current head node
+# 		head = head.next
+# 		value = preNode.val
+# 		while head is not None:
+# 			if head.val>value:
+# 				#if the current head is higher than previous::
+# 				#move node0 to preNode to make it safe, move preNode to current head node
+# 				#and update value, and move head to the next node
+# 				node0 = preNode
+# 				preNode=head
+# 				value = head.val
+# 				head = head.next
+# 			else:
+# 				#if the preNode and the current head node has the same value, we delete the two, set preNode as the node0
+# 				preNode=node0
+# 				node0.next=head.next
+# 				head = head.next
+# 		return res.next
+
 
 # 61. Rotate List My Submissions Question
 # Total Accepted: 56511 Total Submissions: 254664 Difficulty: Medium
