@@ -1283,20 +1283,53 @@
 # For example,
 # Given [100, 4, 200, 1, 3, 2],
 # The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4.
-
 # Your algorithm should run in O(n) complexity.
-
 # Subscribe to see which companies asked this question
 
-# class Solution(object):
-#     def longestConsecutive(self, nums):
-#         """
-#         :type nums: List[int]
-#         :rtype: int
-#         """
-	
+class Solution(object):
+	def check_each_key(self,dct,i):
+		#i is the key already in dct
+		# if i not in dct:
+		# 	return None
+		count = 1
+		key = i
+		while key+1 in dct:
+			count += 1
+			key += 1
+			del dct[key]
+		key = i
+		while key-1 in dct:
+			count += 1
+			key -= 1
+			del dct[key]
+		return count
 
 
+	def longestConsecutive(self, nums):
+		"""
+		:type nums: List[int]
+		:rtype: int
+		"""
+		total = len(nums)
+		if total<=1: return total
+		dct = {}
+		for i in nums:
+			dct[i] = 1
+		res = 0
+		# while total>0:
+		for i in nums:
+			if i in dct:
+				count = self.check_each_key(dct,i)
+				del dct[i]
+			res=max(res,count)
+
+		return res
+
+if __name__ == '__main__':
+	sk =Solution()
+	print sk.longestConsecutive([100, 4, 200, 1, 3, 2])
+	print sk.longestConsecutive([100,100,100])
+	print sk.longestConsecutive(range(10))
 
 
 
