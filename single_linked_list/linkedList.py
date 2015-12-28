@@ -66,28 +66,64 @@
 # 92. Reverse Linked List II My Submissions Question
 # Total Accepted: 59214 Total Submissions: 221428 Difficulty: Medium
 # Reverse a linked list from position m to n. Do it in-place and in one-pass.
-
 # For example:
 # Given 1->2->3->4->5->NULL, m = 2 and n = 4,
-
 # return 1->4->3->2->5->NULL.
-
 # Note:
 # Given m, n satisfy the following condition:
 # 1 ≤ m ≤ n ≤ length of list.
-
 # Subscribe to see which companies asked this question
 
-
-
-
 # class Solution:
-#     # @param head, a ListNode
-#     # @param m, an integer
-#     # @param n, an integer
-#     # @return a ListNode
-#     def reverseBetween(self, head, m, n):
-#         ''''''
+# 	# @param head, a ListNode
+# 	# @param m, an integer
+# 	# @param n, an integer
+# 	# @return a ListNode
+# 	def reverseBetween(self, head, m, n):
+# 		#time2
+# 		#you go through the list, and when start from m, just reverse the direction, and finally attach m and n
+# 		#boundary problems here:
+# 		if head is None or m==n: return head
+		
+# 		res = ListNode(0)
+# 		res.next = head
+# 		pos = 1
+# 		while pos<m-1:
+# 			#after this loop, pos would be the m-1 position, that is where the previous before to start to reverse the Node
+# 			#and head would be the m-1 th Node
+# 			head = head.next
+# 			pos +=1
+# 		#now reverse the linked of the following node from head
+# 		#intiate the following loop
+# 		#liucun
+# 		if m!=1:
+# 			pre_m_Node = head
+# 			head = head.next
+# 			pos += 1
+# 			nextNode=head.next
+# 			#liucun
+# 			m_Node = head
+# 		else:
+# 			nextNode=head.next
+# 			m_Node = head
+# 		#it is ok now for m_node linked to its next,and its  next to itself
+# 		while pos<n: #can NOt be n, otherwise will be bug becaues of NULL
+# 			#suppose now head alreay points to a different node, not nextNode
+# 			#head, head1, head2
+# 			tmp = nextNode.next
+# 			nextNode.next=head
+# 			head=nextNode
+# 			nextNode=tmp
+# 			pos+=1
+# 		#at the n-th, head now is the nth, nextNode is the n+1 th
+# 		if m!=1:
+# 			pre_m_Node.next = head
+# 			m_Node.next = tmp
+# 		else:
+# 			res.next=head
+# 			m_Node.next=tmp
+# 		return res.next
+		# time1
 #         if head == None or head.next == None:
 #             return head
 
@@ -98,26 +134,20 @@
 #         cur = head
 #         for i in range(m-1):
 #             pre = cur
-#             cur = cur.next
-		
+#             cur = cur.next	
 #         if cur is not None:
 #             p1 = cur.next
 #         if p1 is not None:
 #             p2 = p1.next
-
 #         for i in range(n-m):
 #             p1.next = cur
 #             cur = p1
 #             p1 = p2
 #             if p2 is not None:
-#                 p2 = p2.next
-		
+#                 p2 = p2.next		
 #         pre.next.next = p1
 #         pre.next = cur
-		
-			
 #         return dummy.next
-
 
 
 
