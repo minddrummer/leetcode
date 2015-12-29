@@ -309,36 +309,65 @@
 # 61. Rotate List My Submissions Question
 # Total Accepted: 56511 Total Submissions: 254664 Difficulty: Medium
 # Given a list, rotate the list to the right by k places, where k is non-negative.
-
 # For example:
 # Given 1->2->3->4->5->NULL and k = 2,
 # return 4->5->1->2->3->NULL.
-
 # Subscribe to see which companies asked this question
 
-# # Definition for singly-linked list.
-# # class ListNode(object):
-# #     def __init__(self, x):
-# #         self.val = x
-# #         self.next = None
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
 
 # class Solution(object):
-#     def rotateRight(self, head, k):
-#         """
-#         :type head: ListNode
-#         :type k: int
-#         :rtype: ListNode
-#         """
-		
+# 	def rotateRight(self, head, k):
+# 		"""
+# 		:type head: ListNode
+# 		:type k: int
+# 		:rtype: ListNode
+# 		"""
+# 		if head is None or k==0 or head.next is None: return head
+# 		count = 0
+# 		res = ListNode(0)
+# 		res.next = head
+# 		while head is not None:
+# 			count += 1
+# 			head = head.next
+
+# 		head = res.next
+# 		#if k >= count
+# 		k = k%count
+# 		if k==0: return head
+# 		#if k<count
+# 		preNode = res
+# 		i = 1
+# 		#how to rightly figure the times out to get the right bounday
+# 		#1 test/cases 2.logic for ending, and minusing and adding
+# 		while i <= count-k:
+# 			#after the loop, head will be in the right-count kth pos
+# 			#preNode is in the left count-k pos
+# 			preNode = head
+# 			head = head.next
+# 			i += 1
+# 		preNode.next = None
+# 		head1 = res.next
+# 		res.next = head
+# 		#boudary
+# 		while i < count:
+# 			head = head.next
+# 			i+=1
+# 		head.next = head1
+# 		return res.next
+
+
+
 
 # 19. Remove Nth Node From End of List My Submissions Question
 # Total Accepted: 86284 Total Submissions: 307960 Difficulty: Easy
 # Given a linked list, remove the nth node from the end of list and return its head.
-
 # For example,
-
 #    Given linked list: 1->2->3->4->5, and n = 2.
-
 #    After removing the second node from the end, the linked list becomes 1->2->3->5.
 # Note:
 # Given n will always be valid.
@@ -350,58 +379,73 @@
 # 	# @param {ListNode} head
 # 	# @param {integer} n
 # 	# @return {ListNode}
-# 	def count_head_order(self, head, n):
-# 		'''this fucntion counting the x-th node from the head if it is n-th node from the end'''
-# 		if head is None:
-# 			return None
-# 		i = 1
-# 		while head.next is not None:
-# 			head = head.next
-# 			i += 1
-# 		if i == 1:
-# 			return None
-# 		return (i - n + 1)
-
+# 	#one pass solution:
+# 	#very intellegent solution:becaseu one pass, we set two point, the gap is n
+# 	#and they move at the same time until the first one arrive to the end
 # 	def removeNthFromEnd(self, head, n):
-# 		nh = self.count_head_order(head,n)
-# 		if nh is None:
-# 			return None
-# 		if nh == 1:
-# 			return head.next
-# 		cur = head
-# 		for i in range(nh - 2):
-# 			cur = cur.next
-# 		pre = cur
-# 		cur =  cur.next
-# 		curNext = cur.next
-# 		pre.next = curNext
-# 		return head
+# 		if head is None: return head
+# 		res = ListNode(0)
+# 		p=res
+# 		res.next = head
+# 		#after make p as the initial node, there is NO need for special situation/boundary clarification
+# 		q=head
+# 		for i in range(n):
+# 			q=q.next
+# 		while q is not None:
+# 			p=p.next
+# 			q=q.next
+# 		p.next = p.next.next 
+# 		return res.next
+
+	#this is not the one-pass solution
+	# def count_head_order(self, head, n):
+	# 	'''this fucntion counting the x-th node from the head if it is n-th node from the end'''
+	# 	if head is None:
+	# 		return None
+	# 	i = 1
+	# 	while head.next is not None:
+	# 		head = head.next
+	# 		i += 1
+	# 	if i == 1:
+	# 		return None
+	# 	return (i - n + 1)
+
+	# def removeNthFromEnd(self, head, n):
+	# 	nh = self.count_head_order(head,n)
+	# 	if nh is None:
+	# 		return None
+	# 	if nh == 1:
+	# 		return head.next
+	# 	cur = head
+	# 	for i in range(nh - 2):
+	# 		cur = cur.next
+	# 	pre = cur
+	# 	cur =  cur.next
+	# 	curNext = cur.next
+	# 	pre.next = curNext
+	# 	return head
 		
 
 
 # 24. Swap Nodes in Pairs My Submissions Question
 # Total Accepted: 75216 Total Submissions: 223207 Difficulty: Medium
 # Given a linked list, swap every two adjacent nodes and return its head.
-
 # For example,
 # Given 1->2->3->4, you should return the list as 2->1->4->3.
-
 # Your algorithm should use only constant space. You may not modify the values in the list, only nodes itself can be changed.
-
 # Subscribe to see which companies asked this question
-
 # # Definition for singly-linked list.
 # # class ListNode(object):
 # #     def __init__(self, x):
 # #         self.val = x
 # #         self.next = None
 
-# class Solution(object):
-#     def swapPairs(self, head):
-#         """
-#         :type head: ListNode
-#         :rtype: ListNode
-#         """
+class Solution(object):
+    def swapPairs(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
 
 
 # 25. Reverse Nodes in k-Group My Submissions Question
