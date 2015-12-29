@@ -71,7 +71,7 @@
 # return 1->4->3->2->5->NULL.
 # Note:
 # Given m, n satisfy the following condition:
-# 1 ≤ m ≤ n ≤ length of list.
+# 1 <=m <= n <= length of list.
 # Subscribe to see which companies asked this question
 
 # class Solution:
@@ -469,36 +469,81 @@
 # 25. Reverse Nodes in k-Group My Submissions Question
 # Total Accepted: 49488 Total Submissions: 187850 Difficulty: Hard
 # Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.
-
 # If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.
-
 # You may not alter the values in the nodes, only nodes itself may be changed.
-
 # Only constant memory is allowed.
-
 # For example,
 # Given this linked list: 1->2->3->4->5
-
 # For k = 2, you should return: 2->1->4->3->5
-
 # For k = 3, you should return: 3->2->1->4->5
-
 # Subscribe to see which companies asked this question
-
 # # Definition for singly-linked list.
-# # class ListNode(object):
-# #     def __init__(self, x):
-# #         self.val = x
-# #         self.next = None
+# class ListNode(object):
+# 	def __init__(self, x):
+# 		self.val = x
+# 		self.next = None
 
 # class Solution(object):
-#     def reverseKGroup(self, head, k):
-#         """
-#         :type head: ListNode
-#         :type k: int
-#         :rtype: ListNode
-#         """
-		
+# 	def reverseKGroup(self, head, k):
+# 		"""
+# 		:type head: ListNode
+# 		:type k: int
+# 		:rtype: ListNode
+# 		"""
+# 		if head is None or head.next is None or k<=1: return head
+# 		res = ListNode(0)
+# 		head0 = res
+# 		res.next = head
+
+# 		while head is not None:
+# 			#initiate
+# 			p=head
+# 			head=head.next
+# 			tracker = p
+# 			j=1
+# 			loop = False
+# 			while tracker is not None and j<k:
+# 				tracker = tracker.next
+# 				j+=1
+# 			if tracker is None:
+# 				# loop=False
+# 				break
+# 			#run k-1 times of the switch
+# 			for i in range(k-1):
+# 				tmp=head.next
+# 				head.next=p
+# 				p=head
+# 				head=tmp
+# 			#after the loop, head is pointing forward, and p is pointing backward
+# 			tmp0=head0.next
+# 			head0.next.next=head
+# 			head0.next=p
+# 			head0=tmp0
+# 			loop = True
+# 		if loop:
+# 			head0.next=head
+# 		else:
+# 			head0.next=p
+# 		return res.next
+
+# if __name__ == '__main__':
+# 	sk=Solution()
+# 	node1=ListNode(1)
+# 	node2=ListNode(2)
+# 	node3=ListNode(3)
+# 	node4=ListNode(4)
+# 	# node5=ListNode(5)
+# 	node1.next=node2
+# 	node2.next=node3
+# 	node3.next=node4
+# 	# node4.next=node5
+# 	node = sk.reverseKGroup(node1,2)
+# 	while node is not None:
+# 		print node.val
+# 		node=node.next
+			
+
+
 
 # 138. Copy List with Random Pointer My Submissions Question
 # Total Accepted: 54702 Total Submissions: 212259 Difficulty: Hard
@@ -585,8 +630,8 @@
 
 # 143. Reorder List My Submissions Question
 # Total Accepted: 55720 Total Submissions: 254913 Difficulty: Medium
-# Given a singly linked list L: L0→L1→…→Ln-1→Ln,
-# reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
+# Given a singly linked list L: L0 L1 Ln-1 Ln,
+# reorder it to: L0 Ln L1 Ln-1 L2 Ln-2
 
 # You must do this in-place without altering the nodes' values.
 
