@@ -440,13 +440,31 @@
 # #         self.val = x
 # #         self.next = None
 
-class Solution(object):
-    def swapPairs(self, head):
-        """
-        :type head: ListNode
-        :rtype: ListNode
-        """
-
+# class Solution(object):
+# 	def swapPairs(self, head):
+# 		"""
+# 		:type head: ListNode
+# 		:rtype: ListNode
+# 		"""
+# 		if head is None or head.next is None: return head
+# 		res = ListNode(0)
+# 		head0 = res
+# 		res.next = head
+# 		while head is not None:
+# 			p = head
+# 			q = head.next
+# 			if q is not None:
+# 				head=head.next.next
+# 				head0.next = q
+# 				q.next = p
+# 				#the bug here is that when you end with p is still valid and the odd Nodes
+# 				#therefore, make p linked to head.next.next now
+# 				#but linked to head doesnot bring bugs(the infinite loop) here
+# 				p.next=head
+# 				head0=p
+# 			else:
+# 				break
+# 		return res.next
 
 # 25. Reverse Nodes in k-Group My Submissions Question
 # Total Accepted: 49488 Total Submissions: 187850 Difficulty: Hard
