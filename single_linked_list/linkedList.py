@@ -544,127 +544,294 @@
 			
 
 
+# 141. Linked List Cycle My Submissions Question
+# Total Accepted: 86686 Total Submissions: 236463 Difficulty: Medium
+# Given a linked list, determine if it has a cycle in it.
+# Follow up:
+# Can you solve it without using extra space?
+# Subscribe to see which companies asked this question
+# # Definition for singly-linked list.
+# # class ListNode(object):
+# #     def __init__(self, x):
+# #         self.val = x
+# #         self.next = None
+
+# class Solution(object):
+# 	def hasCycle(self, head):
+# 		"""
+# 		:type head: ListNode
+# 		:rtype: bool
+# 		"""
+# 		#method1: SO(1):set a value to indicate visited or not
+# 		#but how do you know the value is unique, and could applied into all cases
+# 		# res = False
+# 		# while head is not None:
+# 		#     if head.val != 's':
+# 		#     	head.val = 's'
+# 		#         head = head.next
+# 		#     else:
+# 		#         res = True
+# 		#         break
+# 		# return res 
+# 		#method2: use slow and quicker pointed, and the quicker will
+# 		#finally meets slower p after entering the loop
+# 		#you judge the two nodes after quicker point's each step of the two steps
+
+# 		if head is None: return False
+# 		s = head
+# 		q = head.next
+# 		while q is not None:
+# 			s = s.next
+# 			q = q.next
+# 			if q is not None:
+# 				if s is q: return True
+# 				else:
+# 					q = q.next
+# 					if q is not None and s is q: return True
+# 		return False		
+
+
+# 142. Linked List Cycle II My Submissions Question
+# Total Accepted: 62790 Total Submissions: 199610 Difficulty: Medium
+# Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
+# Note: Do not modify the linked list.
+# Follow up:
+# Can you solve it without using extra space?
+# Subscribe to see which companies asked this question
+
+# # Definition for singly-linked list.
+# # class ListNode(object):
+# #     def __init__(self, x):
+# #         self.val = x
+# #         self.next = None
+
+# class Solution(object):
+# 	def detectCycle(self, head):
+# 		"""
+# 		:type head: ListNode
+# 		:rtype: ListNode
+# 		"""
+# 		#method1 is ok, but there is bug, that is when q and s1 meet at the first node of q, rather than the second node of q
+# 		#so you need to track whether meet at step1 or step2::
+# 		if head is None or head.next is None: return None
+# 		s1 = head
+# 		q = head.next
+# 		loop = False
+# 		step1=False
+# 		while q is not None:
+# 			s1=s1.next
+# 			q=q.next
+# 			if q is not None:
+# 				if s1 is q:
+# 					loop =True
+# 					step1=True
+# 					break
+# 				else:
+# 					q=q.next
+# 					if q is not None and s1 is q: 
+# 						loop=True
+# 						break
+# 		if not loop:
+# 			return None
+# 		#move s1 additional 1 step
+# 		if not step1:
+# 			s1=s1.next
+# 		#set s2 from the head
+# 		s2=head
+# 		#move s1 and s2 at the same time, until they meet
+# 		while s1 is not s2:
+# 			s1=s1.next
+# 			s2=s2.next
+# 		return s1
+
+		#you can actually prove that s1 and p will eventually meet in the cycle for sure
+		#even we only check the steps2 for p, rather than step1+step2 for p(this method is quick when we only need the cycle True or false)
+		# def detectCycle(self, head):
+		# """
+		# :type head: ListNode
+		# :rtype: ListNode
+		# """
+		# if head is None or head.next is None: return None
+		# s1 = head
+		# q = head.next
+		# loop = False
+		# while q is not None:
+		# 	s1=s1.next
+		# 	q=q.next
+		# 	if q is not None and q.next is not None:
+		# 	    q=q.next
+		# 	    if s1 is q:
+		# 	        loop =True
+		# 	        break
+		# 	else:
+		# 	    break
+			
+		# if not loop:
+		# 	return None
+		# #move s1 additional 1 step
+		# s1=s1.next
+		# #set s2 from the head
+		# s2=head
+		# #move s1 and s2 at the same time, until they meet
+		# while s1 is not s2:
+		# 	s1=s1.next
+		# 	s2=s2.next
+		# return s1
+
+
+# 143. Reorder List My Submissions Question
+# Total Accepted: 55720 Total Submissions: 254913 Difficulty: Medium
+# Given a singly linked list L: L0 L1 Ln-1 Ln,
+# reorder it to: L0 Ln L1 Ln-1 L2 Ln-2
+# You must do this in-place without altering the nodes' values.
+# For example,
+# Given {1,2,3,4}, reorder it to {1,4,2,3}.
+# Subscribe to see which companies asked this question
+
+# # Definition for singly-linked list.
+# # class ListNode(object):
+# #     def __init__(self, x):
+# #         self.val = x
+# #         self.next = None
+
+# class Solution(object):
+# 	def reorderList(self, head):
+# 		"""
+# 		:type head: ListNode
+# 		:rtype: void Do not return anything, modify head in-place instead.
+# 		"""
+# 		#because we want inplace, SO(n), we cannot create a new list
+# 		#we cut in the middle, reverse the second half, and then move the two list to the end
+# 		if head is None or head.next is None: return
+# 		count = 0
+# 		head1=head
+# 		while head is not None:
+# 			count+=1
+# 			head=head.next
+# 		#middle is counting, not indexing
+# 		#put the last one in head1, it is easy for coding
+# 		middle = (count+1)/2
+# 		count=1
+# 		# res = ListNode(0)
+# 		# res.next = head
+# 		head= head1
+# 		while count < middle:
+# 			#do n times, now head is at the begining of the second half
+# 			head=head.next
+# 			count += 1
+# 		#cut head1's end to None::: this is a possible bug
+# 		tmp = head.next
+# 		head.next = None
+# 		head=tmp
+
+# 		head2=ListNode(0)
+# 		head2.next=head
+# 		#reverse head2
+# 		pre = head2
+# 		while head is not None:
+# 			tmp=head.next
+# 			head.next=pre
+# 			pre = head
+# 			head=tmp
+# 		head2.next.next = None
+# 		head2.next = pre
+# 		head2=head2.next
+
+# # 		res=ListNode(0)
+# # 		head=head1
+# 		while head1 is not None and head2 is not None:
+# 			tmp1 = head1.next
+# 			head1.next=head2
+# 			tmp2 = head2.next
+# 			head2.next =tmp1
+# 			head1=tmp1
+# 			head2=tmp2
+# 		#no need for change the head, because we return nothing	
+# # 		head = head1	
+# 		return 
+		
 
 # 138. Copy List with Random Pointer My Submissions Question
 # Total Accepted: 54702 Total Submissions: 212259 Difficulty: Hard
-# A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
-
+# A linked list is given such that each node contains an additional random pointer
+ # which could point to any node in the list or null.
 # Return a deep copy of the list.
-
 # Subscribe to see which companies asked this question
-
 # Show Tags
 # Show Similar Problems
 
-# # Definition for singly-linked list with a random pointer.
-# # class RandomListNode(object):
-# #     def __init__(self, x):
-# #         self.label = x
-# #         self.next = None
-# #         self.random = None
+# Definition for singly-linked list with a random pointer.
+# class RandomListNode(object):
+#     def __init__(self, x):
+#         self.label = x
+#         self.next = None
+#         self.random = None
 
 # class Solution(object):
 #     def copyRandomList(self, head):
 #         """
 #         :type head: RandomListNode
 #         :rtype: RandomListNode
-#         """
-		
-
-# 141. Linked List Cycle My Submissions Question
-# Total Accepted: 86686 Total Submissions: 236463 Difficulty: Medium
-# Given a linked list, determine if it has a cycle in it.
-
-# Follow up:
-# Can you solve it without using extra space?
-
-# Subscribe to see which companies asked this question
-
-# # Definition for singly-linked list.
-# # class ListNode(object):
-# #     def __init__(self, x):
-# #         self.val = x
-# #         self.next = None
-
-# class Solution(object):
-#     def hasCycle(self, head):
-#         """
-#         :type head: ListNode
-#         :rtype: bool
-#         """
-#         res = False
+#         """                                                                                               
+#         if head is None: return None
+#         # if head.next is None: return ListNode(head.label)
+#         #deep copy means that you create a completed list nodes, rather than the original ones
+#         #make next
+#         res = RandomListNode(0)
+#         res.next = head
+#         #copy next
 #         while head is not None:
-#             if head.val != 's':
-#             	head.val = 's'
-#                 head = head.next
-#             else:
-#                 res = True
-#                 break
-#         return res 
+#         	newNode = RandomListNode(head.label)
+#         	tmp = head.next
+#         	head.next=newNode
+#         	newNode.next=tmp
+#         	head=tmp
+#         #copy random
+#         head=res.next
+#         #only check the even label nodes, because each node could randomly point to None
+#         copyhead = head.next
+#         while head is not None:
+#         	if head.random is not None:
+# 	        	copyhead.random = head.random.next
+# 	        else:
+# 	        	copyhead.random = None
+#         	head = copyhead.next
+#         	if head is None:
+#         		break
+#         	copyhead = head.next
 
+#         #decouple the one into two lists
+#         head1=res.next
+#         head2=head1.next
+#         res.next=head2
+#         while head1 is not None:
+#         	tmp1=head2.next
+#         	if tmp1 is None:
+#         		break
+#         	tmp2=tmp1.next
+#         	head1.next = tmp1
+#         	head2.next = tmp2
+#         	head1=tmp1
+#         	head2=tmp2
+#         head1.next=None
+#         return res.next
 
-# 142. Linked List Cycle II My Submissions Question
-# Total Accepted: 62790 Total Submissions: 199610 Difficulty: Medium
-# Given a linked list, return the node where the cycle begins. If there is no cycle, return null.
-
-# Note: Do not modify the linked list.
-
-# Follow up:
-# Can you solve it without using extra space?
-
-# Subscribe to see which companies asked this question
-
-# # Definition for singly-linked list.
-# # class ListNode(object):
-# #     def __init__(self, x):
-# #         self.val = x
-# #         self.next = None
-
-# class Solution(object):
-#     def detectCycle(self, head):
-#         """
-#         :type head: ListNode
-#         :rtype: ListNode
-#         """
-		
-
-# 143. Reorder List My Submissions Question
-# Total Accepted: 55720 Total Submissions: 254913 Difficulty: Medium
-# Given a singly linked list L: L0 L1 Ln-1 Ln,
-# reorder it to: L0 Ln L1 Ln-1 L2 Ln-2
-
-# You must do this in-place without altering the nodes' values.
-
-# For example,
-# Given {1,2,3,4}, reorder it to {1,4,2,3}.
-
-# Subscribe to see which companies asked this question
-
-# # Definition for singly-linked list.
-# # class ListNode(object):
-# #     def __init__(self, x):
-# #         self.val = x
-# #         self.next = None
-
-# class Solution(object):
-#     def reorderList(self, head):
-#         """
-#         :type head: ListNode
-#         :rtype: void Do not return anything, modify head in-place instead.
-#         """
-		
 
 # 146. LRU Cache My Submissions Question
 # Total Accepted: 58461 Total Submissions: 376255 Difficulty: Hard
-# Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and set.
-
+# Design and implement a data structure for Least Recently Used (LRU) cache. 
+# It should support the following operations: get and set.
 # get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
 # set(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
 
 # Subscribe to see which companies asked this question
 
 # class LRUCache(object):
-
+	'''
+	use hashtable and doublelinked list to implement
+	hashtable to save keys to find node: O(1)
+	use doublelinked list to set values and move node O(1)
+	'''
 #     def __init__(self, capacity):
 #         """
 #         :type capacity: int
@@ -683,4 +850,5 @@
 #         :type value: int
 #         :rtype: nothing
 #         """
-#                                                                                                         
+#          
+
