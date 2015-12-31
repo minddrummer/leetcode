@@ -1,87 +1,106 @@
-# 125. Valid Palindrome My Submissions Question
+# 125. Valid Palindrome
 # Total Accepted: 81196 Total Submissions: 355032 Difficulty: Easy
-# Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
-
+# Given a string, determine if it is a palindrome, 
+# considering only alphanumeric characters and ignoring cases.
 # For example,
 # "A man, a plan, a canal: Panama" is a palindrome.
 # "race a car" is not a palindrome.
-
 # Note:
-# Have you consider that the string might be empty? This is a good question to ask during an interview.
-
+# Have you consider that the string might be empty? This is a good question 
+# to ask during an interview.
 # For the purpose of this problem, we define empty string as valid palindrome.
-
 # Subscribe to see which companies asked this question
 
-
 # class Solution:
-#     # @param {string} s
-#     # @return {boolean}
-#     def isPalindrome(self, s):
-#     	if len(s) == 0:
-#     		return True
-#     	s = s.lower()
-#     	s = ''.join(x for x in s if x.isalnum())
-#     	return s == s[::-1]
+# 	# @param {string} s
+# 	# @return {boolean}
+# 	def isPalindrome(self, s):
+# 		#the following is slower, will run n+n+n times at least
+# 		# if len(s) == 0:
+# 		# 	return True
+# 		# s = s.lower()
+# 		# s = ''.join(x for x in s if x.isalnum())
+# 		# return s == s[::-1]
+		#method2 will run n times
+# 		#if empty count it as True
+# 		count = len(s)
+# 		if count==0: return True
+# 		left=0
+# 		right=count-1
+# 		while left<right:
+# 			if s[left].isalnum() and s[right].isalnum():
+# 				if s[left].lower()==s[right].lower():
+# 					left +=1
+# 					right-=1
+# 				else:
+# 					return False
+# 			elif not s[left].isalnum() and s[right].isalnum():
+# 				left += 1
+# 			elif s[left].isalnum() and not s[right].isalnum():	
+# 				right -=1
+# 			else:
+# 				left+=1
+# 				right-=1
+# 		return True
 
 
 
 # 28. Implement strStr() My Submissions Question
 # Total Accepted: 84227 Total Submissions: 355976 Difficulty: Easy
 # Implement strStr().
-
 # Returns the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
-
 # Subscribe to see which companies asked this question
 
-# Show Tags
-# Show Similar Problems
-# Have you met this question in a real interview? Yes  No
-# Discuss
-
-
-
 # class Solution:
-#     # @param {string} haystack
-#     # @param {string} needle
-#     # @return {integer}
+# 	# @param {string} haystack
+# 	# @param {string} needle
+# 	# @return {integer}
 #     def strStr(self, haystack, needle):
+# 		#this method is brute-force, but good enough
 # 		hl = len(haystack)
 # 		nl = len(needle)
-# 		if nl == 0:
-# 		    return 0
+# 		if nl == 0: return 0
 # 		i = 0
-# 		while i <= hl-1:
-# 			if haystack[i] == needle[0]:
-# 				if haystack[i:(i+nl)] == needle:
-# 					return i
+# 		j=0
+# 		while i < hl:
+# 			if haystack[i] == needle[j]:
+# 				new_i = i
+# 				match=True
+# 				#need both condition
+# 				while j<nl-1 and new_i<hl-1:
+# 					new_i += 1
+# 					j += 1
+# 					if haystack[new_i]==needle[j]:
+# 						continue
+# 						# new_i+=1
+# 						# j+=1
+# 					else:
+# 						match=False
+# 						j=0
+# 						break
+# 				if match and j==nl-1: return i
+# 				# if haystack[i:(i+nl)] == needle:
+# 				# 	return i
 # 			i += 1
 # 			# 	else:
 # 			# 		i = i + nl
 # 			# else: 
 # 			# 	i += 1    	
 # 		return -1
-        
 
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.strStr('abaacdaa','aa')	
 
 # 8. String to Integer (atoi) My Submissions Question
 # Total Accepted: 80256 Total Submissions: 612069 Difficulty: Easy
 # Implement atoi to convert a string to an integer.
-
 # Hint: Carefully consider all possible input cases. If you want a challenge, please do not see below and ask yourself what are the possible input cases.
-
 # Notes: It is intended for this problem to be specified vaguely (ie, no given input specs). You are responsible to gather all the input requirements up front.
-
 # Update (2015-02-10):
 # The signature of the C++ function had been updated. If you still see your function signature accepts a const char * argument, please click the reload button  to reset your code definition.
-
-# spoilers alert... click to show requirements for atoi.
-
+# spoilers alert... click to show requirements for atoi
 # Subscribe to see which companies asked this question
-
-# Show Tags
-# Show Similar Problems
-
 
 # class Solution:
 # 	# @param {string} str
@@ -90,66 +109,75 @@
 # 		if len(str) == 0:
 # 			return 0
 # 		s = str
+# 		#remove all the white space
 # 		s = s.strip()
-# 		num_lst = ['0','1','2','3','4','5','6','7','8','9','-']
+# 		num_lst = ['0','1','2','3','4','5','6','7','8','9','-','+']
 # 		res = []
+# 		i=0
 # 		for letter in s:
 # 			if letter in num_lst:
-# 				res.append(letter)
-# 		if len(res) == 0:
+# 				#only allows one sign
+# 				if i==0 and letter in ['-','+']:
+# 					res.append(letter)
+# 					i+=1
+# 				# elif i==1 and letter in ['-','+']:
+# 				# 	res=[]
+# 				# 	break
+# 				#more than one sign will break and stop counting
+# 				elif i>0 and letter in ['+','-']:
+# 					break
+# 				else:
+# 					i+=1
+# 					res.append(letter)
+# 			else:
+# 				break
+# 		#len0 or only sign will return 0				
+# 		if len(res) == 0 or (len(res)==1 and res[0] in ['+','-']):
 # 			return 0
-# 		res1 = []
-# 		#print res
-		
-# 		res1.append(res[0])
-# 		for i in res[1:]:
-# 		    if i != '-':
-# 		        res1.append(i)
-# 		#print res1
-# 		if len(res1) == 1 and '-' in res1:
-# 		    return 0
-# 		#print res1
-# 		res1 = int(''.join(res1))
-# 		return res1
+# 		res = int(''.join(res))
+# 		#adjust the final range
+# 		if res > 2147483647:
+# 		    return 2147483647
+# 		if res < -2147483648:
+# 		    return -2147483648
+# 		return res
 
 
 # 67. Add Binary My Submissions Question
 # Total Accepted: 67706 Total Submissions: 261672 Difficulty: Easy
 # Given two binary strings, return their sum (also a binary string).
-
 # For example,
 # a = "11"
 # b = "1"
 # Return "100".
-
 # Subscribe to see which companies asked this question
 
-# class Solution:
-#     # @param {string} a
-#     # @param {string} b
-#     # @return {string}
-#     def addBinary(self, a, b):
-#     	#the shortest and pythonest way to finish the code
-#         #return 
-        
-#         if len(a) >= len(b):
-#         	b = (len(a)-len(b))*'0' + b
-#         else:
-#         	a = (len(b)-len(a))*'0' + a
-#         res = ''
-#         up = 0
-#         for i in range(1,len(a)+1):
-#         	if int(a[-i]) + int(b[-i]) + up >= 2:
-#         		res = res + str((int(a[-i]) + int(b[-i]) + up)%2)
-#         		up = 1
-#         	else:
-#         		res = res + str(int(a[-i]) + int(b[-i]) + up)
-#         		#has to reset up here
-#         		up = 0
-#         if up == 1:
-#         	res = res + '1'	
-#         #x = bin(int(a,2)+int(b,2))[2:]	
-#         return res[::-1]#, x
+class Solution:
+    # @param {string} a
+    # @param {string} b
+    # @return {string}
+    def addBinary(self, a, b):
+    	#the shortest and pythonest way to finish the code
+        #return 
+		
+        if len(a) >= len(b):
+        	b = (len(a)-len(b))*'0' + b
+        else:
+        	a = (len(b)-len(a))*'0' + a
+        res = ''
+        up = 0
+        for i in range(1,len(a)+1):
+        	if int(a[-i]) + int(b[-i]) + up >= 2:
+        		res = res + str((int(a[-i]) + int(b[-i]) + up)%2)
+        		up = 1
+        	else:
+        		res = res + str(int(a[-i]) + int(b[-i]) + up)
+        		#has to reset up here
+        		up = 0
+        if up == 1:
+        	res = res + '1'	
+        #x = bin(int(a,2)+int(b,2))[2:]	
+        return res[::-1]#, x
 
 
 # 5. Longest Palindromic Substring My Submissions Question
@@ -182,13 +210,13 @@
 # bool isMatch(const char *s, const char *p)
 
 # Some examples:
-# isMatch("aa","a") → false
-# isMatch("aa","aa") → true
-# isMatch("aaa","aa") → false
-# isMatch("aa", "a*") → true
-# isMatch("aa", ".*") → true
-# isMatch("ab", ".*") → true
-# isMatch("aab", "c*a*b") → true
+# isMatch("aa","a")  false
+# isMatch("aa","aa")  true
+# isMatch("aaa","aa")  false
+# isMatch("aa", "a*")  true
+# isMatch("aa", ".*")  true
+# isMatch("ab", ".*")  true
+# isMatch("aab", "c*a*b") true
 
 
 # class Solution(object):
@@ -198,7 +226,7 @@
 #         :type p: str
 #         :rtype: bool
 #         """
-        
+		
 
 
 # 44. Wildcard Matching My Submissions Question
@@ -214,13 +242,13 @@
 # bool isMatch(const char *s, const char *p)
 
 # Some examples:
-# isMatch("aa","a") → false
-# isMatch("aa","aa") → true
-# isMatch("aaa","aa") → false
-# isMatch("aa", "*") → true
-# isMatch("aa", "a*") → true
-# isMatch("ab", "?*") → true
-# isMatch("aab", "c*a*b") → false
+# isMatch("aa","a") false
+# isMatch("aa","aa")  true
+# isMatch("aaa","aa") false
+# isMatch("aa", "*")  true
+# isMatch("aa", "a*")  true
+# isMatch("ab", "?*")  true
+# isMatch("aab", "c*a*b") false
 
 
 # class Solution(object):
@@ -230,7 +258,7 @@
 #         :type p: str
 #         :rtype: bool
 #         """
-        
+		
 
 # 14. Longest Common Prefix My Submissions Question
 # Total Accepted: 79040 Total Submissions: 295620 Difficulty: Easy
@@ -286,7 +314,7 @@
 #         :type s: str
 #         :rtype: bool
 #         """
-        
+		
 
 # 12. Integer to Roman My Submissions Question
 # Total Accepted: 51285 Total Submissions: 141110 Difficulty: Medium
@@ -302,7 +330,7 @@
 #         :type num: int
 #         :rtype: str
 #         """
-        
+		
 
 # 13. Roman to Integer My Submissions Question
 # Total Accepted: 65811 Total Submissions: 178393 Difficulty: Easy
@@ -410,7 +438,7 @@
 # 				times = len(item)
 # 				res = res + str(times)+str(item[0])
 # 		return res
-        
+		
 
 # 242. Valid Anagram My Submissions Question
 # Total Accepted: 47204 Total Submissions: 119459 Difficulty: Easy
@@ -435,7 +463,7 @@
 #         :type t: str
 #         :rtype: bool
 #         """
-        
+		
 
 # 49. Group Anagrams My Submissions Question
 # Total Accepted: 59431 Total Submissions: 231519 Difficulty: Medium
@@ -486,7 +514,7 @@
 #         :type path: str
 #         :rtype: str
 #         """
-        
+		
 
 # 58. Length of Last Word My Submissions Question
 # Total Accepted: 76539 Total Submissions: 270996 Difficulty: Easy
