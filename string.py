@@ -152,63 +152,129 @@
 # Return "100".
 # Subscribe to see which companies asked this question
 
-class Solution:
-    # @param {string} a
-    # @param {string} b
-    # @return {string}
-    def addBinary(self, a, b):
-    	#the shortest and pythonest way to finish the code
-        #return 
-		
-        if len(a) >= len(b):
-        	b = (len(a)-len(b))*'0' + b
-        else:
-        	a = (len(b)-len(a))*'0' + a
-        res = ''
-        up = 0
-        for i in range(1,len(a)+1):
-        	if int(a[-i]) + int(b[-i]) + up >= 2:
-        		res = res + str((int(a[-i]) + int(b[-i]) + up)%2)
-        		up = 1
-        	else:
-        		res = res + str(int(a[-i]) + int(b[-i]) + up)
-        		#has to reset up here
-        		up = 0
-        if up == 1:
-        	res = res + '1'	
-        #x = bin(int(a,2)+int(b,2))[2:]	
-        return res[::-1]#, x
+# class Solution:
+# 	# @param {string} a
+# 	# @param {string} b
+# 	# @return {string}
+# 	def addBinary(self, a, b):
+		#the shortest and pythonest way to finish the code
+		#return 
+		#if you save result into a list, will take SO(n), but if you 
+		#make it as a int or str, it will take SO(1)
+		# if len(a) >= len(b):
+		# 	b = (len(a)-len(b))*'0' + b
+		# else:
+		# 	a = (len(b)-len(a))*'0' + a
+		# res = ''
+		# up = 0
+		# for i in range(1,len(a)+1):
+		# 	if int(a[-i]) + int(b[-i]) + up >= 2:
+		# 		res = res + str((int(a[-i]) + int(b[-i]) + up)%2)
+		# 		up = 1
+		# 	else:
+		# 		res = res + str(int(a[-i]) + int(b[-i]) + up)
+		# 		#has to reset up here
+		# 		up = 0
+		# if up == 1:
+		# 	res = res + '1'	
+		# #x = bin(int(a,2)+int(b,2))[2:]	
+		# return res[::-1]#, x
+
+		#method 2: to int, add first, and the  transfer to string digits by digits
+		# c = str(int(a) + int(b))[::-1]
+		# # count = len(c)
+		# res = ''
+		# up = False
+		# for i in c:
+		# 	if i == '0':
+		# 		if up: res = '1'+res
+		# 		else: res = '0'+res
+		# 		up = False
+		# 	elif i == '1':
+		# 		if up: 
+		# 			res = '0' + res
+		# 			up = True
+		# 		else:
+		# 			res = '1'+res
+		# 			up = False
+		# 	else:#=2
+		# 		if up:
+		# 			res = '1'+res
+		# 		else:
+		# 			res = '0'+res
+		# 		up=True
+		# if up:
+		# 	res = '1'+res
+		# return res		
+
+
 
 
 # 5. Longest Palindromic Substring My Submissions Question
 # Total Accepted: 85048 Total Submissions: 390023 Difficulty: Medium
-# Given a string S, find the longest palindromic substring in S. You may assume that the maximum length of S is 1000, and there exists one unique longest palindromic substring.
-
+# Given a string S, find the longest palindromic substring in S. 
+# You may assume that the maximum length of S is 1000,
+# and there exists one unique longest palindromic substring.
 # Subscribe to see which companies asked this question
-
 # Show Tags
 # Show Similar Problems
 
 # class Solution(object):
-#     def longestPalindrome(self, s):
-#         """
-#         :type s: str
-#         :rtype: str
-#         """
+# 	def getP(self,s,l,r,count):
+# 		while l>=0 and r<count and s[l]==s[r]:
+# 			l-=1
+# 			r+=1
+# 		return s[l+1:r]
+# 	def longestPalindrome(self, s):
+# 		"""
+# 		:type s: str
+# 		:rtype: str
+# 		"""
+		#method1: from middle to two side, get the most longest length
+		#TO(n^2), SO(n)
+		# p=''
+		# count=len(s)
+		# for i in range(count):
+		# 	p_odd = self.getP(s,i,i,count)
+		# 	if len(p_odd)>len(p): p = p_odd
+		# 	p_even = self.getP(s,i,i+1,count)
+		# 	if len(p_even)>len(p): p = p_even
+		# return p
+
+		#method2:dynamic programming
+		#To(n^2), SO(n^2)
+		# P[i,j] = 1  if i ==j
+  #       =  S[i] ==S[j]   if j = i+1
+  #       =  S[i] == S[j] && P[i+1][j-1]  if j>i+1
+
+		# n=len(s)
+		# if n<=1: return s
+		# dct={}
+		# pan = ''
+		# count = 0
+		# #reverse index for j, not the typical going forward, but rather backward!
+		# for i in range(n):
+		# 	for j in range(0,i+1):
+		# 		if j==i:
+		# 			dct[(j,i)]=True
+		# 		elif j==i-1:
+		# 			dct[(j,i)]=s[i]==s[j]
+		# 		else:
+		# 			dct[(j,i)]=(s[i]==s[j] and dct[(j+1,i-1)])
+		# 		if dct[(j,i)] and i-j+1>count:
+		# 			count = i-j+1
+		# 			pan = s[j:i+1]
+		# return pan
 
 
 # 10. Regular Expression Matching My Submissions Question
 # Total Accepted: 65937 Total Submissions: 309819 Difficulty: Hard
 # Implement regular expression matching with support for '.' and '*'.
-
 # '.' Matches any single character.
 # '*' Matches zero or more of the preceding element.
-
 # The matching should cover the entire input string (not partial).
-
 # The function prototype should be:
 # bool isMatch(const char *s, const char *p)
-
 # Some examples:
 # isMatch("aa","a")  false
 # isMatch("aa","aa")  true
@@ -218,16 +284,77 @@ class Solution:
 # isMatch("ab", ".*")  true
 # isMatch("aab", "c*a*b") true
 
-
 # class Solution(object):
-#     def isMatch(self, s, p):
-#         """
-#         :type s: str
-#         :type p: str
-#         :rtype: bool
-#         """
+# 	def isMatch(self, s, p):
+# 		"""
+# 		:type s: str
+# 		:type p: str
+# 		:rtype: bool
+# 		"""
+#   #       ns = len(s)
+#   #       np = len(p)
+# 		# if '*' not in p:
+# 		# 	if len(p) != len(s): return False
+# 		# 	else:
+# 		# 		for i in range(ns):
+# 		# 			if s[i]==p[i]:
+# 		# 				continue
+# 		# 			elif s[i]!=p[i] and p[i] == '.':
+# 		# 				continue
+# 		# 			else:
+# 		# 				return False
+# 		# 		return True
+# 		# else:
+# 		# 	if p[0]=='*': return False
+# 		# 	for i in range(np):
+# 		# 		if p[i+1] != '*':
+# 		#recursion--will have time limit error
+# 		# np=len(p)
+# 		# ns=len(s)
+# 		# if np==0: return ns==0
+# 		# #no * at the 2nd pos
+# 		# if np==1 or p[1]!='*':
+# 		# 	if ns==0 or (s[0]!=p[0] and p[0]!='.'): return False
+# 		# 	return self.isMatch(s[1:],p[1:])
+# 		# else: #2nd is '*'
+# 		# 	#if s[i]==p[j]: check i and j+2,  or i+1 and j+2
+# 		# 	if ns==0: return self.isMatch(s, p[2:])
+# 		# 	if s[0]==p[0] or p[0]=='.':
+# 		# 		#when the first one matches, there are three conditions
+# 		# 		#skip the first 2 of p, starting from p3
+# 		# 		if self.isMatch(s,p[2:]): return True
+# 		# 		#match the first one, count from s2 and p3
+# 		# 		if self.isMatch(s[1:],p[2:]): return True
+# 		# 		#match the first s1, but what if the second s2 is the same as s1, 
+# 		# 		# then move to s2 and start match it again to p1
+# 		# 		if self.isMatch(s[1:],p): return True
+# 		# 	#if s[i]!=p[j]: check i and j+2
+# 		# 	else:
+# 		# 		if self.isMatch(s,p[2:]): return True
+# 		# 	return False
 		
+# 		#dynamical programming	
+# 		dp = [[False for i in range(0,len(p)+1)] for j in range(0,len(s)+1)]
+# 		dp[0][0]=True
+# 		for i in range(len(p)+1):
+# 			if i>=2 and p[i-1]=='*':
+# 				dp[0][i]=dp[0][i-2]
+# 		#start from the second place				
+# 		for i in range(1,len(s)+1):
+# 			for j in range(1,len(p)+1):
+# 				if p[j-1]=='.':
+# 					dp[i][j] = dp[i-1][j-1]
+# 				elif p[j-1]=='*':
+# 					dp[i][j] = dp[i][j-1] or dp[i][j-2] or (dp[i-1][j] and (s[i-1]==p[j-2] or p[j-2]=='.'))
+# 				else:
+# 					dp[i][j]= dp[i-1][j-1] and s[i-1]==p[j-1]
+# 		#put  i j here will get a bug
+# 		return dp[len(s)][len(p)]
 
+# if __name__ == '__main__':
+# 	sk =Solution()
+	# print sk.isMatch('aaaaaaaaaaaaab',"a*a*a*a*a*a*a*a*a*a*c")
+	# print sk.isMatch('1',"1*")
 
 # 44. Wildcard Matching My Submissions Question
 # Total Accepted: 46918 Total Submissions: 284267 Difficulty: Hard
