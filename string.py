@@ -291,47 +291,6 @@
 # 		:type p: str
 # 		:rtype: bool
 # 		"""
-#   #       ns = len(s)
-#   #       np = len(p)
-# 		# if '*' not in p:
-# 		# 	if len(p) != len(s): return False
-# 		# 	else:
-# 		# 		for i in range(ns):
-# 		# 			if s[i]==p[i]:
-# 		# 				continue
-# 		# 			elif s[i]!=p[i] and p[i] == '.':
-# 		# 				continue
-# 		# 			else:
-# 		# 				return False
-# 		# 		return True
-# 		# else:
-# 		# 	if p[0]=='*': return False
-# 		# 	for i in range(np):
-# 		# 		if p[i+1] != '*':
-# 		#recursion--will have time limit error
-# 		# np=len(p)
-# 		# ns=len(s)
-# 		# if np==0: return ns==0
-# 		# #no * at the 2nd pos
-# 		# if np==1 or p[1]!='*':
-# 		# 	if ns==0 or (s[0]!=p[0] and p[0]!='.'): return False
-# 		# 	return self.isMatch(s[1:],p[1:])
-# 		# else: #2nd is '*'
-# 		# 	#if s[i]==p[j]: check i and j+2,  or i+1 and j+2
-# 		# 	if ns==0: return self.isMatch(s, p[2:])
-# 		# 	if s[0]==p[0] or p[0]=='.':
-# 		# 		#when the first one matches, there are three conditions
-# 		# 		#skip the first 2 of p, starting from p3
-# 		# 		if self.isMatch(s,p[2:]): return True
-# 		# 		#match the first one, count from s2 and p3
-# 		# 		if self.isMatch(s[1:],p[2:]): return True
-# 		# 		#match the first s1, but what if the second s2 is the same as s1, 
-# 		# 		# then move to s2 and start match it again to p1
-# 		# 		if self.isMatch(s[1:],p): return True
-# 		# 	#if s[i]!=p[j]: check i and j+2
-# 		# 	else:
-# 		# 		if self.isMatch(s,p[2:]): return True
-# 		# 	return False
 		
 # 		#dynamical programming	
 # 		dp = [[False for i in range(0,len(p)+1)] for j in range(0,len(s)+1)]
@@ -359,15 +318,11 @@
 # 44. Wildcard Matching My Submissions Question
 # Total Accepted: 46918 Total Submissions: 284267 Difficulty: Hard
 # Implement wildcard pattern matching with support for '?' and '*'.
-
 # '?' Matches any single character.
 # '*' Matches any sequence of characters (including the empty sequence).
-
 # The matching should cover the entire input string (not partial).
-
 # The function prototype should be:
 # bool isMatch(const char *s, const char *p)
-
 # Some examples:
 # isMatch("aa","a") false
 # isMatch("aa","aa")  true
@@ -379,20 +334,46 @@
 
 
 # class Solution(object):
-#     def isMatch(self, s, p):
-#         """
-#         :type s: str
-#         :type p: str
-#         :rtype: bool
-#         """
-		
+# 	def isMatch(self, s, p):
+# 		"""
+# 		:type s: str
+# 		:type p: str
+# 		:rtype: bool
+# 		"""
+# 		spos=ppos=ss=0
+# 		star=-1
+# 		lens=len(s)
+# 		lenp=len(p)
+# 		while spos<lens:
+# 			if ppos<lenp and (s[spos]==p[ppos] or p[ppos]=='?'):
+# 				spos +=1; ppos+=1; 
+# 				continue
+# 			if ppos<lenp and p[ppos] == '*':
+# 				star = ppos; ss=spos; ppos +=1;
+# 				continue
+# 			if star != -1:
+# 				ppos = star+1; ss += 1; spos = ss;
+# 				continue
+# 			return False
+# 		while ppos < lenp and p[ppos] == '*':
+# 			ppos += 1
+# 		if ppos == lenp: return True
+# 		return False
+
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.isMatch('aaaabaaaab', 'a*b*b' )
+# 	print sk.isMatch('aaaaaaaab', 'a*b*b' )
+# 	print sk.isMatch('aaaaaaaab', 'a*b*b***' )
+# 	print sk.isMatch('aaaabbbaaaab', 'a*b*b***' )
+# #use 'aaaabaaaab' vs 'a*b*b' as an example
+
+
 
 # 14. Longest Common Prefix My Submissions Question
 # Total Accepted: 79040 Total Submissions: 295620 Difficulty: Easy
 # Write a function to find the longest common prefix string amongst an array of strings.
-
 # Subscribe to see which companies asked this question
-
 # Show Tags
 
 # class Solution:
@@ -423,7 +404,6 @@
 # 65. Valid Number My Submissions Question
 # Total Accepted: 38762 Total Submissions: 328128 Difficulty: Hard
 # Validate if a given string is numeric.
-
 # Some examples:
 # "0" => true
 # " 0.1 " => true
@@ -431,7 +411,6 @@
 # "1 a" => false
 # "2e10" => true
 # Note: It is intended for the problem statement to be ambiguous. You should gather all requirements up front before implementing one.
-
 # Update (2015-02-10):
 # The signature of the C++ function had been updated. If you still see your function signature accepts a const char * argument, please click the reload button  to reset your code definition.
 
@@ -532,7 +511,6 @@
 # Total Accepted: 65463 Total Submissions: 241667 Difficulty: Easy
 # The count-and-say sequence is the sequence of integers beginning as follows:
 # 1, 11, 21, 1211, 111221, ...
-
 # 1 is read off as "one 1" or 11.
 # 11 is read off as "two 1s" or 21.
 # 21 is read off as "one 2, then one 1" or 1211.
@@ -546,6 +524,7 @@
 #     # @param {integer} n
 #     # @return {string}
 #     def countAndSay(self, n):
+#should transform to string, and count each number in the string, and speak it
 # 		if n == 1: return '1'
 # 		res = '1'
 # 		for i in range(2,n+1):
@@ -570,35 +549,47 @@
 # 242. Valid Anagram My Submissions Question
 # Total Accepted: 47204 Total Submissions: 119459 Difficulty: Easy
 # Given two strings s and t, write a function to determine if t is an anagram of s.
-
 # For example,
 # s = "anagram", t = "nagaram", return true.
 # s = "rat", t = "car", return false.
-
 # Note:
 # You may assume the string contains only lowercase alphabets.
-
 # Follow up:
 # What if the inputs contain unicode characters? How would you adapt your solution to such case?
-
 # Subscribe to see which companies asked this question
 
 # class Solution(object):
-#     def isAnagram(self, s, t):
-#         """
-#         :type s: str
-#         :type t: str
-#         :rtype: bool
-#         """
+# 	def isAnagram(self, s, t):
+# 		"""
+# 		:type s: str
+# 		:type t: str
+# 		:rtype: bool
+# 		"""
+# 		s_dict ={}
+# 		for i in s:
+# 			if i not in s_dict:
+# 				s_dict[i] = 1
+# 			else:
+# 				s_dict[i] += 1
+# 		for i in t:
+# 			if i not in s_dict:
+# 				return False
+# 			else:
+# 				s_dict[i] -=1
+# 		for key in s_dict:
+# 			if s_dict[key] != 0:
+# 				return False
+# 		return True
+
+
+
 		
 
 # 49. Group Anagrams My Submissions Question
 # Total Accepted: 59431 Total Submissions: 231519 Difficulty: Medium
 # Given an array of strings, group anagrams together.
-
 # For example, given: ["eat", "tea", "tan", "ate", "nat", "bat"], 
 # Return:
-
 # [
 #   ["ate", "eat","tea"],
 #   ["nat","tan"],
@@ -620,8 +611,7 @@
 # 			strs_dict[letter_com].append(item)
 # 		res = []
 # 		for key in strs_dict:
-# 			if len(strs_dict[key]) >=2:
-# 				res = res + strs_dict[key]
+# 			res = res + strs_dict[key]
 # 		return res
 
 # 71. Simplify Path My Submissions Question
@@ -636,46 +626,93 @@
 # Subscribe to see which companies asked this question
 
 # class Solution(object):
-#     def simplifyPath(self, path):
-#         """
-#         :type path: str
-#         :rtype: str
-#         """
-		
+# 	def simplifyPath(self, path):
+# 		"""
+# 		:type path: str
+# 		:rtype: str
+# 		"""
+# 		#TO(n), SO(n)
+# 		#use stack
+# 		res = ''
+# 		# for l in path:
+# 		# 	if l
+# 		#use python processing string ability
+# 		path = path.split('/')
+# 		for l in path:
+# 			if l =='':
+# 				continue
+# 			elif l =='.':
+# 				continue
+# 			elif l == '..':
+# 				if len(res)==0:
+# 					continue
+# 				else:
+# 					i = -1
+# 					while res[i] != '/':
+# 						i -= 1
+# 					res	= res[0:i]				
+# 			else:
+# 				res += '/'+l
+# 		if res == '': return '/'
+# 		return res
+
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print  sk.simplifyPath("/a/./b/../../c/")
+# 	print  sk.simplifyPath("/../")
+# 	print  sk.simplifyPath("/home//foo")
 
 # 58. Length of Last Word My Submissions Question
 # Total Accepted: 76539 Total Submissions: 270996 Difficulty: Easy
 # Given a string s consists of upper/lower-case alphabets and empty space characters ' ', return the length of last word in the string.
-
 # If the last word does not exist, return 0.
-
 # Note: A word is defined as a character sequence consists of non-space characters only.
-
 # For example, 
 # Given s = "Hello World",
 # return 5.
-
 # Subscribe to see which companies asked this question
 
 # class Solution:
 # 	# @param {string} s
 # 	# @return {integer}
 # 	def lengthOfLastWord(self, s):
-# 		##python way to do it
-# 		# s = s.split()
-# 		# #print s
-# 		# if len(s) >= 1:
-# 		# 	return len(s[-1])
-# 		# else: 
-# 		# 	return 0
+# 		# mark and get the letter
+# 		# last = ''
+# 		# continue_white = True
+# 		# for i in range(1,len(s)+1):
+# 		# 	if s[-i] != ' ':
+# 		# 		continue_white = False
+# 		# 	if not continue_white:
+# 		# 		if s[-i] == ' ':
+# 		# 			break 
+# 		# 		last = last + s[-i]
+# 		# return len(last)       
 
-# 		last = ''
-# 		continue_white = True
-# 		for i in range(1,len(s)+1):
+
+
+# 		#the index way to do it
+# 		lens= len(s)
+# 		if lens==0: return 0
+# 		start = -1
+# 		i = 1
+# 		while i <= lens:
+# 			if s[-i] == ' ':
+# 				i+=1
+# 				continue
+# 			else:
+# 				start = i
+# 				break
+# 		if start == -1: return 0
+# 		end = -1
+# 		while i <= lens:
 # 			if s[-i] != ' ':
-# 				continue_white = False
-# 			if not continue_white:
-# 				if s[-i] == ' ':
-# 					break 
-# 				last = last + s[-i]
-# 		return len(last)                                                                                		            	
+# 				i += 1
+# 				continue
+# 			else:
+# 				end = i
+# 				break
+# 		if end == -1:
+# 			return lens-start+1
+# 		else:
+# 			return end - start
+
