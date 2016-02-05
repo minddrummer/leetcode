@@ -1,10 +1,7 @@
-
 # 130. Surrounded Regions My Submissions Question
 # Total Accepted: 46767 Total Submissions: 298769 Difficulty: Medium
 # Given a 2D board containing 'X' and 'O', capture all regions surrounded by 'X'.
-
 # A region is captured by flipping all 'O's into 'X's in that surrounded region.
-
 # For example,
 # X X X X
 # X O O X
@@ -37,6 +34,7 @@
 
 # class Solution(object):
 # 	'''this code transfer the O to Y when qualified, in this way to speed up'''
+'''use a big queue, not each row queue, and put index first, with different method to get neighours, should be faster'''
 # 	def solve(self, board):
 # 		"""
 # 		:type board: List[List[str]]
@@ -89,8 +87,8 @@
 # 				if ele in idx_dct and board[ele[0]][ele[1]] == 'O':
 # 					queue.append(ele)
 # 					board[ele[0]][ele[1]] = 'Y'
-# 					if ele in total_queue:
-# 						total_queue.remove(ele)
+# 					# if ele in total_queue:
+# 					# 	total_queue.remove(ele)
 # 			queue.pop(0)
 
 
@@ -121,17 +119,33 @@
 # All words contain only lowercase alphabetic characters.
 
 
-# class Solution(object):
-#     def ladderLength(self, beginWord, endWord, wordList):
-#         """
-#         :type beginWord: str
-#         :type endWord: str
-#         :type wordList: Set[str]
-#         :rtype: int
-#         """
-        
+class Solution(object):
+	def ladderLength(self, beginWord, endWord, wordList):
+		"""
+		:type beginWord: str
+		:type endWord: str
+		:type wordList: Set[str]
+		:rtype: int
+		"""
+		#bfs:queue, dict and tree
+		#to record the level/path, just add the step after the word state, that is it
+		wordList.add(endWord)
+		dct = dict(zip(wordlist, [1]*len(wordList)))        
+		queue = [(beginWord,1)]
+		n=len(endWord)
+		letters = 'abcdefghijklmnopqrstuvwxyz'
+		while queue:
+			cur = queue.pop(0)
+			curword, curlevel = cur[0], cur[1]
+			if curword == endWord: return curlevel 
 
-
+			for i in range(n):
+				for letter in letters:
+					new = curword[:i] + letter + curword[i+1:]
+					if new in dct:
+						queue.append((new, curlevel+1))
+						dct.remove(new)
+		return 0
 # 126. Word Ladder II My Submissions Question
 # Total Accepted: 38549 Total Submissions: 285578 Difficulty: Hard
 # Given two words (beginWord and endWord), and a dictionary's word list, find all shortest transformation sequence(s) from beginWord to endWord, such that:
@@ -161,7 +175,7 @@
 #         :type wordlist: Set[str]
 #         :rtype: List[List[int]]
 #         """
-                
+
 
 
 
