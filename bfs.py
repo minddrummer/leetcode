@@ -147,6 +147,7 @@
 # 				# 		dct.pop(new)
 # 						wordList.remove(new)
 # 		return 0
+
 # 126. Word Ladder II My Submissions Question
 # Total Accepted: 38549 Total Submissions: 285578 Difficulty: Hard
 # Given two words (beginWord and endWord), and a dictionary's word list, find all shortest transformation sequence(s) from beginWord to endWord, such that:
@@ -154,7 +155,6 @@
 # Only one letter can be changed at a time
 # Each intermediate word must exist in the word list
 # For example,
-
 # Given:
 # beginWord = "hit"
 # endWord = "cog"
@@ -167,18 +167,68 @@
 # Note:
 # All words have the same length.
 # All words contain only lowercase alphabetic characters.
-
-# class Solution(object):
-#     def findLadders(self, beginWord, endWord, wordlist):
-#         """
-#         :type beginWord: str
-#         :type endWord: str
-#         :type wordlist: Set[str]
-#         :rtype: List[List[int]]
-#         """
+class parentNode(object):
+	def __init__(self,word):
+		self.val = word
+		self.parent = None
 
 
+class Solution(object):
+	def findLadders(self, beginWord, endWord, wordlist):
+		"""
+		:type beginWord: str
+		:type endWord: str
+		:type wordlist: Set[str]
+		:rtype: List[List[int]]
+		"""
+		# wordlist.add(beginWord)
+		wordlist.add(endWord)
+		n=len(endWord)
+		letters = 'abcdefghijklmnopqrstuvwxyz'
 
+		queue = [(beginWord, parentNode(beginWord))]
+		resNodes = []
+		nextqueue=[]
+		while queue:
+			cur = queue.pop(0)
+			curword, curNode = cur[0], cur[1]
+			if curword == endWord:
+				resNodes.append(curNode)
+				while queue:
+					next = queue.pop(0)
+					nextword, nextNode = next[0],next[1]
+					if nextword == endWord:
+						resNodes.append(nextNode)
+				break
+			for i in range(n):
+				for letter in letters:
+					new = curword[:i] + letter + curword[i+1:]
+					newNode = parentNode(new)
+					newNode.parent = curNode
+					# if using the following code, there might be a bug in some data, so 
+					#make two queue, and remove all the previous queue word
+					# if new in wordlist and (curNode.parent is None or new != curNode.parent.val):
+					if new in wordlist:							
+						nextqueue.append((new, newNode))
 
+			if not queue:
+				for item in nextqueue:
+					if item[0] in wordlist:
+						wordlist.remove(item[0])
+				queue = nextqueue
+				nextqueue=[]			
+
+		res=[]
+		for node in resNodes:
+			each_res=[]
+			while node:
+				each_res.insert(0, node.val)
+				node= node.parent
+			res.append(each_res)				
+		return res
+
+if __name__ == '__main__':
+	sk = Solution()
+	print sk.findLadders('hit','cog',set(["hot","dot","dog","lot","log"]))
 
 
