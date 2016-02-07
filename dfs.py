@@ -100,24 +100,30 @@
 
 # Subscribe to see which companies asked this question
 
-class Solution(object):
-	DCT = {}
-	def uniquePaths(self, m, n):
-		"""
-		:type m: int
-		:type n: int
-		:rtype: int
-		"""
-
-		if m<1 or n<1: return 0
-		if m==1 and n == 1: 
-			self.DCT[(m,n)] = 1
-			return 1
-		if (m,n) in self.DCT:
-			return self.DCT[(m,n)]
-		else:
-			self.DCT[(m,n)] = self.uniquePaths(m,n-1) + self.uniquePaths(m-1,n)
-			return self.DCT[(m,n)]
+# class Solution(object):
+# 	DCT = {}
+# 	def uniquePaths(self, m, n):
+# 		"""
+# 		:type m: int
+# 		:type n: int
+# 		:rtype: int
+# 		"""
+		##memorization method: TO(n^2), SO(n^2)
+		##if not using dict, then it would be TO(n^4), SO(n)
+		##it can be a math problem by choosing m-1 from m+n-2
+		##last method, use DP's loop-forward method, rather than DP's dict method, like the code following
+# 		#only count, need to count duplicate, ending in two ways: the trick is using the end point as the beginning point
+# 		#save to dict to speed up; need prunning?
+# 		#if you count from the beginning, it is hard, and more computation; if you start from the ending, it is easier and quick
+# 		if m<1 or n<1: return 0
+# 		if m==1 and n == 1: 
+# 			self.DCT[(m,n)] = 1
+# 			return 1
+# 		if (m,n) in self.DCT:
+# 			return self.DCT[(m,n)]
+# 		else:
+# 			self.DCT[(m,n)] = self.uniquePaths(m,n-1) + self.uniquePaths(m-1,n)
+# 			return self.DCT[(m,n)]
 
 
 # 63. Unique Paths II My Submissions Question
@@ -143,12 +149,70 @@ class Solution(object):
 # Subscribe to see which companies asked this question
 
 # class Solution(object):
-#     def uniquePathsWithObstacles(self, obstacleGrid):
-#         """
-#         :type obstacleGrid: List[List[int]]
-#         :rtype: int
-#         """
+# 	def uniquePathsWithObstacles(self, obstacleGrid):
+# 		"""
+# 		:type obstacleGrid: List[List[int]]
+# 		:rtype: int
+# 		"""
+# 		matrix = obstacleGrid
+# 		dct={}
+# 		m=len(matrix)				
+# 		n=len(matrix[0])
+# 		return self.help(matrix, dct, m,n)		
+
+
+# 	def help(self, matrix, dct, m, n):
+# 		'''matrix is not-inversed, dct is inversed'''
+# 		if m<1 or n<1: return 0
+# 		if matrix[-m][-n] == 1: 
+# 			dct[(m,n)] = 0
+# 			return 0
+# 		if m==1 and n==1:
+# 			dct[(m,n)] = 1
+# 			return 1
+			
+# 		if (m,n) in dct:
+# 			return dct[(m,n)]
+# 		else:
+# 			dct[(m,n)] = self.help(matrix, dct, m-1, n) + self.help(matrix, dct, m, n-1)
+# 			return dct[(m,n)]
+
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.uniquePathsWithObstacles([
+#   [0,0,0],
+#   [0,1,0],
+#   [0,0,0]
+# ])
+
+# 51. N-Queens My Submissions Question
+# Total Accepted: 48429 Total Submissions: 185184 Difficulty: Hard
+# The n-queens puzzle is the problem of placing n queens on an n *n chessboard such that no two queens attack each other.
+# Given an integer n, return all distinct solutions to the n-queens puzzle.
+# Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space respectively.
+# For example,
+# There exist two distinct solutions to the 4-queens puzzle:
+# [
+#  [".Q..",  // Solution 1
+#   "...Q",
+#   "Q...",
+#   "..Q."],
+
+#  ["..Q.",  // Solution 2
+#   "Q...",
+#   "...Q",
+#   ".Q.."]
+# ]
+# Subscribe to see which companies asked this question
+
+class Solution(object):
+    def solveNQueens(self, n):
+        """
+        :type n: int
+        :rtype: List[List[str]]
+        """
 				
+
 
 # 52. N-Queens II My Submissions Question
 # Total Accepted: 40139 Total Submissions: 104819 Difficulty: Hard
@@ -168,39 +232,7 @@ class Solution(object):
 #         """
 				
 
-# 51. N-Queens My Submissions Question
-# Total Accepted: 48429 Total Submissions: 185184 Difficulty: Hard
-# The n-queens puzzle is the problem of placing n queens on an n *n chessboard such that no two queens attack each other.
 
-
-
-# Given an integer n, return all distinct solutions to the n-queens puzzle.
-
-# Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space respectively.
-
-# For example,
-# There exist two distinct solutions to the 4-queens puzzle:
-
-# [
-#  [".Q..",  // Solution 1
-#   "...Q",
-#   "Q...",
-#   "..Q."],
-
-#  ["..Q.",  // Solution 2
-#   "Q...",
-#   "...Q",
-#   ".Q.."]
-# ]
-# Subscribe to see which companies asked this question
-
-# class Solution(object):
-#     def solveNQueens(self, n):
-#         """
-#         :type n: int
-#         :rtype: List[List[str]]
-#         """
-				
 
 # 93. Restore IP Addresses My Submissions Question
 # Total Accepted: 50042 Total Submissions: 220989 Difficulty: Medium
