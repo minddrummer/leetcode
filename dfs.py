@@ -205,52 +205,70 @@
 # ]
 # Subscribe to see which companies asked this question
 
-class Solution(object):
-    def solveNQueens(self, n):
-        """
-        :type n: int
-        :rtype: List[List[str]]
-        """
-		def dfs(depth, lst):
-			if depth == n: 
-				res.append(lst)
-				return 
-			for i in range(n):
-				if check(depth, i):
-					board[depth]=i
-					dfs(depth+1, lst.append(string[:i]+'Q'+string[i+1:]))
+# class Solution(object):
+# 	def solveNQueens(self, n):
+# 		"""
+# 		:type n: int
+# 		:rtype: List[List[str]]
+# 		"""
+# 		def dfs(depth, lst):
+# 			if depth == n: 
+# 				res.append(lst)
+# 				return 
+# 			for i in range(n):
+# 				if check(depth, i):
+# 					board[depth]=i
+# 					#has to keep lst at the same level constant!
+# 					#not changing over time!! : not lst.append
+# 					dfs(depth+1, lst + [string[:i]+'Q'+string[i+1:]])
 
+# 		def check(depth, col):
+# 			for i in range(depth):
+# 				if board[i]==col or abs(depth-i)==abs(board[i]-col):
+# 					return False
+# 			return True
+
+# 		#n, board and res now is frame-environement within solveNQueens
+# 		board = [-1]*n
+# 		string = '.'*n
+# 		res=[]
+# 		dfs(0,[])
+# 		return res
+
+# 52. N-Queens II My Submissions Question
+# Total Accepted: 40139 Total Submissions: 104819 Difficulty: Hard
+# Follow up for N-Queens problem.
+# Now, instead outputting board configurations, return the total number of distinct solutions.
+# Subscribe to see which companies asked this question
+
+class Solution(object):
+	count=None
+	def totalNQueens(self, n):
+		"""
+		:type n: int
+		:rtype: int
+		"""
 		def check(depth, col):
 			for i in range(depth):
 				if board[i]==col or abs(depth-i)==abs(board[i]-col):
 					return False
 			return True
+		
+		def dfs(depth):
+			if depth==n: Solution.count += 1; return
+			#no matter what, for each depth, we search 0-(n-i) col for each depth
+			for i in range(n):
+				if check(depth, i):
+					board[depth]=i
+					dfs(depth+1)
 
-		#n, board and res now is frame-environement within solveNQueens
-		board = [-1]*n
-		string = '.'*n
-		res=[]
-		return dfs(0,[])
-
-# 52. N-Queens II My Submissions Question
-# Total Accepted: 40139 Total Submissions: 104819 Difficulty: Hard
-# Follow up for N-Queens problem.
-
-# Now, instead outputting board configurations, return the total number of distinct solutions.
-
-
-
-# Subscribe to see which companies asked this question
-
-# class Solution(object):
-#     def totalNQueens(self, n):
-#         """
-#         :type n: int
-#         :rtype: int
-#         """
-				
-
-
+		Solution.count=0
+		board=[-1]*n
+		dfs(0)
+		return Solution.count
+if __name__ == '__main__':
+	sk=Solution()
+	print sk.totalNQueens(9)
 
 # 93. Restore IP Addresses My Submissions Question
 # Total Accepted: 50042 Total Submissions: 220989 Difficulty: Medium
