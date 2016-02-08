@@ -329,37 +329,38 @@
 # [2, 2, 3] 
 
 
-class Solution(object):
-	def combinationSum(self, candidates, target):
-		"""
-		:type candidates: List[int]
-		:type target: int
-		:rtype: List[List[int]]
-		"""
-		setc = sorted(set(candidates))
-		res=[]
-		self.dfs(setc, target, [], res)
-		return res
-		
-	def dfs(self, setc, target, lst, res):
-		#setc is a set, with increase order
-		n= len(setc)
-		for i in range(n):
-			if setc[i] == target:		
-				res.append(lst + [setc[i]])
-			elif setc[i]<target:
-				self.dfs(setc[i:], target-setc[i], lst+[setc[i]], res)
-			else:
-				continue
+# class Solution(object):
+# 	def combinationSum(self, candidates, target):
+# 		"""
+# 		:type candidates: List[int]
+# 		:type target: int
+# 		:rtype: List[List[int]]
+# 		"""
+# 		#what is the state recording, how to expand, how to pruning and saving memory
+# 		#how to sort and no duplicates?
+# 		setc = sorted(set(candidates))
+# 		res=[]
+# 		self.dfs(setc, target, [], res)
+# 		return res
 
-if __name__ == '__main__':
-	sk=Solution()
-	print sk.combinationSum([2,3,6,7],7)
+# 	def dfs(self, setc, target, lst, res):
+# 		#setc is a set, with increase order
+# 		n= len(setc)
+# 		for i in range(n):
+# 			if setc[i] == target:		
+# 				res.append(lst + [setc[i]])
+# 			elif setc[i]<target:
+# 				self.dfs(setc[i:], target-setc[i], lst+[setc[i]], res)
+# 			else:
+# 				continue
+
+# if __name__ == '__main__':
+# 	sk=Solution()
+# 	print sk.combinationSum([2,3,6,7],7)
 
 # 40. Combination Sum II My Submissions Question
 # Total Accepted: 59648 Total Submissions: 222533 Difficulty: Medium
 # Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
-
 # Each number in C may only be used once in the combination.
 
 # Note:
@@ -375,50 +376,98 @@ if __name__ == '__main__':
 # Subscribe to see which companies asked this question
 
 # class Solution(object):
-#     def combinationSum2(self, candidates, target):
-#         """
-#         :type candidates: List[int]
-#         :type target: int
-#         :rtype: List[List[int]]
-#         """
-				
+# 	def combinationSum2(self, candidates, target):
+# 		"""
+# 		:type candidates: List[int]
+# 		:type target: int
+# 		:rtype: List[List[int]]
+# 		"""
+# 		cand = sorted(candidates)		
+# 		res=[]
+# 		self.dfs(cand, target, [], res)
+# 		return res
 
+# 	def dfs(self, cand, target, lst, res):	
+# 		n= len(cand)
+# 		#for the duplicate number, like [1,1,1...] 
+# 		#set up a pre variable, and skip it when the current number match the pre value should be good in dfs search
+# 		#because dfs search would go deep first, and wouldNOT skip any duplicate-number answer for the final answer
+# 		pre = None #pre variable
+# 		for i in range(n):
+# 			#check pre varialble match or NOT
+# 			if cand[i] == pre: continue
+# 			else: pre=cand[i]
+
+# 			if cand[i]==target:
+# 				res.append(lst+[cand[i]])
+# 			elif cand[i]<target:
+# 				#because of cand[i+1:]---this would retain the duplicate-number answer for the final answer
+# 				self.dfs(cand[i+1:], target-cand[i], lst+[cand[i]], res)
+# 			else:
+# 				continue
+
+# if __name__ == '__main__':
+# 	sk =Solution()
+# 	print sk.combinationSum2([10,1,2,7,6,1,5], 8)
 
 # 216. Combination Sum III My Submissions Question
 # Total Accepted: 24112 Total Submissions: 70931 Difficulty: Medium
 # Find all possible combinations of k numbers that add up to a number n, given that only numbers from 1 to 9 can be used and each combination should be a unique set of numbers.
-
 # Ensure that numbers within the set are sorted in ascending order.
-
-
 # Example 1:
 
 # Input: k = 3, n = 7
-
 # Output:
-
 # [[1,2,4]]
-
 # Example 2:
-
 # Input: k = 3, n = 9
-
 # Output:
-
 # [[1,2,6], [1,3,5], [2,3,4]]
 # Credits:
 # Special thanks to @mithmatt for adding this problem and creating all test cases.
-
 # Subscribe to see which companies asked this question
 
 # class Solution(object):
-#     def combinationSum3(self, k, n):
-#         """
-#         :type k: int
-#         :type n: int
-#         :rtype: List[List[int]]
-#         """
-				
+# 	def combinationSum3(self, k, n):
+# 		"""
+# 		:type k: int
+# 		:type n: int
+# 		:rtype: List[List[int]]
+# 		"""
+# 		'''there should be no duplicate number in the results'''
+# 		res=[]
+# 		self.dfs(k,n,[], res, range(1,10))
+# 		return res
+
+# 	def dfs(self, k, n, lst, res, setc):
+# 		#you cannot go down searching, so we need START variable
+# 		#setc in increaing order for easy computation
+# 		if k<=0: return
+# 		elif k==1:
+# 			for i in setc:
+# 				#only single value would be added to the result
+# 				if i<n: continue
+# 				elif i==n: res.append(lst+[i])
+# 				else: break
+# 		else:
+# 			#k>=2 continue dfs
+# 			#for dfs, we cannot search from big number to smalled number, so the setc should be shrinked for final results
+# 			for i in range(len(setc)):
+# 				#shrink the setc, just from i+1, all the previous have been counted!!!
+# 				if n>setc[i]: 
+# 					#order matters for these type of problems
+# 					#we donot go back and count the prevoius less number, so setc has to be ordered
+# 					#and it will be shrinked whenever you use some value
+# 					#you have to maintain a list for using purpose, rather than a range(1,10)
+# 					#in this way, it will shrinked via dfs and you would get the right answer
+# 					#setc[i:](would produce duplicate number in the set) VS setc[i+1](would produce non-duoplicate-number answer in the result)
+# 					self.dfs(k-1, n-setc[i], lst+[setc[i]], res, setc[i:])
+# 				#if n== or <, then there would be no answer for the following
+# 				else: break
+
+# if __name__ == '__main__':
+# 	sk=Solution()
+# 	print sk.combinationSum3(3,9)
 
 # 22. Generate Parentheses My Submissions Question
 # Total Accepted: 76174 Total Submissions: 214866 Difficulty: Medium
@@ -496,9 +545,6 @@ if __name__ == '__main__':
 # word = "SEE", -> returns true,
 # word = "ABCB", -> returns false.
 # Subscribe to see which companies asked this question
-
-
-
 
 # class Solution(object):
 #     def exist(self, board, word):
