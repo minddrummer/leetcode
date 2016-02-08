@@ -241,53 +241,77 @@
 # Now, instead outputting board configurations, return the total number of distinct solutions.
 # Subscribe to see which companies asked this question
 
-class Solution(object):
-	count=None
-	def totalNQueens(self, n):
-		"""
-		:type n: int
-		:rtype: int
-		"""
-		def check(depth, col):
-			for i in range(depth):
-				if board[i]==col or abs(depth-i)==abs(board[i]-col):
-					return False
-			return True
+# class Solution(object):
+# 	count=None
+# 	def totalNQueens(self, n):
+# 		"""
+# 		:type n: int
+# 		:rtype: int
+# 		"""
+# 		def check(depth, col):
+# 			for i in range(depth):
+# 				if board[i]==col or abs(depth-i)==abs(board[i]-col):
+# 					return False
+# 			return True
 		
-		def dfs(depth):
-			if depth==n: Solution.count += 1; return
-			#no matter what, for each depth, we search 0-(n-i) col for each depth
-			for i in range(n):
-				if check(depth, i):
-					board[depth]=i
-					dfs(depth+1)
+# 		def dfs(depth):
+# 			if depth==n: Solution.count += 1; return
+# 			#no matter what, for each depth, we search 0-(n-i) col for each depth
+# 			for i in range(n):
+# 				if check(depth, i):
+# 					board[depth]=i
+# 					dfs(depth+1)
 
-		Solution.count=0
-		board=[-1]*n
-		dfs(0)
-		return Solution.count
-if __name__ == '__main__':
-	sk=Solution()
-	print sk.totalNQueens(9)
+# 		Solution.count=0
+# 		board=[-1]*n
+# 		dfs(0)
+# 		return Solution.count
+# if __name__ == '__main__':
+# 	sk=Solution()
+# 	print sk.totalNQueens(9)
+
 
 # 93. Restore IP Addresses My Submissions Question
 # Total Accepted: 50042 Total Submissions: 220989 Difficulty: Medium
 # Given a string containing only digits, restore it by returning all possible valid IP address combinations.
-
 # For example:
 # Given "25525511135",
-
 # return ["255.255.11.135", "255.255.111.35"]. (Order does not matter)
-
 # Subscribe to see which companies asked this question
 
 # class Solution(object):
-#     def restoreIpAddresses(self, s):
-#         """
-#         :type s: str
-#         :rtype: List[str]
-#         """
+# 	def restoreIpAddresses(self, s):
+# 		"""
+# 		:type s: str
+# 		:rtype: List[str]
+# 		"""
+# 		#dfs has to reach the ending or prunning at the half if there is 0 beginning
+# 		return self.help(s, 1)
 
+# 	def help(self, s, level):
+# 		res=[]
+# 		#lots of prunning here
+# 		if level<=3:
+# 			if len(s)>=2:
+# 				res=res+[s[0:1]+'.'+item for item in self.help(s[1:], level+1)]
+# 			if len(s)>=3 and int(s[0])!=0:
+# 				res=res+[s[0:2]+'.'+item for item in self.help(s[2:], level+1)]
+# 			if len(s)>=4 and int(s[0:3])<=255 and int(s[0])!=0:
+# 				res=res+[s[0:3]+'.'+item for item in self.help(s[3:], level+1)]
+# 		else: #level=4, the last level
+# 			if len(s)==0: return []
+# 			elif len(s)==1: return [s]
+# 			elif len(s)==2 and int(s[0])!=0: return [s]
+# 			elif len(s) ==3:
+# 				if int(s)<=255 and int(s[0])!=0: return [s]
+# 				else: return []
+# 			else:
+# 				return []
+# 		return res
+
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.restoreIpAddresses("010010")
 
 # 39. Combination Sum My Submissions Question
 # Total Accepted: 78729 Total Submissions: 263128 Difficulty: Medium
@@ -305,14 +329,32 @@ if __name__ == '__main__':
 # [2, 2, 3] 
 
 
-# class Solution(object):
-#     def combinationSum(self, candidates, target):
-#         """
-#         :type candidates: List[int]
-#         :type target: int
-#         :rtype: List[List[int]]
-#         """
-				
+class Solution(object):
+	def combinationSum(self, candidates, target):
+		"""
+		:type candidates: List[int]
+		:type target: int
+		:rtype: List[List[int]]
+		"""
+		setc = sorted(set(candidates))
+		res=[]
+		self.dfs(setc, target, [], res)
+		return res
+		
+	def dfs(self, setc, target, lst, res):
+		#setc is a set, with increase order
+		n= len(setc)
+		for i in range(n):
+			if setc[i] == target:		
+				res.append(lst + [setc[i]])
+			elif setc[i]<target:
+				self.dfs(setc[i:], target-setc[i], lst+[setc[i]], res)
+			else:
+				continue
+
+if __name__ == '__main__':
+	sk=Solution()
+	print sk.combinationSum([2,3,6,7],7)
 
 # 40. Combination Sum II My Submissions Question
 # Total Accepted: 59648 Total Submissions: 222533 Difficulty: Medium
