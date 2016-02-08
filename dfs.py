@@ -211,8 +211,26 @@ class Solution(object):
         :type n: int
         :rtype: List[List[str]]
         """
-				
+		def dfs(depth, lst):
+			if depth == n: 
+				res.append(lst)
+				return 
+			for i in range(n):
+				if check(depth, i):
+					board[depth]=i
+					dfs(depth+1, lst.append(string[:i]+'Q'+string[i+1:]))
 
+		def check(depth, col):
+			for i in range(depth):
+				if board[i]==col or abs(depth-i)==abs(board[i]-col):
+					return False
+			return True
+
+		#n, board and res now is frame-environement within solveNQueens
+		board = [-1]*n
+		string = '.'*n
+		res=[]
+		return dfs(0,[])
 
 # 52. N-Queens II My Submissions Question
 # Total Accepted: 40139 Total Submissions: 104819 Difficulty: Hard
