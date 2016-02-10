@@ -3,23 +3,23 @@
 # Implement pow(x, n).
 # Subscribe to see which companies asked this question
 
-class Solution(object):
-	def myPow(self, x, n):
-		"""
-		:type x: float
-		:type n: int
-		:rtype: float
-		"""	
-		#divide and conquer: TO(logN), SO(1)
-		#the recursion call loop doesnot cost Space memory
-		#at each step, there is constant space cost, so totally there is constant space memory cost
-		if n<0: return 1/self.myPow(x, -n)
-		if n==0: return 1
-		if n==1: return x
-		half=self.myPow(x, n/2)
-		left=1
-		if n%2: left=x
-		return half*half*left
+# class Solution(object):
+# 	def myPow(self, x, n):
+# 		"""
+# 		:type x: float
+# 		:type n: int
+# 		:rtype: float
+# 		"""	
+# 		#divide and conquer: TO(logN), SO(1)
+# 		#the recursion call loop doesnot cost Space memory
+# 		#at each step, there is constant space cost, so totally there is constant space memory cost
+# 		if n<0: return 1/self.myPow(x, -n)
+# 		if n==0: return 1
+# 		if n==1: return x
+# 		half=self.myPow(x, n/2)
+# 		left=1
+# 		if n%2: left=x
+# 		return half*half*left
 		
 
 # 69. Sqrt(x) My Submissions Question
@@ -34,13 +34,38 @@ class Solution(object):
 # Show Similar Problems
 
 
-# class Solution(object):
-#     def mySqrt(self, x):
-#         """
-#         :type x: int
-#         :rtype: int
-#         """
-		
+class Solution(object):
+	def mySqrt(self, x):
+		"""
+		:type x: int
+		:rtype: int
+		"""
+		#divide and conquer TO(logN), SO(1)
+		if x==0 or x==1: return x
+		#but the following would sig improve speed
+		#if you use index and iteration method, it should be quicker!!
+		if (x/2+1)*(x/2+1) ==x: return x/2+1
+		return self.dfs(x, 1, x/2+1)
+	def dfs(self, x, left, right):
+		# if right*right==x: return right
+		if left*left==x or (left*left<x and right*right>x and right-left==1): return left		
+		half=(left+right)/2
+		if half*half>x:
+			return self.dfs(x, left, half)
+		elif half*half<x:
+			return self.dfs(x, half, right)
+		else:
+			return half
+
+if __name__ == '__main__':
+	sk = Solution()
+	print sk.mySqrt(0)
+	print sk.mySqrt(1)
+	print sk.mySqrt(2)
+	print sk.mySqrt(3)
+	print sk.mySqrt(10)
+	print sk.mySqrt(100)
+
 
 
 # 55. Jump Game My Submissions Question
