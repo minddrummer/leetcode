@@ -472,15 +472,16 @@
 # 22. Generate Parentheses My Submissions Question
 # Total Accepted: 76174 Total Submissions: 214866 Difficulty: Medium
 # Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
-
 # For example, given n = 3, a solution set is:
 
 # "((()))", "(()())", "(())()", "()(())", "()()()"
 
 # Subscribe to see which companies asked this question
-
 # class Solution(object):
 # 	def binaryTree_dfs(self, l,r,item, res):
+# 		'''why binaryTree_dfs, because it is like binaryTree,
+# 		you can go left or right or not, given situations, and 
+# 		if you reach the bottom-both 0, you return the values'''
 # 		if l>r:
 # 			return None
 # 		if l == 0 and r == 0:
@@ -504,27 +505,49 @@
 # 37. Sudoku Solver My Submissions Question
 # Total Accepted: 44889 Total Submissions: 187041 Difficulty: Hard
 # Write a program to solve a Sudoku puzzle by filling the empty cells.
-
 # Empty cells are indicated by the character '.'.
-
 # You may assume that there will be only one unique solution.
-
-
 # A sudoku puzzle...
-
-
 # ...and its solution numbers marked in red.
-
 # Subscribe to see which companies asked this question
 
-
 # class Solution(object):
-#     def solveSudoku(self, board):
-#         """
-#         :type board: List[List[str]]
-#         :rtype: void Do not return anything, modify board in-place instead.
-#         """
-				
+# 	def solveSudoku(self, board):
+# 		"""
+# 		:type board: List[List[str]]
+# 		:rtype: void Do not return anything, modify board in-place instead.
+# 		"""
+# 		self.dfs(board)
+		
+# 	def valid(self, board,x,y):
+# 		tmp=board[x][y]
+# 		board[x][y]='X'
+# 		for i in range(9):
+# 			if board[i][y]==tmp: return False
+# 		for i in range(9):
+# 			if board[x][i]==tmp: return False	
+
+# 		for i in range(3):
+# 			for j in range(3):
+# 				if board[(x/3)*3+i][(y/3)*3+j]==tmp: return False
+# 		#if it is true, we need to change back to original value tmp
+# 		board[x][y]=tmp
+# 		return True
+
+# 	def dfs(self,board):
+# 		for i in range(9):
+# 			for j in range(9):
+# 				if board[i][j] == '.':
+# 					for x in '123456789':
+# 						board[i][j] = x
+# 						if self.valid(board,i,j) and self.dfs(board):
+# 							return True
+# 						board[i][j]='.'
+# 					#if for one 1-9, there is no True, it means there will be False
+# 					#so return False just after the for x '1-9' loop
+# 					return False
+# 		#to the end, if all are not '.', it is True; and should return True			
+# 		return True
 
 
 # 79. Word Search My Submissions Question
@@ -547,14 +570,50 @@
 # Subscribe to see which companies asked this question
 
 # class Solution(object):
-#     def exist(self, board, word):
-#         """
-#         :type board: List[List[str]]
-#         :type word: str
-#         :rtype: bool
-#         """
-				
+# 	def exist(self, board, word):
+# 		"""
+# 		:type board: List[List[str]]
+# 		:type word: str
+# 		:rtype: bool
+# 		"""
+		
+# 		def dfs(board, x, y, word,m,n):
+# 			if len(word)==0: return True
+# 			if board[x][y] == word[0]:
+# 				tmp=board[x][y]
+# 				board[x][y]='@'
+# 			else: return False
+# 			if len(word)==1: return True
+# 			#basically the same logic, but pruning via directly judgment board[x-1][y] == word[1], rather than
+# 			#board[x-1][y] != '@' will speed up the code
+# 			if x-1>=0 and board[x-1][y] == word[1] and dfs(board,x-1,y, word[1:],m,n):
+# 				return True
+# 			if x+1<=m-1 and board[x+1][y] == word[1] and dfs(board,x+1,y, word[1:],m,n):
+# 				return True	
+# 			if y+1<=n-1 and board[x][y+1]==word[1] and dfs(board,x,y+1, word[1:],m,n):
+# 				return True	
+# 			if y-1>=0 and board[x][y-1]==word[1] and dfs(board,x,y-1, word[1:],m,n):
+# 				return True		
+# 			#whenever dfs not working at this level, set it up to the orignal value
+# 			board[x][y]=tmp
+# 			return False
+		
+# 		m = len(board)
+# 		n= len(board[0])
+# 		for i in range(m):
+# 			for j in range(n):
+# 				if dfs(board,i,j,word,m,n):
+# 					return True
+# 		return False
+		
 
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.exist([
+#   ['A','B','C','E'],
+#   ['S','F','C','S'],
+#   ['A','D','E','E']
+# ], "ABCCED")
 
 # 212. Word Search II My Submissions Question
 # Total Accepted: 14961 Total Submissions: 82885 Difficulty: Hard
@@ -575,14 +634,44 @@
 # Note:
 # You may assume that all inputs are consist of lowercase letters a-z.
 
-# class Solution(object):
-#     def findWords(self, board, words):
-#         """
-#         :type board: List[List[str]]
-#         :type words: List[str]
-#         :rtype: List[str]
-#         """
-				
+class Solution(object):
+	def findWords(self, board, words):
+		"""
+		:type board: List[List[str]]
+		:type words: List[str]
+		:rtype: List[str]
+		"""
+		def dfs(board, i, j, word,m,n):
+			if len(word)<=1: return True
+			#you can go in, then board[i][j]= word[0]
+			tmp=board[i][j]
+			board[i][j]='*'
+			if i-1>=0 and board[i-1][j] == word[1] and dfs(board,i-1,j,word[1:],m,n):
+				return True
+			if i+1<=m-1 and board[i+1][j] == word[1] and dfs(board,i+1,j,word[1:],m,n):
+				return True	
+			if j+1<=n-1 and board[i][j+1] == word[1] and dfs(board,i,j+1,word[1:],m,n):
+				return True		
+			if j-1>=0 and board[i][j-1] == word[1] and dfs(board,i,j-1,word[1:],m,n):
+				return True			
+			board[i][j] = tmp
+			return False
+
+
+		m=len(board)
+		n=len(board[0])
+		res=[]
+		#cannot pass timelimit for longer words list,
+		#need better pruning for this
+		for word in words:
+			board_new=copy.deepcopy(board)
+			for i in range(m):
+				for j in range(n):
+					if board_new[i][j] == word[0]:
+						if dfs(board_new,i,j,word,m,n):
+							res.append(word)
+		return res
+
 
 
 
