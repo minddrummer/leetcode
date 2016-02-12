@@ -34,53 +34,49 @@
 # Show Similar Problems
 
 
-class Solution(object):
-	def mySqrt(self, x):
-		"""
-		:type x: int
-		:rtype: int
-		"""
-		#divide and conquer TO(logN), SO(1)
-		if x==0 or x==1: return x
-		#but the following would sig improve speed
-		#if you use index and iteration method, it should be quicker!!
-		if (x/2+1)*(x/2+1) ==x: return x/2+1
-		return self.dfs(x, 1, x/2+1)
-	def dfs(self, x, left, right):
-		# if right*right==x: return right
-		if left*left==x or (left*left<x and right*right>x and right-left==1): return left		
-		half=(left+right)/2
-		if half*half>x:
-			return self.dfs(x, left, half)
-		elif half*half<x:
-			return self.dfs(x, half, right)
-		else:
-			return half
+# class Solution(object):
+# 	def mySqrt(self, x):
+# 		"""
+# 		:type x: int
+# 		:rtype: int
+# 		"""
+# 		#divide and conquer TO(logN), SO(1)
+# 		if x==0 or x==1: return x
+# 		#but the following would sig improve speed
+# 		#if you use index and iteration method, it should be quicker!!
+# 		if (x/2+1)*(x/2+1) ==x: return x/2+1
+# 		return self.dfs(x, 1, x/2+1)
+# 	def dfs(self, x, left, right):
+# 		# if right*right==x: return right
+# 		if left*left==x or (left*left<x and right*right>x and right-left==1): return left		
+# 		half=(left+right)/2
+# 		if half*half>x:
+# 			return self.dfs(x, left, half)
+# 		elif half*half<x:
+# 			return self.dfs(x, half, right)
+# 		else:
+# 			return half
 
-if __name__ == '__main__':
-	sk = Solution()
-	print sk.mySqrt(0)
-	print sk.mySqrt(1)
-	print sk.mySqrt(2)
-	print sk.mySqrt(3)
-	print sk.mySqrt(10)
-	print sk.mySqrt(100)
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.mySqrt(0)
+# 	print sk.mySqrt(1)
+# 	print sk.mySqrt(2)
+# 	print sk.mySqrt(3)
+# 	print sk.mySqrt(10)
+# 	print sk.mySqrt(100)
 
 
 
 # 55. Jump Game My Submissions Question
 # Total Accepted: 69067 Total Submissions: 248316 Difficulty: Medium
 # Given an array of non-negative integers, you are initially positioned at the first index of the array.
-
 # Each element in the array represents your maximum jump length at that position.
-
 # Determine if you are able to reach the last index.
 
 # For example:
 # A = [2,3,1,1,4], return true.
-
 # A = [3,2,1,0,4], return false.
-
 # Subscribe to see which companies asked this question
 
 # class Solution(object):
@@ -89,62 +85,78 @@ if __name__ == '__main__':
 #         :type nums: List[int]
 #         :rtype: bool
 #         """
-		
+#         n=len(nums)
+#         #==1 is special
+#         if n==1: return True
+#         max_pre = nums[0]
+#         #doesnot count the last step: since as long as you reach it, that is fine
+#         for i in range(n-1):
+#             max_pre = max(nums[i], max_pre-1)
+#             if max_pre==0: return False
+#         return True			
+
 
 # 45. Jump Game II My Submissions Question
 # Total Accepted: 57770 Total Submissions: 231958 Difficulty: Hard
 # Given an array of non-negative integers, you are initially positioned at the first index of the array.
-
 # Each element in the array represents your maximum jump length at that position.
-
 # Your goal is to reach the last index in the minimum number of jumps.
 
 # For example:
 # Given array A = [2,3,1,1,4]
-
 # The minimum number of jumps to reach the last index is 2. (Jump 1 step from index 0 to 1, then 3 steps to the last index.)
 
 # Note:
 # You can assume that you can always reach the last index.
-
 # Subscribe to see which companies asked this question
-
 # class Solution(object):
-#     def jump(self, nums):
-#         """
-#         :type nums: List[int]
-#         :rtype: int
-#         """
-		
+# 	def jump(self, nums):
+# 		"""
+# 		:type nums: List[int]
+# 		:rtype: int
+# 		"""
+# 		'''this greedy is really magic'''
+# 		last=0
+# 		res=0
+# 		current=0
+# 		for i in range(len(nums)):
+# 			#the index is out of the last
+# 			if i > last:
+# 				#last will be the current reach
+# 				last = current
+# 				#min steps +1
+# 				res += 1
+# 			current = max(current, i+nums[i])
+# 		return res
 
 # 121. Best Time to Buy and Sell Stock My Submissions Question
 # Total Accepted: 85081 Total Submissions: 242394 Difficulty: Medium
 # Say you have an array for which the ith element is the price of a given stock on day i.
-
 # If you were only permitted to complete at most one transaction (ie, buy one and sell one share of the stock), design an algorithm to find the maximum profit.
-
 # Subscribe to see which companies asked this question
-
 # Show Tags
 # Show Similar Problems
 
 
-# class Solution(object):
-# 	def maxProfit(self, prices):
-# 		"""
-# 		:type prices: List[int]
-# 		:rtype: int
-# 		"""
-# 		if len(prices) <= 1:
-# 			return 0
-# 		max_p = 0
-# 		low = prices[0]
-# 		for i in range(1,len(prices)):
-# 			if prices[i] < low: 
-# 			    low = prices[i]
-# 			else:
-# 			    max_p = max(max_p, prices[i] - low)
-# 		return max_p
+class Solution(object):
+	def maxProfit(self, prices):
+		"""
+		:type prices: List[int]
+		:rtype: int
+		the tricky thing is that you can only do one buy and sell on the total dataset!!
+		"""
+		#easy: track the lowest price, and forward compute the profit at each step
+		#if the profit exceed the current profit, replace it
+		if len(prices) <= 1:
+			return 0
+		max_p = 0
+		low = prices[0]
+		for i in range(1,len(prices)):
+			if prices[i] < low: 
+			    low = prices[i]
+			else:
+			    max_p = max(max_p, prices[i] - low)
+		return max_p
 
 
 # 123. Best Time to Buy and Sell Stock III My Submissions Question
