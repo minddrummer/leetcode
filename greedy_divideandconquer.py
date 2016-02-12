@@ -138,25 +138,49 @@
 # Show Similar Problems
 
 
+# class Solution(object):
+# 	def maxProfit(self, prices):
+# 		"""
+# 		:type prices: List[int]
+# 		:rtype: int
+# 		the tricky thing is that you can only do one buy and sell on the total dataset!!
+# 		"""
+# 		#easy: track the lowest price, and forward compute the profit at each step
+# 		#if the profit exceed the current profit, replace it
+# 		if len(prices) <= 1:
+# 			return 0
+# 		max_p = 0
+# 		low = prices[0]
+# 		for i in range(1,len(prices)):
+# 			if prices[i] < low: 
+# 			    low = prices[i]
+# 			else:
+# 			    max_p = max(max_p, prices[i] - low)
+# 		return max_p
+
+# 122. Best Time to Buy and Sell Stock II My Submissions Question
+# Total Accepted: 76339 Total Submissions: 185235 Difficulty: Medium
+# Say you have an array for which the ith element is the price of a given stock on day i.
+
+# Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one and sell one share of the stock multiple times). However, you may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
+
+# Subscribe to see which companies asked this question
 class Solution(object):
 	def maxProfit(self, prices):
 		"""
 		:type prices: List[int]
 		:rtype: int
-		the tricky thing is that you can only do one buy and sell on the total dataset!!
+		now you can do many times, but you need to sell before buy
+		that is you maximize all the possible profit there: so the
+		greedy is just all the gap between i and i-1
+
 		"""
-		#easy: track the lowest price, and forward compute the profit at each step
-		#if the profit exceed the current profit, replace it
-		if len(prices) <= 1:
-			return 0
-		max_p = 0
-		low = prices[0]
+		max_profit  = 0
 		for i in range(1,len(prices)):
-			if prices[i] < low: 
-			    low = prices[i]
-			else:
-			    max_p = max(max_p, prices[i] - low)
-		return max_p
+			if prices[i] >= prices[i-1]:
+				max_profit += prices[i] - prices[i-1]
+		
+		return max_profit
 
 
 # 123. Best Time to Buy and Sell Stock III My Submissions Question
@@ -205,26 +229,7 @@ class Solution(object):
 #         """
 		
 
-# 122. Best Time to Buy and Sell Stock II My Submissions Question
-# Total Accepted: 76339 Total Submissions: 185235 Difficulty: Medium
-# Say you have an array for which the ith element is the price of a given stock on day i.
 
-# Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one and sell one share of the stock multiple times). However, you may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
-
-# Subscribe to see which companies asked this question
-
-# class Solution(object):
-# 	def maxProfit(self, prices):
-# 		"""
-# 		:type prices: List[int]
-# 		:rtype: int
-# 		"""
-# 		max_profit  = 0
-# 		for i in range(1,len(prices)):
-# 			if prices[i] >= prices[i-1]:
-# 				max_profit += prices[i] - prices[i-1]
-		
-# 		return max_profit
 		
 
 # 309. Best Time to Buy and Sell Stock with Cooldown My Submissions Question
