@@ -165,111 +165,58 @@
 # Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one and sell one share of the stock multiple times). However, you may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
 
 # Subscribe to see which companies asked this question
-class Solution(object):
-	def maxProfit(self, prices):
-		"""
-		:type prices: List[int]
-		:rtype: int
-		now you can do many times, but you need to sell before buy
-		that is you maximize all the possible profit there: so the
-		greedy is just all the gap between i and i-1
-
-		"""
-		max_profit  = 0
-		for i in range(1,len(prices)):
-			if prices[i] >= prices[i-1]:
-				max_profit += prices[i] - prices[i-1]
-		
-		return max_profit
-
-
-# 123. Best Time to Buy and Sell Stock III My Submissions Question
-# Total Accepted: 51015 Total Submissions: 199409 Difficulty: Hard
-# Say you have an array for which the ith element is the price of a given stock on day i.
-
-# Design an algorithm to find the maximum profit. You may complete at most two transactions.
-
-# Note:
-# You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
-
-# Subscribe to see which companies asked this question
-
-# Show Tags
-# Show Similar Problems
-
-
 # class Solution(object):
-#     def maxProfit(self, prices):
-#         """
-#         :type prices: List[int]
-#         :rtype: int
-#         """
+# 	def maxProfit(self, prices):
+# 		"""
+# 		:type prices: List[int]
+# 		:rtype: int
+# 		now you can do many times, but you need to sell before buy
+# 		that is you maximize all the possible profit there: so the
+# 		greedy is just all the gap between i and i-1
+
+# 		"""
+# 		max_profit  = 0
+# 		for i in range(1,len(prices)):
+# 			if prices[i] >= prices[i-1]:
+# 				max_profit += prices[i] - prices[i-1]
 		
-
-# 188. Best Time to Buy and Sell Stock IV My Submissions Question
-# Total Accepted: 21541 Total Submissions: 101314 Difficulty: Hard
-# Say you have an array for which the ith element is the price of a given stock on day i.
-
-# Design an algorithm to find the maximum profit. You may complete at most k transactions.
-
-# Note:
-# You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
-
-# Credits:
-# Special thanks to @Freezen for adding this problem and creating all test cases.
-
-# Subscribe to see which companies asked this question
-
-# class Solution(object):
-#     def maxProfit(self, k, prices):
-#         """
-#         :type k: int
-#         :type prices: List[int]
-#         :rtype: int
-#         """
-		
-
-
-		
-
-# 309. Best Time to Buy and Sell Stock with Cooldown My Submissions Question
-# Total Accepted: 7893 Total Submissions: 22358 Difficulty: Medium
-# Say you have an array for which the ith element is the price of a given stock on day i.
-
-# Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one and sell one share of the stock multiple times) with the following restrictions:
-
-# You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
-# After you sell your stock, you cannot buy stock on next day. (ie, cooldown 1 day)
-# Example:
-
-# prices = [1, 2, 3, 0, 2]
-# maxProfit = 3
-# transactions = [buy, sell, cooldown, buy, sell]
-# Credits:
-# Special thanks to @dietpepsi for adding this problem and creating all test cases.
-
-# class Solution(object):
-#     def maxProfit(self, prices):
-#         """
-#         :type prices: List[int]
-#         :rtype: int
-#         """
+# 		return max_profit
 		
 
 # 3. Longest Substring Without Repeating Characters My Submissions Question
 # Total Accepted: 124955 Total Submissions: 583785 Difficulty: Medium
-# Given a string, find the length of the longest substring without repeating characters. For example, the longest substring without repeating letters for "abcabcbb" is "abc", which the length is 3. For "bbbbb" the longest substring is "b", with the length of 1.
-
+# Given a string, find the length of the longest substring without repeating characters. For example,
+# the longest substring without repeating letters for "abcabcbb" is "abc", which the length is 3. For "bbbbb" the longest substring is "b", with the length of 1.
 # Subscribe to see which companies asked this question
 
 
 # class Solution(object):
-#     def lengthOfLongestSubstring(self, s):
-#         """
-#         :type s: str
-#         :rtype: int
-#         """
-		
+# 	def lengthOfLongestSubstring(self, s):
+# 		"""
+# 		:type s: str
+# 		:rtype: int
+# 		"""
+# 		#greedy method: focus on the local, and hope for the right as a whole
+# 		dct = {}
+# 		n = len(s)
+# 		maxlen = 0
+# 		res = 0
+# 		last = 0
+# 		for i in  range(n):
+# 			if s[i] not in dct:
+# 				dct[s[i]] = [i]
+# 				res += 1
+# 			else:
+# 				if dct[s[i]][-1]>=last:
+# 					maxlen = max(maxlen, res)
+# 					res = i - dct[s[i]][-1]
+# 					last = dct[s[i]][-1]+1
+# 					dct[s[i]].append(i)
+# 				else:
+# 					dct[s[i]].append(i)
+# 					res += 1
+# 		return max(maxlen, res)
+
 
 # 11. Container With Most Water My Submissions Question
 # Total Accepted: 67377 Total Submissions: 199641 Difficulty: Medium
