@@ -14,66 +14,77 @@
 # Note:
 # Bonus point if you are able to do this using only O(n) extra space, where n is the total number of rows in the triangle.
 
-class Solution(object):
-	def minimumTotal(self, triangle):
-		"""
-		:type triangle: List[List[int]]
-		:rtype: int
-		"""
-		#n is the # of rows of the triangle, shoot for TO(n^2), and SO(n)
-		n=len(triangle)
-		if n==0: return 0
-		array=[triangle[0][0]]
-		#for rows from second to the last
-		for i in range(1,n):
-			m = len(triangle[i])
-			#j is the index for each row, from 0 to m-1
-			new_array=[]
-			for j in range(m):
-				if j==0: new_array.append(array[0]+triangle[i][j]) 
-				elif j<m-1:
-					new_array.append(min(array[j-1], array[j])+triangle[i][j])
-				else: #j=m-1
-					new_array.append(array[j-1]+triangle[i][j])
-			array = new_array
-		return min(array)
+# class Solution(object):
+# 	def minimumTotal(self, triangle):
+# 		"""
+# 		:type triangle: List[List[int]]
+# 		:rtype: int
+# 		"""
+# 		#n is the # of rows of the triangle, shoot for TO(n^2), and SO(n)
+# 		n=len(triangle)
+# 		if n==0: return 0
+# 		array=[triangle[0][0]]
+# 		#for rows from second to the last
+# 		for i in range(1,n):
+# 			m = len(triangle[i])
+# 			#j is the index for each row, from 0 to m-1
+# 			new_array=[]
+# 			for j in range(m):
+# 				if j==0: new_array.append(array[0]+triangle[i][j]) 
+# 				elif j<m-1:
+# 					new_array.append(min(array[j-1], array[j])+triangle[i][j])
+# 				else: #j=m-1
+# 					new_array.append(array[j-1]+triangle[i][j])
+# 			array = new_array
+# 		return min(array)
 
-if __name__ == '__main__':
-	sk = Solution()
-	print sk.minimumTotal([
-	 [2],
-	[3,4],
-   [6,5,7],
-  [4,1,8,3]
-]
-)
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.minimumTotal([
+# 	 [2],
+# 	[3,4],
+#    [6,5,7],
+#   [4,1,8,3]
+# ]
+# )
 
 # 53. Maximum Subarray My Submissions Question
 # Total Accepted: 97791 Total Submissions: 271579 Difficulty: Medium
 # Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
-
 # For example given the array [-2, 1,-3,4,-1,2,1,-5,4]
 # the contiguous subarray [4,-1,2,1]has the largest sum = 6
 # click to show more practice.
-
 # Subscribe to see which companies asked this question
 
-# class Solution(object):
-#     def maxSubArray(self, nums):
-#         """
-#         :type nums: List[int]
-#         :rtype: int
-#         """
-#         total = 0
-#         cur_max = max(nums)
-#         for i in nums:
-#         	total += i
-#         	if total > cur_max:
-#         		cur_max = total
-#         	if total < 0:
-#         		total = 0
-#         return cur_max
-
+class Solution(object):
+	def maxSubArray(self, nums):
+		"""
+		:type nums: List[int]
+		:rtype: int
+		"""
+		#greedy method
+		#add all positive from the beginning, if at some point, the total is <0, that means until this part
+		#there is no contribution to the final result, so reset total = 0
+		# total = 0
+		# cur_max = max(nums)
+		# for i in nums:
+		# 	total += i
+		# 	if total > cur_max: cur_max = total
+		# 	if total >0: continue
+		# 	else: total = 0
+		# return cur_max
+		
+		#dp method:
+		#we set--restrict set the array[j] -- as the max arrary that ends with array[j]
+		#and we know that at least one of the array would be the final result--because you have to end with one element of the array
+		# n=len(nums)
+		# if n==0: return 0
+		# f = nums[0]
+		# res = f
+		# for i in range(1, n):
+		# 	f = max(f+nums[i], nums[i])
+		# 	res= max(res, f)
+		# return res
 
 # 132. Palindrome Partitioning II My Submissions Question
 # Total Accepted: 46174 Total Submissions: 217410 Difficulty: Hard
