@@ -89,24 +89,51 @@ class Solution(object):
 # 132. Palindrome Partitioning II My Submissions Question
 # Total Accepted: 46174 Total Submissions: 217410 Difficulty: Hard
 # Given a string s, partition s such that every substring of the partition is a palindrome.
-
 # Return the minimum cuts needed for a palindrome partitioning of s.
-
 # For example, given s = "aab",
 # Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
-
 # Subscribe to see which companies asked this question
-
 # Show Tags
 # Show Similar Problems
 
 # class Solution(object):
-#     def minCut(self, s):
-#         """
-#         :type s: str
-#         :rtype: int
-#         """
-		
+# 	def minCut(self, s):
+# 		"""
+# 		:type s: str
+# 		:rtype: int
+# 		"""
+#		# self set index for myself, now has length of n for dp, not n+1
+# 		#dp problem
+# 		n=len(s)
+# 		#set all ele of is_pan to False first
+# 		is_pan = [[False for i in range(n)] for j in range(n)] #save two dimension isPan or not
+# 		#update is_pan
+# 		# for i in range(n): is_pan[i][i] = True
+# 		#set dp's all element to the max of each first
+# 		#if you have n letters, the maximum cut is n-1
+# 		#why one cell more, and  add 1 to all?
+# 		dp = [i for i in range(n-1,-1,-1)] #save one dimension, about the min cut
+
+# 		for i in range(n-1, -1, -1):
+# 			#each outside loop check one i
+# 			for j in range(i, n):
+# 				# print i
+# 				#the string between i and  j is panlindrome or not
+# 				if s[i]==s[j] and (i+1>=j-1 or is_pan[i+1][j-1]):
+# 					is_pan[i][j]=True
+# 					#each outside loop check one i, and update only the i based on all the information we have done/computed
+# 					# print i,j+1
+# 					if j+1<=n-1:
+# 						dp[i] = min(dp[j+1]+1, dp[i])
+# 					else:
+# 						dp[i] = min(0, dp[i])
+# 		# print dp
+# 		return dp[0]
+
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.minCut("aab")
+# 	print sk.minCut("aabb")
 
 
 # 85. Maximal Rectangle My Submissions Question
