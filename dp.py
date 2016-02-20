@@ -139,15 +139,51 @@ class Solution(object):
 # 85. Maximal Rectangle My Submissions Question
 # Total Accepted: 38061 Total Submissions: 165316 Difficulty: Hard
 # Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing all ones and return its area.
-
 # Subscribe to see which companies asked this question
 
-# class Solution(object):
-#     def maximalRectangle(self, matrix):
-#         """
-#         :type matrix: List[List[str]]
-#         :rtype: int
-#         """
+class Solution(object):
+	def maximalRectangle(self, matrix):
+		"""
+		:type matrix: List[List[str]]
+		:rtype: int
+		"""
+		m=len(matrix)
+		if m==0: return 0
+		n=len(matrix[0])
+		if n==0: return 0
+		array = [0 for j  in range(n+1)]
+		area = 0
+		for i in range(m):
+			for j in range(n):
+				array[j] = array[j] + 1 if matrix[i][j]	==1 else 0
+				area=max(area, self.help(array))
+		return area
+	
+	def help(self, array):
+		# newarray=array[:]
+		# newarray.append(0)
+		# stack =[array[0]]
+		index_stack=[0]   	
+		area = 0
+		for i in range(1,len(array)):
+			if array[i]>array[index_stack[-1]]:
+				index_stack.append(i)
+				# stack.append(array[i])
+			else:# array[i]<array[index_stack[-1]]:
+				while len(index_stack) != 0 and array[i] < array[index_stack[-1]]:
+					tmp_height=array[index_stack[-1]]
+					tmp_index=index_stack.pop(-1)
+					area = max(area, tmp_height*(i-tmp_index))
+				# stack.append(array[i])
+				index_stack.append(i)
+		return area
+
+if __name__ == '__main__':
+	sk = Solution()
+	# print sk.maximalRectangle([[0,1,0],[0,1,1],[0,1,0]])
+	print sk.maximalRectangle([1])
+
+
 
 # 123. Best Time to Buy and Sell Stock III My Submissions Question
 # Total Accepted: 51305 Total Submissions: 200248 Difficulty: Hard
