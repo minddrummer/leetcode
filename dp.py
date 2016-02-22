@@ -56,12 +56,12 @@
 # click to show more practice.
 # Subscribe to see which companies asked this question
 
-class Solution(object):
-	def maxSubArray(self, nums):
-		"""
-		:type nums: List[int]
-		:rtype: int
-		"""
+# class Solution(object):
+# 	def maxSubArray(self, nums):
+# 		"""
+# 		:type nums: List[int]
+# 		:rtype: int
+# 		"""
 		#greedy method
 		#add all positive from the beginning, if at some point, the total is <0, that means until this part
 		#there is no contribution to the final result, so reset total = 0
@@ -141,61 +141,58 @@ class Solution(object):
 # Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing all ones and return its area.
 # Subscribe to see which companies asked this question
 
-class Solution(object):
-	def maximalRectangle(self, matrix):
-		"""
-		:type matrix: List[List[str]]
-		:rtype: int
-		"""
-		m=len(matrix)
-		if m==0: return 0
-		n=len(matrix[0])
-		if n==0: return 0
-		array = [0 for j  in range(n+1)]
-		area = 0
-		for i in range(m):
-			for j in range(n):
-				array[j] = array[j] + 1 if matrix[i][j]	==1 else 0
-				area=max(area, self.help(array))
-		return area
+# class Solution(object):
+# 	def maximalRectangle(self, matrix):
+# 		"""
+# 		:type matrix: List[List[str]]
+# 		:rtype: int
+# 		"""
+# 		m=len(matrix)
+# 		if m==0: return 0
+# 		n=len(matrix[0])
+# 		if n==0: return 0
+# 		array = [0 for j  in range(n+1)]
+# 		area = 0
+# 		for i in range(m):
+# 			for j in range(n):
+# 				array[j] = array[j] + 1 if matrix[i][j]	==1 else 0
+# 				area=max(area, self.help(array))
+# 		return area
 	
-	def help(self, array):
-		# newarray=array[:]
-		# newarray.append(0)
-		# stack =[array[0]]
-		index_stack=[0]   	
-		area = 0
-		for i in range(1,len(array)):
-			if array[i]>array[index_stack[-1]]:
-				index_stack.append(i)
-				# stack.append(array[i])
-			else:# array[i]<array[index_stack[-1]]:
-				while len(index_stack) != 0 and array[i] < array[index_stack[-1]]:
-					tmp_height=array[index_stack[-1]]
-					tmp_index=index_stack.pop(-1)
-					area = max(area, tmp_height*(i-tmp_index))
-				# stack.append(array[i])
-				index_stack.append(i)
-		return area
+# 	def help(self, array):
+# 		# newarray=array[:]
+# 		# newarray.append(0)
+# 		# stack =[array[0]]
+# 		index_stack=[0]   	
+# 		area = 0
+# 		for i in range(1,len(array)):
+# 			if array[i]>array[index_stack[-1]]:
+# 				index_stack.append(i)
+# 				# stack.append(array[i])
+# 			else:# array[i]<array[index_stack[-1]]:
+# 				while len(index_stack) != 0 and array[i] < array[index_stack[-1]]:
+# 					tmp_height=array[index_stack[-1]]
+# 					tmp_index=index_stack.pop(-1)
+# 					area = max(area, tmp_height*(i-tmp_index))
+# 				# stack.append(array[i])
+# 				index_stack.append(i)
+# 		return area
 
-if __name__ == '__main__':
-	sk = Solution()
-	# print sk.maximalRectangle([[0,1,0],[0,1,1],[0,1,0]])
-	print sk.maximalRectangle([1])
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	# print sk.maximalRectangle([[0,1,0],[0,1,1],[0,1,0]])
+# 	print sk.maximalRectangle([1])
 
 
 
 # 123. Best Time to Buy and Sell Stock III My Submissions Question
 # Total Accepted: 51305 Total Submissions: 200248 Difficulty: Hard
 # Say you have an array for which the ith element is the price of a given stock on day i.
-
 # Design an algorithm to find the maximum profit. You may complete at most two transactions.
 
 # Note:
-# You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
-
+# You may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again)
 # Subscribe to see which companies asked this question
-
 # Show Tags
 # Show Similar Problems
 
@@ -206,6 +203,32 @@ if __name__ == '__main__':
 #         :type prices: List[int]
 #         :rtype: int
 #         """
+#         #forward once and backward once, and get the value for each point
+#         #and count the sum of the backward and forward value in total, get the maximum
+#         n = len(prices)
+#         if n <=1: return 0
+#         forward = [0]
+#         #forward count each index(including), and forward[0]=0
+#         valley = prices[0]
+#         for i in range(1,n):
+#         	valley=min(valley, prices[i])
+#         	forward.append(max(prices[i]-valley, forward[-1]))
+#         peak = prices[-1]
+#         backward=[0]
+#         for i in range(n-2,-1,-1):
+#         	peak = max(peak, prices[i])
+#         	backward.insert(0, max(peak-prices[i], backward[0]))
+#         print forward
+#         print backward	
+#         res = 0
+#         for i in range(n):
+#         	res= max(res, forward[i] + backward[i])
+
+#         return res
+# if __name__ == '__main__':
+# 	sk  = Solution()
+# 	print sk.maxProfit([2,1,2,0,1])
+
 		
 
 # 97. Interleaving String My Submissions Question
@@ -224,14 +247,14 @@ if __name__ == '__main__':
 
 # Show Tags
 
-# class Solution(object):
-#     def isInterleave(self, s1, s2, s3):
-#         """
-#         :type s1: str
-#         :type s2: str
-#         :type s3: str
-#         :rtype: bool
-#         """
+class Solution(object):
+    def isInterleave(self, s1, s2, s3):
+        """
+        :type s1: str
+        :type s2: str
+        :type s3: str
+        :rtype: bool
+        """
 
 # 87. Scramble String My Submissions Question
 # Total Accepted: 42305 Total Submissions: 162870 Difficulty: Hard
