@@ -247,38 +247,38 @@
 
 # Show Tags
 
-class Solution(object):
-    def isInterleave(self, s1, s2, s3):
-        """
-        :type s1: str
-        :type s2: str
-        :type s3: str
-        :rtype: bool
-        """
-        n1=len(s1)
-        n2=len(s2)
-        n3=len(s3)
-        if n1+n2 != n3: return False
-        #we record n1+1 cols and n2+1 rows
-        array=[[False for i in range(n1+1)] for j in range(n2+1)]
-        array[0][0] = True
-        #initialize
-        for i in range(1,n1+1):
-        	if array[0][i-1] and s3[i-1] == s1[i-1]: array[0][i]=True        	
-        for j in range(1,n2+1):
-        	if array[j-1][0] and s3[j-1] == s2[j-1]: array[j][0] = True
+# class Solution(object):
+#     def isInterleave(self, s1, s2, s3):
+#         """
+#         :type s1: str
+#         :type s2: str
+#         :type s3: str
+#         :rtype: bool
+#         """
+#         n1=len(s1)
+#         n2=len(s2)
+#         n3=len(s3)
+#         if n1+n2 != n3: return False
+#         #we record n1+1 cols and n2+1 rows
+#         array=[[False for i in range(n1+1)] for j in range(n2+1)]
+#         array[0][0] = True
+#         #initialize
+#         for i in range(1,n1+1):
+#         	if array[0][i-1] and s3[i-1] == s1[i-1]: array[0][i]=True        	
+#         for j in range(1,n2+1):
+#         	if array[j-1][0] and s3[j-1] == s2[j-1]: array[j][0] = True
 
-        #dp process to fill in all the values
-        for i in range(1, n1+1):
-        	for j in range(1,n2+1):
-        		if (array[j-1][i] and s3[i+j-1]==s2[j-1]) or (array[j][i-1] and s3[i+j-1] == s1[i-1]):
-        			array[j][i] = True
-       	return array[-1][-1]
+#         #dp process to fill in all the values
+#         for i in range(1, n1+1):
+#         	for j in range(1,n2+1):
+#         		if (array[j-1][i] and s3[i+j-1]==s2[j-1]) or (array[j][i-1] and s3[i+j-1] == s1[i-1]):
+#         			array[j][i] = True
+#        	return array[-1][-1]
 
-if __name__ == '__main__':
-	sk=Solution()
-	print sk.isInterleave("aabcc","dbbca","aadbbcbcac")
-	print sk.isInterleave("aabcc","dbbca","aadbbbaccc")
+# if __name__ == '__main__':
+# 	sk=Solution()
+# 	print sk.isInterleave("aabcc","dbbca","aadbbcbcac")
+# 	print sk.isInterleave("aabcc","dbbca","aadbbbaccc")
 
 
 
@@ -289,7 +289,6 @@ if __name__ == '__main__':
 # 87. Scramble String My Submissions Question
 # Total Accepted: 42305 Total Submissions: 162870 Difficulty: Hard
 # Given a string s1, we may represent it as a binary tree by partitioning it to two non-empty substrings recursively.
-
 # Below is one possible representation of s1 = "great":
 
 #     great
@@ -311,9 +310,7 @@ if __name__ == '__main__':
 #            / \
 #           a   t
 # We say that "rgeat" is a scrambled string of "great".
-
 # Similarly, if we continue to swap the children of nodes "eat" and "at", it produces a scrambled string "rgtae".
-
 #     rgtae
 #    /    \
 #   rg    tae
@@ -322,20 +319,59 @@ if __name__ == '__main__':
 #        / \
 #       t   a
 # We say that "rgtae" is a scrambled string of "great".
-
 # Given two strings s1 and s2 of the same length, determine if s2 is a scrambled string of s1.
-
 # Subscribe to see which companies asked this question
 
-# class Solution(object):
-#     def isScramble(self, s1, s2):
-#         """
-#         :type s1: str
-#         :type s2: str
-#         :rtype: bool
-#         """
-		
+class Solution(object):
+	def isScramble(self, s1, s2):
+		"""
+		:type s1: str
+		:type s2: str
+		:rtype: bool
+		"""
+		#we use dfs here
+		#the problem here is that as long as it is divided substring, it will work
+		#not necessary to be around half
+		n1=len(s1)
+		n2=len(s2)
+		if n1 != n2: return False
+		if s1==s2: return True
+		#prunning by count letters
+		dct={}
+		for i in range(n1):
+			if s1[i] not in dct:
+				dct[s1[i]] = 1
+			else: dct[s1[i]] += 1
+			if s2[i] not in dct:
+				dct[s2[i]] = -1
+			else:
+				dct[s2[i]] -= 1
+		for key in dct:
+			if dct[key] != 0: return False
+		# l1=list(s1)
+		# l2=list(s2)
+		# l1.sort()
+		# l2.sort()
+		# if l1 != l2: return False
 
+		#because any no-empty substring divide
+		for i in range(1,n1):
+			if (self.isScramble(s1[:i], s2[:i]) and self.isScramble(s1[i:],s2[i:])):
+				return True
+			if (self.isScramble(s1[:i], s2[-i:]) and self.isScramble(s1[i:], s2[:-i])):
+				return True
+		return False
+
+if __name__ == '__main__':
+	sk = Solution()
+	# print sk.isScramble('great','rgeat')		 
+	# print sk.isScramble('great','great')		 
+	# print sk.isScramble('great','abcde')		 
+	# print sk.isScramble('great','rgtea')
+	# print sk.isScramble('great','eatgr')		 
+	# print sk.isScramble('great','eatrg')
+	print sk.isScramble("abcdefghijklmn","efghijklmncadb")		 
+	print sk.isScramble("ab","ba")		 
 # 64. Minimum Path Sum My Submissions Question
 # Total Accepted: 62940 Total Submissions: 184697 Difficulty: Medium
 # Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path.
