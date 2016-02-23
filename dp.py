@@ -255,6 +255,36 @@ class Solution(object):
         :type s3: str
         :rtype: bool
         """
+        n1=len(s1)
+        n2=len(s2)
+        n3=len(s3)
+        if n1+n2 != n3: return False
+        #we record n1+1 cols and n2+1 rows
+        array=[[False for i in range(n1+1)] for j in range(n2+1)]
+        array[0][0] = True
+        #initialize
+        for i in range(1,n1+1):
+        	if array[0][i-1] and s3[i-1] == s1[i-1]: array[0][i]=True        	
+        for j in range(1,n2+1):
+        	if array[j-1][0] and s3[j-1] == s2[j-1]: array[j][0] = True
+
+        #dp process to fill in all the values
+        for i in range(1, n1+1):
+        	for j in range(1,n2+1):
+        		if (array[j-1][i] and s3[i+j-1]==s2[j-1]) or (array[j][i-1] and s3[i+j-1] == s1[i-1]):
+        			array[j][i] = True
+       	return array[-1][-1]
+
+if __name__ == '__main__':
+	sk=Solution()
+	print sk.isInterleave("aabcc","dbbca","aadbbcbcac")
+	print sk.isInterleave("aabcc","dbbca","aadbbbaccc")
+
+
+
+
+
+
 
 # 87. Scramble String My Submissions Question
 # Total Accepted: 42305 Total Submissions: 162870 Difficulty: Hard
