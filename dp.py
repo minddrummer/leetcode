@@ -410,49 +410,47 @@
 # b) Delete a character
 # c) Replace a character
 
-class Solution(object):
-	def minDistance(self, word1, word2):
-		"""
-		:type word1: str
-		:type word2: str
-		:rtype: int
-		"""
-		#dp problem 
-		#min([i-1][j-1],[i][j-1],[i-1][j])
-		n=len(word1)
-		m=len(word2)
-		#initialize
-		dp= [[0 for i in range(n+1)] for j in range(m+1)]
-		for i in range(1,n+1):
-			dp[0][i] = i
-		for j in range(1,m+1):
-			dp[j][0] = j
+# class Solution(object):
+# 	def minDistance(self, word1, word2):
+# 		"""
+# 		:type word1: str
+# 		:type word2: str
+# 		:rtype: int
+# 		"""
+# 		#dp problem 
+# 		#min([i-1][j-1],[i][j-1],[i-1][j])
+# 		n=len(word1)
+# 		m=len(word2)
+# 		#initialize
+# 		dp= [[0 for i in range(n+1)] for j in range(m+1)]
+# 		for i in range(1,n+1):
+# 			dp[0][i] = i
+# 		for j in range(1,m+1):
+# 			dp[j][0] = j
 
-		#main dp loop
-		for j in range(1,m+1):
-			for i in range(1,n+1):
-				if word1[i-1] == word2[j-1]:
-					dp[j][i] = dp[j-1][i-1]
-				else:
-					dp[j][i] = min(dp[j-1][i-1],dp[j-1][i],dp[j][i-1])+1
+# 		#main dp loop
+# 		for j in range(1,m+1):
+# 			for i in range(1,n+1):
+# 				if word1[i-1] == word2[j-1]:
+# 					dp[j][i] = dp[j-1][i-1]
+# 				else:
+# 					dp[j][i] = min(dp[j-1][i-1],dp[j-1][i],dp[j][i-1])+1
 
-		return dp[-1][-1]
+# 		return dp[-1][-1]
 
 
-if __name__ == '__main__':
-	sk=Solution()
-	print sk.minDistance('ed','e')        
+# if __name__ == '__main__':
+# 	sk=Solution()
+# 	print sk.minDistance('ed','e')        
 		
 # 91. Decode Ways My Submissions Question
 # Total Accepted: 61299 Total Submissions: 357609 Difficulty: Medium
 # A message containing letters from A-Z is being encoded to numbers using the following mapping:
-
 # 'A' -> 1
 # 'B' -> 2
 # ...
 # 'Z' -> 26
 # Given an encoded message containing digits, determine the total number of ways to decode it.
-
 # For example,
 # Given encoded message "12", it could be decoded as "AB" (1 2) or "L" (12).
 
@@ -460,12 +458,38 @@ if __name__ == '__main__':
 
 # Subscribe to see which companies asked this question
 
-# class Solution(object):
-#     def numDecodings(self, s):
-#         """
-#         :type s: str
-#         :rtype: int
-#         """
+class Solution(object):
+    def numDecodings(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        #because of 0 to become illegal, there are more logic judgment in the code
+        n= len(s)
+        if n==0: return 0
+        if int(s[0]) == 0 : return 0
+        if n==1: return 1
+        
+        dp = [0 for i in range(n+1)]
+        dp[0], dp[1]= 1, 1
+        #following i is index for s
+        for i in range(1,n):
+        	if int(s[i])==0 and (int(s[i-1])<1 or int(s[i-1])>2):
+        		return 0
+        	elif int(s[i])==0 and (int(s[i-1])>=1 and int(s[i-1])<=2):
+        		dp[i+1]=dp[i-1]
+        	elif int(s[i-1:i+1])>26 or int(s[i-1])==0:
+        		dp[i+1]=dp[i]        		
+        	else:
+        		dp[i+1] = dp[i-1]+dp[i]
+        return dp[-1]
+
+if __name__ == '__main__':
+	sk=Solution()
+	print sk.numDecodings('123')
+	print sk.numDecodings('30')
+	print sk.numDecodings('0123')
+
 		
 
 # 115. Distinct Subsequences My Submissions Question
