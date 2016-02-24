@@ -458,61 +458,107 @@
 
 # Subscribe to see which companies asked this question
 
-class Solution(object):
-    def numDecodings(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
-        #because of 0 to become illegal, there are more logic judgment in the code
-        n= len(s)
-        if n==0: return 0
-        if int(s[0]) == 0 : return 0
-        if n==1: return 1
-        
-        dp = [0 for i in range(n+1)]
-        dp[0], dp[1]= 1, 1
-        #following i is index for s
-        for i in range(1,n):
-        	if int(s[i])==0 and (int(s[i-1])<1 or int(s[i-1])>2):
-        		return 0
-        	elif int(s[i])==0 and (int(s[i-1])>=1 and int(s[i-1])<=2):
-        		dp[i+1]=dp[i-1]
-        	elif int(s[i-1:i+1])>26 or int(s[i-1])==0:
-        		dp[i+1]=dp[i]        		
-        	else:
-        		dp[i+1] = dp[i-1]+dp[i]
-        return dp[-1]
+# class Solution(object):
+#     def numDecodings(self, s):
+#         """
+#         :type s: str
+#         :rtype: int
+#         """
+#         #because of 0 to become illegal, there are more logic judgment in the code
+#         n= len(s)
+#         if n==0: return 0
+#         if int(s[0]) == 0 : return 0
+#         if n==1: return 1
+		
+#         dp = [0 for i in range(n+1)]
+#         dp[0], dp[1]= 1, 1
+#         #following i is index for s
+#         for i in range(1,n):
+#         	if int(s[i])==0 and (int(s[i-1])<1 or int(s[i-1])>2):
+#         		return 0
+#         	elif int(s[i])==0 and (int(s[i-1])>=1 and int(s[i-1])<=2):
+#         		dp[i+1]=dp[i-1]
+#         	elif int(s[i-1:i+1])>26 or int(s[i-1])==0:
+#         		dp[i+1]=dp[i]        		
+#         	else:
+#         		dp[i+1] = dp[i-1]+dp[i]
+#         return dp[-1]
 
-if __name__ == '__main__':
-	sk=Solution()
-	print sk.numDecodings('123')
-	print sk.numDecodings('30')
-	print sk.numDecodings('0123')
-
+# if __name__ == '__main__':
+# 	sk=Solution()
+# 	print sk.numDecodings('123')
+# 	print sk.numDecodings('30')
+# 	print sk.numDecodings('0123')
 		
 
 # 115. Distinct Subsequences My Submissions Question
 # Total Accepted: 46914 Total Submissions: 166243 Difficulty: Hard
 # Given a string S and a string T, count the number of distinct subsequences of T in S.
-
 # A subsequence of a string is a new string which is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (ie, "ACE" is a subsequence of "ABCDE" while "AEC" is not).
-
 # Here is an example:
 # S = "rabbbit", T = "rabbit"
-
 # Return 3.
 
 # Subscribe to see which companies asked this question
 
-# class Solution(object):
-#     def numDistinct(self, s, t):
-#         """
-#         :type s: str
-#         :type t: str
-#         :rtype: int
-#         """
-		
+class Solution(object):
+	def numDistinct(self, s, t):
+		"""
+		:type s: str
+		:type t: str
+		:rtype: int
+		"""
+		#n*m time
+		ns = len(s)
+		nt = len(t)
+		dp = [[0 for i in range(ns+1)] for j in range(nt+1)]
+		#initialize
+		for i in range(ns+1): dp[0][i] = 1
+		#main loop
+		for j in range(1,nt+1):
+			for i in range(1,ns+1):
+				if t[j-1] == s[i-1]:
+					#index's problem: it represents that how to change from one end to the other end
+					#in this problem it is from s to t
+					#the tips are: typically three ways to draw arrows, you draw them,and try to explain how each one means;
+					#you pick the one that stands right; in this problem, it is changing from the row string and ends with the column string point
+					dp[j][i] = dp[j][i-1]+dp[j-1][i-1]
+				else:
+					dp[j][i] = dp[j][i-1]
+		return dp[nt][ns]
+
+
+		# the following would be n^3 time, which is expensive in some way
+		# ns = len(s)
+		# nt = len(t)
+		# if nt==0: return 1
+		# dp = []
+		# for letter in t:
+		# 	array = []
+		# 	for i in range(ns):
+		# 		if letter == s[i]:
+		# 			array.append(i)
+		# 	if not array: return 0
+		# 	dp.append(array)
+		# # print dp
+		# a0 = dp[0]
+		# # print nt	
+		# for i in range(1, nt):
+		# 	# print i
+		# 	array = dp[i]
+		# 	new_array=[]
+		# 	for ele in array:
+		# 		for item in a0:
+		# 			if ele>item: new_array.append(ele)
+		# 			else: break
+		# 	a0=new_array
+		# return len(a0)
+if __name__ == '__main__':
+	sk  =Solution()
+	print sk.numDistinct('ac','')		
+	print sk.numDistinct('acac','ac')
+	print sk.numDistinct('rabbbit','rabit')		
+	print sk.numDistinct('ddd','dd')		
 
 # 139. Word Break My Submissions Question
 # Total Accepted: 77794 Total Submissions: 317862 Difficulty: Medium
