@@ -380,45 +380,68 @@
 # from top left to bottom right which minimizes the sum of all numbers along its path.
 # Note: You can only move either down or right at any point in time.
 
-class Solution(object):
-    def minPathSum(self, grid):
-        """
-        :type grid: List[List[int]]
-        :rtype: int
-        """
-        #dp problem
-        m = len(grid)
-        n = len(grid[0])
-        if m==0 or n==0: return 0
-        dp= [[0 for i in range(n)] for j in range(m)]
-        dp[0][0] = grid[0][0]
-        for i in range(1,n):
-        	dp[0][i] = dp[0][i-1] + grid[0][i]
-        for j in range(1,m):
-        	dp[j][0] = dp[j-1][0] + grid[j][0]
-        for j in range(1,m):
-        	for i in range(1,n):
-        		dp[j][i] = min(dp[j-1][i], dp[j][i-1])+grid[j][i]
-       	return dp[-1][-1]
+# class Solution(object):
+#     def minPathSum(self, grid):
+#         """
+#         :type grid: List[List[int]]
+#         :rtype: int
+#         """
+#         #dp problem
+#         m = len(grid)
+#         n = len(grid[0])
+#         if m==0 or n==0: return 0
+#         dp= [[0 for i in range(n)] for j in range(m)]
+#         dp[0][0] = grid[0][0]
+#         for i in range(1,n):
+#         	dp[0][i] = dp[0][i-1] + grid[0][i]
+#         for j in range(1,m):
+#         	dp[j][0] = dp[j-1][0] + grid[j][0]
+#         for j in range(1,m):
+#         	for i in range(1,n):
+#         		dp[j][i] = min(dp[j-1][i], dp[j][i-1])+grid[j][i]
+#        	return dp[-1][-1]
 		
 
 # 72. Edit Distance My Submissions Question
 # Total Accepted: 52314 Total Submissions: 187031 Difficulty: Hard
 # Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. (each operation is counted as 1 step.)
-
 # You have the following 3 operations permitted on a word:
-
 # a) Insert a character
 # b) Delete a character
 # c) Replace a character
 
-# class Solution(object):
-#     def minDistance(self, word1, word2):
-#         """
-#         :type word1: str
-#         :type word2: str
-#         :rtype: int
-#         """
+class Solution(object):
+	def minDistance(self, word1, word2):
+		"""
+		:type word1: str
+		:type word2: str
+		:rtype: int
+		"""
+		#dp problem 
+		#min([i-1][j-1],[i][j-1],[i-1][j])
+		n=len(word1)
+		m=len(word2)
+		#initialize
+		dp= [[0 for i in range(n+1)] for j in range(m+1)]
+		for i in range(1,n+1):
+			dp[0][i] = i
+		for j in range(1,m+1):
+			dp[j][0] = j
+
+		#main dp loop
+		for j in range(1,m+1):
+			for i in range(1,n+1):
+				if word1[i-1] == word2[j-1]:
+					dp[j][i] = dp[j-1][i-1]
+				else:
+					dp[j][i] = min(dp[j-1][i-1],dp[j-1][i],dp[j][i-1])+1
+
+		return dp[-1][-1]
+
+
+if __name__ == '__main__':
+	sk=Solution()
+	print sk.minDistance('ed','e')        
 		
 # 91. Decode Ways My Submissions Question
 # Total Accepted: 61299 Total Submissions: 357609 Difficulty: Medium
