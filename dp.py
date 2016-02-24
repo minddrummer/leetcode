@@ -322,70 +322,84 @@
 # Given two strings s1 and s2 of the same length, determine if s2 is a scrambled string of s1.
 # Subscribe to see which companies asked this question
 
-class Solution(object):
-	def isScramble(self, s1, s2):
-		"""
-		:type s1: str
-		:type s2: str
-		:rtype: bool
-		"""
-		#we use dfs here
-		#the problem here is that as long as it is divided substring, it will work
-		#not necessary to be around half
-		n1=len(s1)
-		n2=len(s2)
-		if n1 != n2: return False
-		if s1==s2: return True
-		#prunning by count letters
-		dct={}
-		for i in range(n1):
-			if s1[i] not in dct:
-				dct[s1[i]] = 1
-			else: dct[s1[i]] += 1
-			if s2[i] not in dct:
-				dct[s2[i]] = -1
-			else:
-				dct[s2[i]] -= 1
-		for key in dct:
-			if dct[key] != 0: return False
-		# l1=list(s1)
-		# l2=list(s2)
-		# l1.sort()
-		# l2.sort()
-		# if l1 != l2: return False
+# class Solution(object):
+# 	def isScramble(self, s1, s2):
+# 		"""
+# 		:type s1: str
+# 		:type s2: str
+# 		:rtype: bool
+# 		"""
+# 		#we use dfs here
+# 		#the problem here is that as long as it is divided substring, it will work
+# 		#not necessary to be around half
+# 		n1=len(s1)
+# 		n2=len(s2)
+# 		if n1 != n2: return False
+# 		if s1==s2: return True
+# 		#prunning by count letters
+# 		dct={}
+# 		for i in range(n1):
+# 			if s1[i] not in dct:
+# 				dct[s1[i]] = 1
+# 			else: dct[s1[i]] += 1
+# 			if s2[i] not in dct:
+# 				dct[s2[i]] = -1
+# 			else:
+# 				dct[s2[i]] -= 1
+# 		for key in dct:
+# 			if dct[key] != 0: return False
+# 		# l1=list(s1)
+# 		# l2=list(s2)
+# 		# l1.sort()
+# 		# l2.sort()
+# 		# if l1 != l2: return False
 
-		#because any no-empty substring divide
-		for i in range(1,n1):
-			if (self.isScramble(s1[:i], s2[:i]) and self.isScramble(s1[i:],s2[i:])):
-				return True
-			if (self.isScramble(s1[:i], s2[-i:]) and self.isScramble(s1[i:], s2[:-i])):
-				return True
-		return False
+# 		#because any no-empty substring divide
+# 		for i in range(1,n1):
+# 			if (self.isScramble(s1[:i], s2[:i]) and self.isScramble(s1[i:],s2[i:])):
+# 				return True
+# 			if (self.isScramble(s1[:i], s2[-i:]) and self.isScramble(s1[i:], s2[:-i])):
+# 				return True
+# 		return False
 
-if __name__ == '__main__':
-	sk = Solution()
-	# print sk.isScramble('great','rgeat')		 
-	# print sk.isScramble('great','great')		 
-	# print sk.isScramble('great','abcde')		 
-	# print sk.isScramble('great','rgtea')
-	# print sk.isScramble('great','eatgr')		 
-	# print sk.isScramble('great','eatrg')
-	print sk.isScramble("abcdefghijklmn","efghijklmncadb")		 
-	print sk.isScramble("ab","ba")		 
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	# print sk.isScramble('great','rgeat')		 
+# 	# print sk.isScramble('great','great')		 
+# 	# print sk.isScramble('great','abcde')		 
+# 	# print sk.isScramble('great','rgtea')
+# 	# print sk.isScramble('great','eatgr')		 
+# 	# print sk.isScramble('great','eatrg')
+# 	print sk.isScramble("abcdefghijklmn","efghijklmncadb")		 
+	# print sk.isScramble("ab","ba")		 
+
+
 # 64. Minimum Path Sum My Submissions Question
 # Total Accepted: 62940 Total Submissions: 184697 Difficulty: Medium
-# Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right which minimizes the sum of all numbers along its path.
-
+# Given a m x n grid filled with non-negative numbers, find a path
+# from top left to bottom right which minimizes the sum of all numbers along its path.
 # Note: You can only move either down or right at any point in time.
 
-# Subscribe to see which companies asked this question
-
-# class Solution(object):
-#     def minPathSum(self, grid):
-#         """
-#         :type grid: List[List[int]]
-#         :rtype: int
-#         """
+class Solution(object):
+    def minPathSum(self, grid):
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        """
+        #dp problem
+        m = len(grid)
+        n = len(grid[0])
+        if m==0 or n==0: return 0
+        dp= [[0 for i in range(n)] for j in range(m)]
+        dp[0][0] = grid[0][0]
+        for i in range(1,n):
+        	dp[0][i] = dp[0][i-1] + grid[0][i]
+        for j in range(1,m):
+        	dp[j][0] = dp[j-1][0] + grid[j][0]
+        for j in range(1,m):
+        	for i in range(1,n):
+        		dp[j][i] = min(dp[j-1][i], dp[j][i-1])+grid[j][i]
+       	return dp[-1][-1]
 		
 
 # 72. Edit Distance My Submissions Question
