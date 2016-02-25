@@ -148,95 +148,94 @@
 
 # Subscribe to see which companies asked this question
 # Definition for an interval.
-class Interval(object):
-	def __init__(self, s=0, e=0):
-		self.start = s
-		self.end = e
+# class Interval(object):
+# 	def __init__(self, s=0, e=0):
+# 		self.start = s
+# 		self.end = e
 
-class Solution(object):
-	# def insert(self, intervals, newInterval):
-	# 	"""
-	# 	:type intervals: List[Interval]
-	# 	:type newInterval: Interval
-	# 	:rtype: List[Interval]
-	# 	"""
-	# 	TO(n), SO(n)
-	# 	n = len(intervals)
-	# 	if n==0: return [newInterval]
-	# 	res = []
-	# 	stop = False
-	# 	for i in range(n):
-	# 		if intervals[i].end < newInterval.start:
-	# 			res.append(intervals[i])
-	# 		elif intervals[i].end>=newInterval.start and intervals[i].start<=newInterval.start:
-	# 			tmp = Interval(intervals[i].start, max(newInterval.end, intervals[i].end))
-	# 			newInterval = tmp
-	# 		elif intervals[i].end>=newInterval.end and intervals[i].start<=newInterval.end:
-	# 			tmp = Interval(min(intervals[i].start, newInterval.start), intervals[i].end)
-	# 			newInterval = tmp
-	# 		elif intervals[i].start > newInterval.end:
-	# 			stop =True
-	# 			break
-	# 	# print newInterval
-	# 	# print stop
+# class Solution(object):
+# 	# def insert(self, intervals, newInterval):
+# 	# 	"""
+# 	# 	:type intervals: List[Interval]
+# 	# 	:type newInterval: Interval
+# 	# 	:rtype: List[Interval]
+# 	# 	"""
+# 	# 	TO(n), SO(n)
+# 	# 	n = len(intervals)
+# 	# 	if n==0: return [newInterval]
+# 	# 	res = []
+# 	# 	stop = False
+# 	# 	for i in range(n):
+# 	# 		if intervals[i].end < newInterval.start:
+# 	# 			res.append(intervals[i])
+# 	# 		elif intervals[i].end>=newInterval.start and intervals[i].start<=newInterval.start:
+# 	# 			tmp = Interval(intervals[i].start, max(newInterval.end, intervals[i].end))
+# 	# 			newInterval = tmp
+# 	# 		elif intervals[i].end>=newInterval.end and intervals[i].start<=newInterval.end:
+# 	# 			tmp = Interval(min(intervals[i].start, newInterval.start), intervals[i].end)
+# 	# 			newInterval = tmp
+# 	# 		elif intervals[i].start > newInterval.end:
+# 	# 			stop =True
+# 	# 			break
+# 	# 	# print newInterval
+# 	# 	# print stop
 		
-	# 	res.append(newInterval)
-	# 	#if it is stopped, so there are some elements in the end need to be added to the res
-	# 	if stop:
-	# 		res = res + intervals[i:]
-	# 	# res.append(intervals[i:])		
-	# 	# res.append(newInterval)
-	# 	return res
+# 	# 	res.append(newInterval)
+# 	# 	#if it is stopped, so there are some elements in the end need to be added to the res
+# 	# 	if stop:
+# 	# 		res = res + intervals[i:]
+# 	# 	# res.append(intervals[i:])		
+# 	# 	# res.append(newInterval)
+# 	# 	return res
 
 
-	def insert(self, intervals, newInterval):	
-		#TO(n), SO(1)!!
-		n = len(intervals)
-		if n==0: return [newInterval]
-		# res = []
-		# stop = False
-		i=0
-		# for i in range(n):
-		while i <= n-1:
-			if intervals[i].end < newInterval.start:
-				# res.append(intervals[i])
-				i+=1
-				continue
-			elif intervals[i].end>=newInterval.start and intervals[i].start<=newInterval.start:
-				tmp = Interval(intervals[i].start, max(newInterval.end, intervals[i].end))
-				newInterval = tmp
-				del intervals[i]
-				n -= 1
-			elif intervals[i].end>=newInterval.end and intervals[i].start<=newInterval.end:
-				tmp = Interval(min(intervals[i].start, newInterval.start), intervals[i].end)
-				newInterval = tmp
-				del intervals[i]
-				n -= 1
-			elif intervals[i].end<=newInterval.end and intervals[i].start>=newInterval.start:
-				# tmp = Interval(min(intervals[i].start, newInterval.start), intervals[i].end)
-				# newInterval = tmp
-				del intervals[i]
-				n -= 1	
-			elif intervals[i].start > newInterval.end:
-				# stop =True
-				break
-		# print newInterval
-		# print stop
-		# print newInterval
-		# print intervals
-		intervals.insert(i, newInterval)
-		#if it is stopped, so there are some elements in the end need to be added to the res
-		# if stop:
-		# 	res = res + intervals[i:]
-		# res.append(intervals[i:])		
-		# res.append(newInterval)
-		return intervals
+# 	def insert(self, intervals, newInterval):	
+# 		#TO(n), SO(1)!!
+# 		n = len(intervals)
+# 		if n==0: return [newInterval]
+# 		# res = []
+# 		# stop = False
+# 		i=0
+# 		# for i in range(n):
+# 		while i <= n-1:
+# 			if intervals[i].end < newInterval.start:
+# 				# res.append(intervals[i])
+# 				i+=1
+# 				continue
+# 			elif intervals[i].end>=newInterval.start and intervals[i].start<=newInterval.start:
+# 				tmp = Interval(intervals[i].start, max(newInterval.end, intervals[i].end))
+# 				newInterval = tmp
+# 				del intervals[i]
+# 				n -= 1
+# 			elif intervals[i].end>=newInterval.end and intervals[i].start<=newInterval.end:
+# 				tmp = Interval(min(intervals[i].start, newInterval.start), intervals[i].end)
+# 				newInterval = tmp
+# 				del intervals[i]
+# 				n -= 1
+# 			elif intervals[i].end<=newInterval.end and intervals[i].start>=newInterval.start:
+# 				# tmp = Interval(min(intervals[i].start, newInterval.start), intervals[i].end)
+# 				# newInterval = tmp
+# 				del intervals[i]
+# 				n -= 1	
+# 			elif intervals[i].start > newInterval.end:
+# 				# stop =True
+# 				break
+# 		# print newInterval
+# 		# print stop
+# 		# print newInterval
+# 		# print intervals
+# 		intervals.insert(i, newInterval)
+# 		#if it is stopped, so there are some elements in the end need to be added to the res
+# 		# if stop:
+# 		# 	res = res + intervals[i:]
+# 		# res.append(intervals[i:])		
+# 		# res.append(newInterval)
+# 		return intervals
 
-if __name__ == '__main__':
-	sk = Solution()
-	print sk.insert([Interval(1,5)], Interval(0,6))
-	# print sk.insert([], Interval(0,0))
-	
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.insert([Interval(1,5)], Interval(0,6))
+# 	# print sk.insert([], Interval(0,0))
 
 
 
@@ -250,17 +249,46 @@ if __name__ == '__main__':
 
 # Subscribe to see which companies asked this question
 # # Definition for an interval.
-# # class Interval(object):
-# #     def __init__(self, s=0, e=0):
-# #         self.start = s
-# #         self.end = e
+class Interval(object):
+	def __init__(self, s=0, e=0):
+		self.start = s
+		self.end = e
 
-# class Solution(object):
-#     def merge(self, intervals):
-#         """
-#         :type intervals: List[Interval]
-#         :rtype: List[Interval]
-#         """
+class Solution(object):
+	def merge(self, intervals):
+		"""
+		:type intervals: List[Interval]
+		:rtype: List[Interval]
+		"""
+		res = []
+		# intervals.sort(key=lambda x: x.start)
+		for item in intervals:
+			res=self.insert(res, item)
+		return res
+	def insert(self, intervals, newInterval):	
+		n = len(intervals)
+		if n==0: return [newInterval]
+		i=0
+		while i <= n-1:
+			if intervals[i].end < newInterval.start:
+				i+=1
+				continue
+			elif intervals[i].end>=newInterval.start and intervals[i].start<=newInterval.start:
+				newInterval = Interval(intervals[i].start, max(newInterval.end, intervals[i].end))
+				del intervals[i]
+				n -= 1
+			elif intervals[i].end>=newInterval.end and intervals[i].start<=newInterval.end:
+				newInterval = Interval(min(intervals[i].start, newInterval.start), intervals[i].end)
+				del intervals[i]
+				n -= 1
+			elif intervals[i].end<=newInterval.end and intervals[i].start>=newInterval.start:
+				del intervals[i]
+				n -= 1	
+			elif intervals[i].start > newInterval.end:
+				break
+		intervals.insert(i, newInterval)
+		return intervals
+		
 
 # 76. Minimum Window Substring My Submissions Question
 # Total Accepted: 54001 Total Submissions: 261262 Difficulty: Hard
