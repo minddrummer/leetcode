@@ -108,35 +108,34 @@
 # click to show spoilers.
 
 # Subscribe to see which companies asked this question
-class Solution:
-    # @param {integer} x
-    # @return {boolean}
-    def isPalindrome(self, x):
-    	#need extra space
-        # return str(x) == str(x)[::-1]
-        #no extra space: manipulate the numbers to get the results
-        if x<0: return False
-        d=1
-        while x/d>=10:
-        	d *= 10 #find the largest d first
-        while x > 0: #loop in x and d, until x is smaller than 10
-        #when x is <10, d will be 1, so it magically work 
-        	first = x/d
-        	resid = x%10
-        	if first != resid: return False
-        	x=x%d
-        	x=x/10
-        	d=d/100
-        return True
-if __name__ == '__main__':
-	sk  =Solution()
-	print sk.isPalindrome(4224)      
-	print sk.isPalindrome(422)      
+# class Solution:
+#     # @param {integer} x
+#     # @return {boolean}
+#     def isPalindrome(self, x):
+#     	#need extra space
+#         # return str(x) == str(x)[::-1]
+#         #no extra space: manipulate the numbers to get the results
+#         if x<0: return False
+#         d=1
+#         while x/d>=10:
+#         	d *= 10 #find the largest d first
+#         while x > 0: #loop in x and d, until x is smaller than 10
+#         #when x is <10, d will be 1, so it magically work 
+#         	first = x/d
+#         	resid = x%10
+#         	if first != resid: return False
+#         	x=x%d
+#         	x=x/10
+#         	d=d/100
+#         return True
+# if __name__ == '__main__':
+# 	sk  =Solution()
+# 	print sk.isPalindrome(4224)      
+# 	print sk.isPalindrome(422)      
 
 # 57. Insert Interval My Submissions Question
 # Total Accepted: 52971 Total Submissions: 227560 Difficulty: Hard
 # Given a set of non-overlapping intervals, insert a new interval into the intervals (merge if necessary).
-
 # You may assume that the intervals were initially sorted according to their start times.
 
 # Example 1:
@@ -148,19 +147,99 @@ if __name__ == '__main__':
 # This is because the new interval [4,9] overlaps with [3,5],[6,7],[8,10].
 
 # Subscribe to see which companies asked this question
-# # Definition for an interval.
-# # class Interval(object):
-# #     def __init__(self, s=0, e=0):
-# #         self.start = s
-# #         self.end = e
+# Definition for an interval.
+class Interval(object):
+	def __init__(self, s=0, e=0):
+		self.start = s
+		self.end = e
 
-# class Solution(object):
-#     def insert(self, intervals, newInterval):
-#         """
-#         :type intervals: List[Interval]
-#         :type newInterval: Interval
-#         :rtype: List[Interval]
-#         """
+class Solution(object):
+	# def insert(self, intervals, newInterval):
+	# 	"""
+	# 	:type intervals: List[Interval]
+	# 	:type newInterval: Interval
+	# 	:rtype: List[Interval]
+	# 	"""
+	# 	TO(n), SO(n)
+	# 	n = len(intervals)
+	# 	if n==0: return [newInterval]
+	# 	res = []
+	# 	stop = False
+	# 	for i in range(n):
+	# 		if intervals[i].end < newInterval.start:
+	# 			res.append(intervals[i])
+	# 		elif intervals[i].end>=newInterval.start and intervals[i].start<=newInterval.start:
+	# 			tmp = Interval(intervals[i].start, max(newInterval.end, intervals[i].end))
+	# 			newInterval = tmp
+	# 		elif intervals[i].end>=newInterval.end and intervals[i].start<=newInterval.end:
+	# 			tmp = Interval(min(intervals[i].start, newInterval.start), intervals[i].end)
+	# 			newInterval = tmp
+	# 		elif intervals[i].start > newInterval.end:
+	# 			stop =True
+	# 			break
+	# 	# print newInterval
+	# 	# print stop
+		
+	# 	res.append(newInterval)
+	# 	#if it is stopped, so there are some elements in the end need to be added to the res
+	# 	if stop:
+	# 		res = res + intervals[i:]
+	# 	# res.append(intervals[i:])		
+	# 	# res.append(newInterval)
+	# 	return res
+
+
+	def insert(self, intervals, newInterval):	
+		#TO(n), SO(1)!!
+		n = len(intervals)
+		if n==0: return [newInterval]
+		# res = []
+		# stop = False
+		i=0
+		# for i in range(n):
+		while i <= n-1:
+			if intervals[i].end < newInterval.start:
+				# res.append(intervals[i])
+				i+=1
+				continue
+			elif intervals[i].end>=newInterval.start and intervals[i].start<=newInterval.start:
+				tmp = Interval(intervals[i].start, max(newInterval.end, intervals[i].end))
+				newInterval = tmp
+				del intervals[i]
+				n -= 1
+			elif intervals[i].end>=newInterval.end and intervals[i].start<=newInterval.end:
+				tmp = Interval(min(intervals[i].start, newInterval.start), intervals[i].end)
+				newInterval = tmp
+				del intervals[i]
+				n -= 1
+			elif intervals[i].end<=newInterval.end and intervals[i].start>=newInterval.start:
+				# tmp = Interval(min(intervals[i].start, newInterval.start), intervals[i].end)
+				# newInterval = tmp
+				del intervals[i]
+				n -= 1	
+			elif intervals[i].start > newInterval.end:
+				# stop =True
+				break
+		# print newInterval
+		# print stop
+		# print newInterval
+		# print intervals
+		intervals.insert(i, newInterval)
+		#if it is stopped, so there are some elements in the end need to be added to the res
+		# if stop:
+		# 	res = res + intervals[i:]
+		# res.append(intervals[i:])		
+		# res.append(newInterval)
+		return intervals
+
+if __name__ == '__main__':
+	sk = Solution()
+	print sk.insert([Interval(1,5)], Interval(0,6))
+	# print sk.insert([], Interval(0,0))
+	
+
+
+
 # 56. Merge Intervals My Submissions Question
 # Total Accepted: 59780 Total Submissions: 242942 Difficulty: Hard
 # Given a collection of intervals, merge all overlapping intervals.
@@ -447,7 +526,7 @@ if __name__ == '__main__':
 #         :type divisor: int
 #         :rtype: int
 #         """
-        
+		
 
 
 # 68. Text Justification My Submissions Question
@@ -479,7 +558,7 @@ if __name__ == '__main__':
 #         :type maxWidth: int
 #         :rtype: List[str]
 #         """
-        
+		
 
 # 149. Max Points on a Line My Submissions Question
 # Total Accepted: 53334 Total Submissions: 380608 Difficulty: Hard
