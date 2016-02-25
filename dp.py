@@ -569,48 +569,106 @@
 # Return true because "leetcode" can be segmented as "leet code".
 # Subscribe to see which companies asked this question
 
+# class Solution(object):
+# 	def wordBreak(self, s, wordDict):
+# 		"""
+# 		:type s: str
+# 		:type wordDict: Set[str]
+# 		:rtype: bool
+# 		"""
+# 		n = len(s)
+# 		dp = [False for i in range(n+1)]
+# 		dp[0] = True
+
+# 		for i in range(1, n+1):
+# 			for j in range(i):
+# 				if dp[j] and s[j:i] in wordDict:
+# 					dp[i] = True
+# 					break
+# 		# print dp
+# 		return dp[-1]
+# if __name__ == '__main__':
+# 	sk= Solution()
+# 	print sk.wordBreak('lll',set(['l']))
+# 	print sk.wordBreak('leetcode', set(['leet','code']))
+
+# 140. Word Break II My Submissions Question
+# Total Accepted: 50737 Total Submissions: 264698 Difficulty: Hard
+# Given a string s and a dictionary of words dict, add spaces in s to construct a sentence where each word is a valid dictionary word.
+# Return all such possible sentences.
+# For example, given
+# s = "catsanddog",
+# dict = ["cat", "cats", "and", "sand", "dog"].
+# A solution is ["cats and dog", "cat sand dog"].
+# Subscribe to see which companies asked this question
+
 class Solution(object):
 	def wordBreak(self, s, wordDict):
 		"""
 		:type s: str
 		:type wordDict: Set[str]
-		:rtype: bool
+		:rtype: List[str]
 		"""
-		n = len(s)
-		dp = [False for i in range(n+1)]
-		dp[0] = True
+		#this problem uses dfs + dp
+		#1.you can either save the dp two dimension first, and use it later
+		#2.you can dfs while pruning through dp checking
+		return self.dfs(s,wordDict)
 
-		for i in range(1, n+1):
-			for j in range(i+1):
-				if dp[j] and s[j:i] in wordDict:
+	def dyn_prog(self, s, wordDict):
+		n=len(s)
+		dp=[False for i in range(n+1)]
+		dp[0] = True
+		for i in range(1,n+1):
+			for j in range(i):
+				if dp[j] and s[j:i] in wordDict:				
 					dp[i] = True
 					break
-		# print dp
 		return dp[-1]
+
+	def dfs(self, s, wordDict):
+		'''dfs method, run each loop'''
+		'''for dfs, you can either from bottom to up,like what I did here;
+		or top down, like use string as each result and keep as an class variable'''
+		if self.dyn_prog(s, wordDict):
+			res = []
+			if len(s)==0: return ['']
+			for i in range(1,len(s)+1):
+				if s[:i] in wordDict:
+					if i != len(s):
+						for item in self.dfs(s[i:], wordDict):
+							res.append(s[:i] + ' ' + item)
+					else:
+						for item in self.dfs(s[i:], wordDict):
+							res.append(s[:i] + item)
+
+			return res
+		else:
+			return []
+
+
+		#this will be exploded if there are too many options at the end
+		#n^2*n at least in some cases
+		# n = len(s)
+		# dp = [False for i in range(n+1)]
+		# dp[0] = True
+		# res = [[] for i in range(n+1)]
+		# res[0] = ['']
+		# for i in range(1, n+1):
+		# 	for j in range(i+1):
+		# 		if dp[j] and s[j:i] in wordDict:
+		# 			dp[i] = True
+		# 			for item in res[j]:
+		# 				if j==0:
+		# 					res[i].append(item + s[j:i])
+		# 				else:
+		# 					res[i].append(item + ' ' + s[j:i])
+
+		# return res[-1]
+																										
 if __name__ == '__main__':
-	sk= Solution()
-	print sk.wordBreak('lll',set(['l']))
-	print sk.wordBreak('leetcode', set(['leet','code']))
+	sk = Solution()
+	print sk.wordBreak("catsanddog", ["cat", "cats", "and", "sand", "dog"])
+	print sk.wordBreak("", ["cat", "cats", "and", "sand", "dog"])
 
-# 140. Word Break II My Submissions Question
-# Total Accepted: 50737 Total Submissions: 264698 Difficulty: Hard
-# Given a string s and a dictionary of words dict, add spaces in s to construct a sentence where each word is a valid dictionary word.
 
-# Return all such possible sentences.
 
-# For example, given
-# s = "catsanddog",
-# dict = ["cat", "cats", "and", "sand", "dog"].
-
-# A solution is ["cats and dog", "cat sand dog"].
-
-# Subscribe to see which companies asked this question
-
-# class Solution(object):
-#     def wordBreak(self, s, wordDict):
-#         """
-#         :type s: str
-#         :type wordDict: Set[str]
-#         :rtype: List[str]
-#         """
-#                                                                                                         
