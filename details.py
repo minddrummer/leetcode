@@ -354,7 +354,7 @@
 #         :type num1: str
 #         :type num2: str
 #         :rtype: str
-        # """
+		# """
 
 # 30. Substring with Concatenation of All Words My Submissions Question
 # Total Accepted: 49974 Total Submissions: 244017 Difficulty: Hard
@@ -461,27 +461,27 @@
 # Could you optimize your algorithm to use only O(k) extra space?
 # Subscribe to see which companies asked this question
 
-class Solution:
-    # @param {integer} rowIndex
-    # @return {integer[]}
-    # because n main loops * upto n small loops: TO(n^2), 
-    #because we keep add new_list as n, and tmp_list also cost n, SO(n)
-    def getRow(self, rowIndex):
-        if rowIndex == 0:
-        	return [1]
-        if rowIndex == 1:
-        	return [1,1]
-        tmpIndex = 1
-        tmpLst = [1,1]	
-        while tmpIndex  < rowIndex:
-        	new_tmpLst = []
-        	for i in range(len(tmpLst)-1):
-        		new_tmpLst.append(tmpLst[i] + tmpLst[i+1])
-        	new_tmpLst.append(1)
-        	new_tmpLst = [1]+new_tmpLst
-        	tmpLst = new_tmpLst
-        	tmpIndex += 1
-        return tmpLst
+# class Solution:
+#     # @param {integer} rowIndex
+#     # @return {integer[]}
+#     # because n main loops * upto n small loops: TO(n^2), 
+#     #because we keep add new_list as n, and tmp_list also cost n, SO(n)
+#     def getRow(self, rowIndex):
+#         if rowIndex == 0:
+#         	return [1]
+#         if rowIndex == 1:
+#         	return [1,1]
+#         tmpIndex = 1
+#         tmpLst = [1,1]	
+#         while tmpIndex  < rowIndex:
+#         	new_tmpLst = []
+#         	for i in range(len(tmpLst)-1):
+#         		new_tmpLst.append(tmpLst[i] + tmpLst[i+1])
+#         	new_tmpLst.append(1)
+#         	new_tmpLst = [1]+new_tmpLst
+#         	tmpLst = new_tmpLst
+#         	tmpIndex += 1
+#         return tmpLst
 
 # 54. Spiral Matrix My Submissions Question
 # Total Accepted: 52533 Total Submissions: 238442 Difficulty: Medium
@@ -498,13 +498,37 @@ class Solution:
 # You should return [1,2,3,6,9,8,7,4,5].
 
 # Subscribe to see which companies asked this question
-# class Solution(object):
-#     def spiralOrder(self, matrix):
-#         """
-#         :type matrix: List[List[int]]
-#         :rtype: List[int]
-#         """
 
+# class Solution:
+#     # @param matrix, a list of lists of integers
+#     # @return a list of integers
+#     def spiralOrder(self, matrix):
+#     	#shoot for TO(n^2) and SO(1)
+#         if matrix == []: return []
+#         up = 0; left = 0
+#         down = len(matrix)-1
+#         right = len(matrix[0])-1
+#         direct = 0  # 0: go right   1: go down  2: go left  3: go up
+#         res = []
+#         while True:
+#             if direct == 0:
+#                 for i in range(left, right+1):
+#                     res.append(matrix[up][i])
+#                 up += 1
+#             if direct == 1:
+#                 for i in range(up, down+1):
+#                     res.append(matrix[i][right])
+#                 right -= 1
+#             if direct == 2:
+#                 for i in range(right, left-1, -1):
+#                     res.append(matrix[down][i])
+#                 down -= 1
+#             if direct == 3:
+#                 for i in range(down, up-1, -1):
+#                     res.append(matrix[i][left])
+#                 left += 1
+#             if up > down or left > right: return res
+#             direct = (direct+1) % 4
 
 # 59. Spiral Matrix II My Submissions Question
 # Total Accepted: 47781 Total Submissions: 139985 Difficulty: Medium
@@ -522,11 +546,47 @@ class Solution:
 # Subscribe to see which companies asked this question
 
 # class Solution(object):
-#     def generateMatrix(self, n):
-#         """
-#         :type n: int
-#         :rtype: List[List[int]]
-#         """
+# 	def generateMatrix(self, n):
+# 		"""
+# 		:type n: int
+# 		:rtype: List[List[int]]
+# 		"""
+# 		#shoot at TO(n^2), SO(n^2)
+# 		array = [[0 for i  in range(n)] for j in range(n)]
+# 		end = n*n
+# 		direction = 0 #0 to right, 1 to down; 2 to left; and 3 to up
+# 		up=0;down=n-1; left=0; right=n-1
+# 		num = 1
+# 		while True:
+# 			if direction == 0:
+# 				for i in range(left, right+1):
+# 					array[up][i] = num
+# 					num += 1
+# 				up += 1
+# 			if direction == 1:
+# 				for i in range(up, down+1):
+# 					array[i][right] = num
+# 					num += 1
+# 				right -= 1
+# 			if direction ==2:
+# 				for i in range(right, left-1, -1):
+# 					array[down][i] = num
+# 					num += 1
+# 				down -= 1
+# 			if direction ==3:
+# 				for i in range(down, up-1, -1):
+# 					array[i][left] = num
+# 					num += 1
+# 				left += 1
+# 			if num > end: break
+# 			direction = (direction+1) %4
+
+# 		return array
+# if __name__ == '__main__':
+# 	sk  = Solution()
+# 	print sk.generateMatrix(3)
+
+
 
 # 6. ZigZag Conversion My Submissions Question
 # Total Accepted: 76862 Total Submissions: 329817 Difficulty: Easy
