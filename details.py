@@ -249,70 +249,97 @@
 
 # Subscribe to see which companies asked this question
 # # Definition for an interval.
-class Interval(object):
-	def __init__(self, s=0, e=0):
-		self.start = s
-		self.end = e
+# class Interval(object):
+# 	def __init__(self, s=0, e=0):
+# 		self.start = s
+# 		self.end = e
 
-class Solution(object):
-	def merge(self, intervals):
-		"""
-		:type intervals: List[Interval]
-		:rtype: List[Interval]
-		"""
-		res = []
-		# intervals.sort(key=lambda x: x.start)
-		for item in intervals:
-			res=self.insert(res, item)
-		return res
-	def insert(self, intervals, newInterval):	
-		n = len(intervals)
-		if n==0: return [newInterval]
-		i=0
-		while i <= n-1:
-			if intervals[i].end < newInterval.start:
-				i+=1
-				continue
-			elif intervals[i].end>=newInterval.start and intervals[i].start<=newInterval.start:
-				newInterval = Interval(intervals[i].start, max(newInterval.end, intervals[i].end))
-				del intervals[i]
-				n -= 1
-			elif intervals[i].end>=newInterval.end and intervals[i].start<=newInterval.end:
-				newInterval = Interval(min(intervals[i].start, newInterval.start), intervals[i].end)
-				del intervals[i]
-				n -= 1
-			elif intervals[i].end<=newInterval.end and intervals[i].start>=newInterval.start:
-				del intervals[i]
-				n -= 1	
-			elif intervals[i].start > newInterval.end:
-				break
-		intervals.insert(i, newInterval)
-		return intervals
+# class Solution(object):
+# 	def merge(self, intervals):
+# 		"""
+# 		:type intervals: List[Interval]
+# 		:rtype: List[Interval]
+# 		"""
+# 		res = []
+# 		# intervals.sort(key=lambda x: x.start)
+# 		for item in intervals:
+# 			res=self.insert(res, item)
+# 		return res
+# 	def insert(self, intervals, newInterval):	
+# 		n = len(intervals)
+# 		if n==0: return [newInterval]
+# 		i=0
+# 		while i <= n-1:
+# 			if intervals[i].end < newInterval.start:
+# 				i+=1
+# 				continue
+# 			elif intervals[i].end>=newInterval.start and intervals[i].start<=newInterval.start:
+# 				newInterval = Interval(intervals[i].start, max(newInterval.end, intervals[i].end))
+# 				del intervals[i]
+# 				n -= 1
+# 			elif intervals[i].end>=newInterval.end and intervals[i].start<=newInterval.end:
+# 				newInterval = Interval(min(intervals[i].start, newInterval.start), intervals[i].end)
+# 				del intervals[i]
+# 				n -= 1
+# 			elif intervals[i].end<=newInterval.end and intervals[i].start>=newInterval.start:
+# 				del intervals[i]
+# 				n -= 1	
+# 			elif intervals[i].start > newInterval.end:
+# 				break
+# 		intervals.insert(i, newInterval)
+# 		return intervals
 		
 
 # 76. Minimum Window Substring My Submissions Question
 # Total Accepted: 54001 Total Submissions: 261262 Difficulty: Hard
 # Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
-
 # For example,
 # S = "ADOBECODEBANC"
 # T = "ABC"
 # Minimum window is "BANC".
-
 # Note:
 # If there is no such window in S that covers all characters in T, return the empty string "".
-
 # If there are multiple such windows, you are guaranteed that there will always be only one unique minimum window in S.
 
 # Subscribe to see which companies asked this question
-# class Solution(object):
-#     def minWindow(self, s, t):
-#         """
-#         :type s: str
-#         :type t: str
-#         :rtype: str
-#         """
+class Solution:
+	# @return a string
+	def minWindow(self, S, T):
+		##this problem is hard to set as TO(n), SO(1)
+		count1, count2= {},{}
+		for l in T:
+			if l in count1: count1[l] += 1
+			else: count1[l] = 1
+			if l in count2: count2[l] += 1
+			else: count2[l] = 1
+		count = len(T)
+		n=len(S)
+		start=0; minSize = n+1; minStart = 0
+		for end in range(n):
+			if S[end] in count2:
+				count1[S[end]] -= 1
+				#after count reach 0, because count1[S[end]] will never >= 0 again, so that will work
+				if count1[S[end]]>=0:
+					count -= 1
+				#move the start point
+				if count == 0:
+					while True:
+						if S[start] in count2:
+							if count1[S[start]]<0:
+								count1[S[start]] +=1
+							else:
+								break
+						#outside the if statement and inside the while loop
+						start += 1
+					if minSize>end-start+1:
+						minSize = end-start+1
+						minStart = start
+		if minSize == n+1: return ''
+		else: return S[minStart:minStart+minSize]
 
+if __name__ == '__main__':
+	sk  = Solution()
+	print sk.minWindow("ADOBECODEBANC", 'ABC')
 # 43. Multiply Strings My Submissions Question
 # Total Accepted: 54769 Total Submissions: 239866 Difficulty: Medium
 # Given two numbers represented as strings, return multiplication of the numbers as a string.
