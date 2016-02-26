@@ -459,28 +459,29 @@
 
 # Note:
 # Could you optimize your algorithm to use only O(k) extra space?
-
 # Subscribe to see which companies asked this question
 
-# class Solution:
-#     # @param {integer} rowIndex
-#     # @return {integer[]}
-#     def getRow(self, rowIndex):
-#         if rowIndex == 0:
-#         	return [1]
-#         if rowIndex == 1:
-#         	return [1,1]
-#         tmpIndex = 1
-#         tmpLst = [1,1]	
-#         while tmpIndex  < rowIndex:
-#         	new_tmpLst = []
-#         	for i in range(len(tmpLst)-1):
-#         		new_tmpLst.append(tmpLst[i] + tmpLst[i+1])
-#         	new_tmpLst.append(1)
-#         	new_tmpLst = [1]+new_tmpLst
-#         	tmpLst = new_tmpLst
-#         	tmpIndex += 1
-#         return tmpLst
+class Solution:
+    # @param {integer} rowIndex
+    # @return {integer[]}
+    # because n main loops * upto n small loops: TO(n^2), 
+    #because we keep add new_list as n, and tmp_list also cost n, SO(n)
+    def getRow(self, rowIndex):
+        if rowIndex == 0:
+        	return [1]
+        if rowIndex == 1:
+        	return [1,1]
+        tmpIndex = 1
+        tmpLst = [1,1]	
+        while tmpIndex  < rowIndex:
+        	new_tmpLst = []
+        	for i in range(len(tmpLst)-1):
+        		new_tmpLst.append(tmpLst[i] + tmpLst[i+1])
+        	new_tmpLst.append(1)
+        	new_tmpLst = [1]+new_tmpLst
+        	tmpLst = new_tmpLst
+        	tmpIndex += 1
+        return tmpLst
 
 # 54. Spiral Matrix My Submissions Question
 # Total Accepted: 52533 Total Submissions: 238442 Difficulty: Medium
