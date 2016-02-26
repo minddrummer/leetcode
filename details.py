@@ -302,48 +302,49 @@
 # If there are multiple such windows, you are guaranteed that there will always be only one unique minimum window in S.
 
 # Subscribe to see which companies asked this question
-class Solution:
-	# @return a string
-	def minWindow(self, S, T):
-		##this problem is hard to set as TO(n), SO(1)
-		count1, count2= {},{}
-		for l in T:
-			if l in count1: count1[l] += 1
-			else: count1[l] = 1
-			if l in count2: count2[l] += 1
-			else: count2[l] = 1
-		count = len(T)
-		n=len(S)
-		start=0; minSize = n+1; minStart = 0
-		for end in range(n):
-			if S[end] in count2:
-				count1[S[end]] -= 1
-				#after count reach 0, because count1[S[end]] will never >= 0 again, so that will work
-				if count1[S[end]]>=0:
-					count -= 1
-				#move the start point
-				if count == 0:
-					while True:
-						if S[start] in count2:
-							if count1[S[start]]<0:
-								count1[S[start]] +=1
-							else:
-								break
-						#outside the if statement and inside the while loop
-						start += 1
-					if minSize>end-start+1:
-						minSize = end-start+1
-						minStart = start
-		if minSize == n+1: return ''
-		else: return S[minStart:minStart+minSize]
+# class Solution:
+# 	# @return a string
+# 	def minWindow(self, S, T):
+# 		##this problem is hard to set as TO(n), SO(1)
+# 		count1, count2= {},{}
+# 		for l in T:
+# 			if l in count1: count1[l] += 1
+# 			else: count1[l] = 1
+# 			if l in count2: count2[l] += 1
+# 			else: count2[l] = 1
+# 		count = len(T)
+# 		n=len(S)
+# 		start=0; minSize = n+1; minStart = 0
+# 		for end in range(n):
+# 			if S[end] in count2:
+# 				count1[S[end]] -= 1
+# 				#after count reach 0, because count1[S[end]] will never >= 0 again, so that will work
+# 				if count1[S[end]]>=0:
+# 					count -= 1
+# 				#move the start point
+# 				if count == 0:
+# 					while True:
+# 						if S[start] in count2:
+# 							if count1[S[start]]<0:
+# 								count1[S[start]] +=1
+# 							else:
+# 								break
+# 						#outside the if statement and inside the while loop
+# 						start += 1
+# 					if minSize>end-start+1:
+# 						minSize = end-start+1
+# 						minStart = start
+# 		if minSize == n+1: return ''
+# 		else: return S[minStart:minStart+minSize]
 
-if __name__ == '__main__':
-	sk  = Solution()
-	print sk.minWindow("ADOBECODEBANC", 'ABC')
+# if __name__ == '__main__':
+# 	sk  = Solution()
+	# print sk.minWindow("ADOBECODEBANC", 'ABC')
+
+
 # 43. Multiply Strings My Submissions Question
 # Total Accepted: 54769 Total Submissions: 239866 Difficulty: Medium
 # Given two numbers represented as strings, return multiplication of the numbers as a string.
-
 # Note: The numbers can be arbitrarily large and are non-negative.
 
 # Subscribe to see which companies asked this question
@@ -353,11 +354,12 @@ if __name__ == '__main__':
 #         :type num1: str
 #         :type num2: str
 #         :rtype: str
-#         """
+        # """
 
 # 30. Substring with Concatenation of All Words My Submissions Question
 # Total Accepted: 49974 Total Submissions: 244017 Difficulty: Hard
-# You are given a string, s, and a list of words, words, that are all of the same length. Find all starting indices of substring(s) in s that is a concatenation of each word in words exactly once and without any intervening characters.
+# You are given a string, s, and a list of words, words, 
+# that are all of the same length. Find all starting indices of substring(s) in s that is a concatenation of each word in words exactly once and without any intervening characters.
 
 # For example, given:
 # s: "barfoothefoobarman"
@@ -377,6 +379,10 @@ if __name__ == '__main__':
 # 	# @return {integer[]}
 # 	def findSubstring(self, s, words):
 # 		#words = sorted(words)
+# 		#suppose s = len(s) and m = len(words)
+# 		#then TO(s*m)-we run each of s, and count each of m words, so it is TO(s*m)
+# 		#the word dict is costing extra memory, and there are m words in it, so the space complexity is SO(m)
+
 # 		words_dict = dict(((x, words.count(x)) for x in set(words)))
 # 		n = len(words)
 # 		m = len(words[0])
@@ -400,8 +406,7 @@ if __name__ == '__main__':
 # 				count +=1
 # 			if count == n:
 # 				match_index.append(i)
-# 			i+=1		
-			
+# 			i+=1					
 # 		return match_index
 
 # 118. Pascal's Triangle My Submissions Question
