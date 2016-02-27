@@ -606,48 +606,88 @@
 # class Solution:
 #     # @return a string
 #     def convert(self, s, nRows):
-#         if  nRows <= 1:
-#             return s
-#         n = nRows
-#         bn = n - 2 + n
-#         fn = len(s)
-#         res = ''
-#         for i in range(n):
-#             if i == 0 or i == n-1:
-#                 loop = 0
-#                 while bn*loop + i <= fn-1:
-#                     #print s[bn*loop + i]
-#                     res = res + s[bn*loop + i]
-#                     loop += 1
-#             else:
-#                 loop = 0
-#                 while (bn*loop + i <= fn-1):
-#                     #print s[bn*loop + i]
-#                     res = res + s[bn*loop+i]
+		#TO(n), SO(n)
+		#run an array, put each element in the array in the right order
+		#finally, read the array for top to bottom to generate the result string
 
-#                     if (bn*loop+i+(n-1-i)*2) <= fn-1:
-#                         #print (bn*loop+i+(n-1-i)*2)
-#                         #print s[bn*loop+i+(n-i)*2]
-#                         res = res + s[bn*loop+i+(n-1-i)*2]
-#                     loop += 1
-#         return res
+		# #TO(n), SO(1)
+	 #    if  nRows <= 1:
+	 #        return s
+	 #    n = nRows
+	 #    bn = n - 2 + n
+	 #    fn = len(s)
+	 #    res = ''
+	 #    for i in range(n):
+	 #        if i == 0 or i == n-1:
+	 #            loop = 0
+	 #            while bn*loop + i <= fn-1:
+	 #                #print s[bn*loop + i]
+	 #                res = res + s[bn*loop + i]
+	 #                loop += 1
+	 #        else:
+	 #            loop = 0
+	 #            while (bn*loop + i <= fn-1):
+	 #                #print s[bn*loop + i]
+	 #                res = res + s[bn*loop+i]
+
+	 #                if (bn*loop+i+(n-1-i)*2) <= fn-1:
+	 #                    #print (bn*loop+i+(n-1-i)*2)
+	 #                    #print s[bn*loop+i+(n-i)*2]
+	 #                    res = res + s[bn*loop+i+(n-1-i)*2]
+	 #                loop += 1
+	 #    return res
 
 
 # 29. Divide Two Integers My Submissions Question
 # Total Accepted: 60335 Total Submissions: 390167 Difficulty: Medium
 # Divide two integers without using multiplication, division and mod operator.
-
 # If it is overflow, return MAX_INT.
-
 # Subscribe to see which companies asked this question
 # class Solution(object):
-#     def divide(self, dividend, divisor):
-#         """
-#         :type dividend: int
-#         :type divisor: int
-#         :rtype: int
-#         """
+# 	def divide(self, dividend, divisor):
+# 		"""
+# 		:type dividend: int
+# 		:type divisor: int
+# 		:rtype: int
+# 		"""
+# 		#if you substract divisor one at a time, it is TO(n)
+# 		#shooting for TO(logn), SO(1)
+
+# 		#suppose both are positive
+# 		#negative is really bothering, since it has whole-divided and partial-divided
+# 		negative = False
+# 		if (dividend>0 and divisor <0) or (dividend<0 and divisor>0):
+# 			negative=True
+				
+# 		dividend = abs(dividend)
+# 		divisor = abs(divisor)
+# 		res = 0
+# 		while dividend >= divisor:
+# 			cur = divisor
+# 			mul = 1
+# 			while dividend >= cur:
+# 				dividend -= cur
+# 				res += mul
+# 				cur += cur
+# 				mul += mul
 		
+# 		if negative and dividend>0: 
+# 			res= -(res+1)
+# 		elif negative and dividend==0:
+# 			res = -res	 	
+# 		return res
+
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.divide(-10,3)
+# 	print sk.divide(-10,5)
+# 	print sk.divide(10,1)
+# 	print sk.divide(0,1)
+# 	print sk.divide(10000,1)
+
+
+
+
 
 
 # 68. Text Justification My Submissions Question
