@@ -693,7 +693,6 @@
 # 68. Text Justification My Submissions Question
 # Total Accepted: 30326 Total Submissions: 192418 Difficulty: Hard
 # Given an array of words and a length L, format the text such that each line has exactly L characters and is fully (left and right) justified.
-
 # You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces ' ' when necessary so that each line has exactly L characters.
 
 # Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line do not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
@@ -712,14 +711,69 @@
 # ]
 # Note: Each word is guaranteed not to exceed L in length.
 
-# class Solution(object):
-#     def fullJustify(self, words, maxWidth):
-#         """
-#         :type words: List[str]
-#         :type maxWidth: int
-#         :rtype: List[str]
-#         """
-		
+class Solution(object):
+	def fullJustify(self, words, maxWidth):
+		"""
+		:type words: List[str]
+		:type maxWidth: int
+		:rtype: List[str]
+		"""
+		n = len(words)
+		# lst_count = []
+
+		new_line = ''
+		new_lst = []
+		new_count = maxWidth
+		empty_array=[]
+		res= []
+		for i in range(n):
+			# print new_line
+			# print i
+			#starting point
+			if len(new_line)==0 and len(words[i])<= new_count:
+				new_line += words[i]
+				new_lst.append(words[i])
+				new_count -= len(words[i])
+				# add_line = False        	
+			elif len(new_line)!=0 and len(words[i])+1<=new_count:
+				new_line += ' ' + words[i]
+				new_lst.append(words[i])
+				new_count -= len(words[i])+1
+				empty_array.append(1)
+			elif len(new_line)!=0 and len(words[i])+1>new_count:
+				left= maxWidth-len(new_line)
+				j=0
+				d = len(empty_array)
+				if d==0: 
+					#only one word in the line
+					tmp_line = new_lst[0] + ' '*left
+				else:
+					while j<=left-1:
+						empty_array[j%d] += 1
+						j += 1
+					tmp_line = new_lst[0]
+					for k in range(1,len(new_lst)):
+						tmp_line += ' '*empty_array[k-1] + new_lst[k]
+				res.append(tmp_line)
+
+				#reset
+				new_line = words[i]
+				new_lst = [words[i]]
+				new_count = maxWidth-len(words[i])
+				empty_array=[]
+
+		#for the last line
+		tmp_line = new_lst[0]
+		for k in range(1,len(new_lst)):
+			tmp_line += ' '+ new_lst[k]
+		tmp_line += (maxWidth - len(tmp_line))*' '
+		res.append(tmp_line)
+		return res
+
+
+if __name__ == '__main__':
+	sk = Solution()
+	print sk.fullJustify(["Listen","to","many,","speak","to","a","few."], 6)		
 
 # 149. Max Points on a Line My Submissions Question
 # Total Accepted: 53334 Total Submissions: 380608 Difficulty: Hard
