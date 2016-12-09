@@ -232,6 +232,29 @@
 # 		# res.append(newInterval)
 # 		return intervals
 
+
+# class Solution:
+#     """
+#     Insert a new interval into a sorted non-overlapping interval list.
+#     @param intevals: Sorted non-overlapping interval list
+#     @param newInterval: The new interval.
+#     @return: A new sorted non-overlapping interval list with the new interval.
+#     """
+#     def insert(self, intervals, newInterval):
+#         results = []
+#         insertPos = 0
+#         for interval in intervals:
+#             if interval.end < newInterval.start:
+#                 results.append(interval)
+#                 insertPos += 1
+#             elif interval.start > newInterval.end:
+#                 results.append(interval)
+#             else:
+#                 newInterval.start = min(interval.start, newInterval.start)
+#                 newInterval.end = max(interval.end, newInterval.end)
+#         results.insert(insertPos, newInterval)
+#         return results 
+
 # if __name__ == '__main__':
 # 	sk = Solution()
 # 	print sk.insert([Interval(1,5)], Interval(0,6))
@@ -290,56 +313,7 @@
 # 		return intervals
 		
 
-# 76. Minimum Window Substring My Submissions Question
-# Total Accepted: 54001 Total Submissions: 261262 Difficulty: Hard
-# Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
-# For example,
-# S = "ADOBECODEBANC"
-# T = "ABC"
-# Minimum window is "BANC".
-# Note:
-# If there is no such window in S that covers all characters in T, return the empty string "".
-# If there are multiple such windows, you are guaranteed that there will always be only one unique minimum window in S.
 
-# Subscribe to see which companies asked this question
-# class Solution:
-# 	# @return a string
-# 	def minWindow(self, S, T):
-# 		##this problem is hard to set as TO(n), SO(1)
-# 		count1, count2= {},{}
-# 		for l in T:
-# 			if l in count1: count1[l] += 1
-# 			else: count1[l] = 1
-# 			if l in count2: count2[l] += 1
-# 			else: count2[l] = 1
-# 		count = len(T)
-# 		n=len(S)
-# 		start=0; minSize = n+1; minStart = 0
-# 		for end in range(n):
-# 			if S[end] in count2:
-# 				count1[S[end]] -= 1
-# 				#after count reach 0, because count1[S[end]] will never >= 0 again, so that will work
-# 				if count1[S[end]]>=0:
-# 					count -= 1
-# 				#move the start point
-# 				if count == 0:
-# 					while True:
-# 						if S[start] in count2:
-# 							if count1[S[start]]<0:
-# 								count1[S[start]] +=1
-# 							else:
-# 								break
-# 						#outside the if statement and inside the while loop
-# 						start += 1
-# 					if minSize>end-start+1:
-# 						minSize = end-start+1
-# 						minStart = start
-# 		if minSize == n+1: return ''
-# 		else: return S[minStart:minStart+minSize]
-
-# if __name__ == '__main__':
-# 	sk  = Solution()
-	# print sk.minWindow("ADOBECODEBANC", 'ABC')
 
 
 # 43. Multiply Strings My Submissions Question
@@ -483,6 +457,328 @@
 #         	tmpIndex += 1
 #         return tmpLst
 
+
+
+
+
+# 6. ZigZag Conversion My Submissions Question
+# Total Accepted: 76862 Total Submissions: 329817 Difficulty: Easy
+# The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+
+# P   A   H   N
+# A P L S I I G
+# Y   I   R
+# And then read line by line: "PAHNAPLSIIGYIR"
+# Write the code that will take a string and make this conversion given a number of rows:
+
+# string convert(string text, int nRows);
+# convert("PAYPALISHIRING", 3) should return "PAHNAPLSIIGYIR".
+# Subscribe to see which companies asked this question
+
+# Show Tags
+# class Solution:
+#     # @return a string
+#     def convert(self, s, nRows):
+		#TO(n), SO(n)
+		#run an array, put each element in the array in the right order
+		#finally, read the array for top to bottom to generate the result string
+
+		# #TO(n), SO(1)
+	 #    if  nRows <= 1:
+	 #        return s
+	 #    n = nRows
+	 #    bn = n - 2 + n
+	 #    fn = len(s)
+	 #    res = ''
+	 #    for i in range(n):
+	 #        if i == 0 or i == n-1:
+	 #            loop = 0
+	 #            while bn*loop + i <= fn-1:
+	 #                #print s[bn*loop + i]
+	 #                res = res + s[bn*loop + i]
+	 #                loop += 1
+	 #        else:
+	 #            loop = 0
+	 #            while (bn*loop + i <= fn-1):
+	 #                #print s[bn*loop + i]
+	 #                res = res + s[bn*loop+i]
+
+	 #                if (bn*loop+i+(n-1-i)*2) <= fn-1:
+	 #                    #print (bn*loop+i+(n-1-i)*2)
+	 #                    #print s[bn*loop+i+(n-i)*2]
+	 #                    res = res + s[bn*loop+i+(n-1-i)*2]
+	 #                loop += 1
+	 #    return res
+# class Solution:
+#     # @return a string
+#     def convert(self, s, nRows):
+#         if nRows ==1: return s
+#         res = ['' for i in range(nRows)]
+        
+#         step=1
+#         index = -1
+#         for i in range(len(s)):
+#             index += step
+#             if index ==nRows:
+#                 index -=2
+#                 step = -1
+#             elif index == -1:
+#                 index += 2
+#                 step =1
+#             res[index] += s[i]
+#         return ''.join(res)
+        
+
+# 29. Divide Two Integers My Submissions Question
+# Total Accepted: 60335 Total Submissions: 390167 Difficulty: Medium
+# Divide two integers without using multiplication, division and mod operator.
+# If it is overflow, return MAX_INT.
+# Subscribe to see which companies asked this question
+# class Solution(object):
+# 	def divide(self, dividend, divisor):
+# 		"""
+# 		:type dividend: int
+# 		:type divisor: int
+# 		:rtype: int
+# 		"""
+# 		#if you substract divisor one at a time, it is TO(n)
+# 		#shooting for TO(logn), SO(1)
+
+# 		#suppose both are positive
+# 		#negative is really bothering, since it has whole-divided and partial-divided
+# 		negative = False
+# 		if (dividend>0 and divisor <0) or (dividend<0 and divisor>0):
+# 			negative=True
+				
+# 		dividend = abs(dividend)
+# 		divisor = abs(divisor)
+# 		res = 0
+# 		while dividend >= divisor:
+# 			cur = divisor
+# 			mul = 1
+# 			while dividend >= cur:
+# 				dividend -= cur
+# 				res += mul
+# 				cur += cur
+# 				mul += mul
+		
+# 		if negative and dividend>0: 
+# 			res= -(res+1)
+# 		elif negative and dividend==0:
+# 			res = -res	 	
+# 		return res
+
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.divide(-10,3)
+# 	print sk.divide(-10,5)
+# 	print sk.divide(10,1)
+# 	print sk.divide(0,1)
+# 	print sk.divide(10000,1)
+
+
+
+
+
+
+# 68. Text Justification My Submissions Question
+# Total Accepted: 30326 Total Submissions: 192418 Difficulty: Hard
+# Given an array of words and a length L, format the text such that each line has exactly L characters and is fully (left and right) justified.
+# You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces ' ' when necessary so that each line has exactly L characters.
+
+# Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line do not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
+
+# For the last line of text, it should be left justified and no extra space is inserted between words.
+
+# For example,
+# words: ["This", "is", "an", "example", "of", "text", "justification."]
+# L: 16.
+
+# Return the formatted lines as:
+# [
+#    "This    is    an",
+#    "example  of text",
+#    "justification.  "
+# ]
+# Note: Each word is guaranteed not to exceed L in length.
+
+class Solution(object):
+	def fullJustify(self, words, maxWidth):
+		"""
+		:type words: List[str]
+		:type maxWidth: int
+		:rtype: List[str]
+		"""
+		n = len(words)
+		# lst_count = []
+
+		new_line = ''
+		new_lst = []
+		new_count = maxWidth
+		empty_array=[]
+		res= []
+		for i in range(n):
+			#starting point
+			if len(new_line)==0 and len(words[i])<= new_count:
+				new_line += words[i]
+				new_lst.append(words[i])
+				new_count -= len(words[i])
+				# add_line = False        	
+			elif len(new_line)!=0 and len(words[i])+1<=new_count:
+				new_line += ' ' + words[i]
+				new_lst.append(words[i])
+				new_count -= len(words[i])+1
+				empty_array.append(1)
+			elif len(new_line)!=0 and len(words[i])+1>new_count:
+				left= maxWidth-len(new_line)
+				j=0
+				d = len(empty_array)
+				if d==0: 
+					#only one word in the line
+					tmp_line = new_lst[0] + ' '*left
+				else:
+					while j<=left-1:
+						empty_array[j%d] += 1
+						j += 1
+					tmp_line = new_lst[0]
+					for k in range(1,len(new_lst)):
+						tmp_line += ' '*empty_array[k-1] + new_lst[k]
+				res.append(tmp_line)
+
+				#reset
+				new_line = words[i]
+				new_lst = [words[i]]
+				new_count = maxWidth-len(words[i])
+				empty_array=[]
+
+		#for the last line left
+		tmp_line = new_lst[0]
+		for k in range(1,len(new_lst)):
+			tmp_line += ' '+ new_lst[k]
+		tmp_line += (maxWidth - len(tmp_line))*' '
+		res.append(tmp_line)
+		return res
+
+
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.fullJustify(["Listen","to","many,","speak","to","a","few."], 6)		
+
+# 149. Max Points on a Line My Submissions Question
+# Total Accepted: 53334 Total Submissions: 380608 Difficulty: Hard
+# Given n points on a 2D plane, find the maximum number of points that lie on the same straight line.
+# Subscribe to see which companies asked this question
+# Show Tags
+
+
+# Definition for a point.
+class Point(object):
+	def __init__(self, a=0, b=0):
+		self.x = a
+		self.y = b
+
+class Solution(object):
+	def maxPoints(self, points):
+		"""
+		:type points: List[Point]
+		:rtype: int
+		"""
+		#use point as center to judge, rather than line
+		# in this way, we can get TO(n^2) and SO(n)
+		#could have duplicate
+		n = len(points)
+		if n<=2: return n
+		res = 0
+
+		for i in range(n):
+			dct = {}	
+			origin = points[i]
+			# duplicate = 0
+			# k = None
+			#run all half points is must, for all points not necessary
+			for j in range(i+1,n):
+				if points[j].x == origin.x and points[j].y != origin.y :
+					k = 'infinity'
+				elif points[j].x == origin.x and points[j].y == origin.y :	
+					k = 'duplicate'
+				else:
+					k = (points[j].y - origin.y)/float(points[j].x - origin.x)
+				
+				# if k is not None:
+				if k not in dct:
+					dct[k] = 2
+				else: dct[k] +=1
+			#change the duplicate if there are	
+			if 'duplicate' in dct:
+				duplicate = dct['duplicate']-1
+			else:
+				duplicate=0	
+			#when not duplicate, + duplicate
+			# when duplicate, max(res, duplicate+1)
+			for key in dct:
+				if key != 'duplicate':
+					res = max(res, dct[key]+duplicate)
+				else:
+					res = max(res, duplicate+1)
+				# else: res= max(res, duplicate+1)
+
+		return res
+
+
+
+# 76. Minimum Window Substring My Submissions Question
+# Total Accepted: 54001 Total Submissions: 261262 Difficulty: Hard
+# Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
+# For example,
+# S = "ADOBECODEBANC"
+# T = "ABC"
+# Minimum window is "BANC".
+# Note:
+# If there is no such window in S that covers all characters in T, return the empty string "".
+# If there are multiple such windows, you are guaranteed that there will always be only one unique minimum window in S.
+
+# Subscribe to see which companies asked this question
+# class Solution:
+# 	# @return a string
+# 	def minWindow(self, S, T):
+# 		##this problem is hard to set as TO(n), SO(1)
+# 		count1, count2= {},{}
+# 		for l in T:
+# 			if l in count1: count1[l] += 1
+# 			else: count1[l] = 1
+# 			if l in count2: count2[l] += 1
+# 			else: count2[l] = 1
+# 		count = len(T)
+# 		n=len(S)
+# 		start=0; minSize = n+1; minStart = 0
+# 		for end in range(n):
+# 			if S[end] in count2:
+# 				count1[S[end]] -= 1
+# 				#after count reach 0, because count1[S[end]] will never >= 0 again, so that will work
+# 				if count1[S[end]]>=0:
+# 					count -= 1
+# 				#move the start point
+# 				if count == 0:
+# 					while True:
+# 						if S[start] in count2:
+# 							if count1[S[start]]<0:
+# 								count1[S[start]] +=1
+# 							else:
+# 								break
+# 						#outside the if statement and inside the while loop
+# 						start += 1
+# 					if minSize>end-start+1:
+# 						minSize = end-start+1
+# 						minStart = start
+# 		if minSize == n+1: return ''
+# 		else: return S[minStart:minStart+minSize]
+
+# if __name__ == '__main__':
+# 	sk  = Solution()
+	# print sk.minWindow("ADOBECODEBANC", 'ABC')		
+
+
+
 # 54. Spiral Matrix My Submissions Question
 # Total Accepted: 52533 Total Submissions: 238442 Difficulty: Medium
 # Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
@@ -584,251 +880,4 @@
 # 		return array
 # if __name__ == '__main__':
 # 	sk  = Solution()
-# 	print sk.generateMatrix(3)
-
-
-
-# 6. ZigZag Conversion My Submissions Question
-# Total Accepted: 76862 Total Submissions: 329817 Difficulty: Easy
-# The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
-
-# P   A   H   N
-# A P L S I I G
-# Y   I   R
-# And then read line by line: "PAHNAPLSIIGYIR"
-# Write the code that will take a string and make this conversion given a number of rows:
-
-# string convert(string text, int nRows);
-# convert("PAYPALISHIRING", 3) should return "PAHNAPLSIIGYIR".
-# Subscribe to see which companies asked this question
-
-# Show Tags
-# class Solution:
-#     # @return a string
-#     def convert(self, s, nRows):
-		#TO(n), SO(n)
-		#run an array, put each element in the array in the right order
-		#finally, read the array for top to bottom to generate the result string
-
-		# #TO(n), SO(1)
-	 #    if  nRows <= 1:
-	 #        return s
-	 #    n = nRows
-	 #    bn = n - 2 + n
-	 #    fn = len(s)
-	 #    res = ''
-	 #    for i in range(n):
-	 #        if i == 0 or i == n-1:
-	 #            loop = 0
-	 #            while bn*loop + i <= fn-1:
-	 #                #print s[bn*loop + i]
-	 #                res = res + s[bn*loop + i]
-	 #                loop += 1
-	 #        else:
-	 #            loop = 0
-	 #            while (bn*loop + i <= fn-1):
-	 #                #print s[bn*loop + i]
-	 #                res = res + s[bn*loop+i]
-
-	 #                if (bn*loop+i+(n-1-i)*2) <= fn-1:
-	 #                    #print (bn*loop+i+(n-1-i)*2)
-	 #                    #print s[bn*loop+i+(n-i)*2]
-	 #                    res = res + s[bn*loop+i+(n-1-i)*2]
-	 #                loop += 1
-	 #    return res
-
-
-# 29. Divide Two Integers My Submissions Question
-# Total Accepted: 60335 Total Submissions: 390167 Difficulty: Medium
-# Divide two integers without using multiplication, division and mod operator.
-# If it is overflow, return MAX_INT.
-# Subscribe to see which companies asked this question
-# class Solution(object):
-# 	def divide(self, dividend, divisor):
-# 		"""
-# 		:type dividend: int
-# 		:type divisor: int
-# 		:rtype: int
-# 		"""
-# 		#if you substract divisor one at a time, it is TO(n)
-# 		#shooting for TO(logn), SO(1)
-
-# 		#suppose both are positive
-# 		#negative is really bothering, since it has whole-divided and partial-divided
-# 		negative = False
-# 		if (dividend>0 and divisor <0) or (dividend<0 and divisor>0):
-# 			negative=True
-				
-# 		dividend = abs(dividend)
-# 		divisor = abs(divisor)
-# 		res = 0
-# 		while dividend >= divisor:
-# 			cur = divisor
-# 			mul = 1
-# 			while dividend >= cur:
-# 				dividend -= cur
-# 				res += mul
-# 				cur += cur
-# 				mul += mul
-		
-# 		if negative and dividend>0: 
-# 			res= -(res+1)
-# 		elif negative and dividend==0:
-# 			res = -res	 	
-# 		return res
-
-# if __name__ == '__main__':
-# 	sk = Solution()
-# 	print sk.divide(-10,3)
-# 	print sk.divide(-10,5)
-# 	print sk.divide(10,1)
-# 	print sk.divide(0,1)
-# 	print sk.divide(10000,1)
-
-
-
-
-
-
-# 68. Text Justification My Submissions Question
-# Total Accepted: 30326 Total Submissions: 192418 Difficulty: Hard
-# Given an array of words and a length L, format the text such that each line has exactly L characters and is fully (left and right) justified.
-# You should pack your words in a greedy approach; that is, pack as many words as you can in each line. Pad extra spaces ' ' when necessary so that each line has exactly L characters.
-
-# Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line do not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right.
-
-# For the last line of text, it should be left justified and no extra space is inserted between words.
-
-# For example,
-# words: ["This", "is", "an", "example", "of", "text", "justification."]
-# L: 16.
-
-# Return the formatted lines as:
-# [
-#    "This    is    an",
-#    "example  of text",
-#    "justification.  "
-# ]
-# Note: Each word is guaranteed not to exceed L in length.
-
-# class Solution(object):
-# 	def fullJustify(self, words, maxWidth):
-# 		"""
-# 		:type words: List[str]
-# 		:type maxWidth: int
-# 		:rtype: List[str]
-# 		"""
-# 		n = len(words)
-# 		# lst_count = []
-
-# 		new_line = ''
-# 		new_lst = []
-# 		new_count = maxWidth
-# 		empty_array=[]
-# 		res= []
-# 		for i in range(n):
-# 			#starting point
-# 			if len(new_line)==0 and len(words[i])<= new_count:
-# 				new_line += words[i]
-# 				new_lst.append(words[i])
-# 				new_count -= len(words[i])
-# 				# add_line = False        	
-# 			elif len(new_line)!=0 and len(words[i])+1<=new_count:
-# 				new_line += ' ' + words[i]
-# 				new_lst.append(words[i])
-# 				new_count -= len(words[i])+1
-# 				empty_array.append(1)
-# 			elif len(new_line)!=0 and len(words[i])+1>new_count:
-# 				left= maxWidth-len(new_line)
-# 				j=0
-# 				d = len(empty_array)
-# 				if d==0: 
-# 					#only one word in the line
-# 					tmp_line = new_lst[0] + ' '*left
-# 				else:
-# 					while j<=left-1:
-# 						empty_array[j%d] += 1
-# 						j += 1
-# 					tmp_line = new_lst[0]
-# 					for k in range(1,len(new_lst)):
-# 						tmp_line += ' '*empty_array[k-1] + new_lst[k]
-# 				res.append(tmp_line)
-
-# 				#reset
-# 				new_line = words[i]
-# 				new_lst = [words[i]]
-# 				new_count = maxWidth-len(words[i])
-# 				empty_array=[]
-
-# 		#for the last line left
-# 		tmp_line = new_lst[0]
-# 		for k in range(1,len(new_lst)):
-# 			tmp_line += ' '+ new_lst[k]
-# 		tmp_line += (maxWidth - len(tmp_line))*' '
-# 		res.append(tmp_line)
-# 		return res
-
-
-# if __name__ == '__main__':
-# 	sk = Solution()
-# 	print sk.fullJustify(["Listen","to","many,","speak","to","a","few."], 6)		
-
-# 149. Max Points on a Line My Submissions Question
-# Total Accepted: 53334 Total Submissions: 380608 Difficulty: Hard
-# Given n points on a 2D plane, find the maximum number of points that lie on the same straight line.
-# Subscribe to see which companies asked this question
-# Show Tags
-
-
-# Definition for a point.
-class Point(object):
-	def __init__(self, a=0, b=0):
-		self.x = a
-		self.y = b
-
-class Solution(object):
-	def maxPoints(self, points):
-		"""
-		:type points: List[Point]
-		:rtype: int
-		"""
-		#use point as center to judge, rather than line
-		# in this way, we can get TO(n^2) and SO(n)
-		#could have duplicate
-		n = len(points)
-		if n<=2: return n
-		res = 0
-
-		for i in range(n):
-			dct = {}	
-			origin = points[i]
-			# duplicate = 0
-			# k = None
-			#run all half points is must, for all points not necessary
-			for j in range(i+1,n):
-				if points[j].x == origin.x and points[j].y != origin.y :
-					k = 'infinity'
-				elif points[j].x == origin.x and points[j].y == origin.y :	
-					k = 'duplicate'
-				else:
-					k = (points[j].y - origin.y)/float(points[j].x - origin.x)
-				
-				# if k is not None:
-				if k not in dct:
-					dct[k] = 2
-				else: dct[k] +=1
-			#change the duplicate if there are	
-			if 'duplicate' in dct:
-				duplicate = dct['duplicate']-1
-			else:
-				duplicate=0	
-			#when not duplicate, + duplicate
-			# when duplicate, max(res, duplicate+1)
-			for key in dct:
-				if key != 'duplicate':
-					res = max(res, dct[key]+duplicate)
-				else:
-				    res = max(res, duplicate+1)
-				# else: res= max(res, duplicate+1)
-
-		return res
+# 	print sk.generateMatrix(3)	

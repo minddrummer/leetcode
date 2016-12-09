@@ -46,17 +46,49 @@
 		#TO(n), SO(n)
 		#add node.val, then add node.right first and node.left second to the stack
 		# if root is None: return []
-		# stack=[]
-		# if root.right is not None: stack.append(root.right)
-		# if root.left is not None: stack.append(root.left)
-		# res=[root.val]
-		# while len(stack) > 0:
-		# 	node=stack.pop(-1)
-		# 	if node.right is not None: stack.append(node.right)
-		# 	if node.left is not None: stack.append(node.left)
-		# 	res.append(node.val)
+		# res = []
+		# stack = [root]
+		
+		# while stack:
+		#     curNode = stack.pop(-1)
+		#     if curNode.right: stack.append(curNode.right)
+		#     if curNode.left: stack.append(curNode.left)
+		#     res.append(curNode.val)
 		# return res
 				
+# class Solution(object):
+#     def preorderTraversal(self, root):
+#         """
+#         :type root: TreeNode
+#         :rtype: List[int]
+#         """
+#         # recursion
+#         # if root is None: return []
+#         # return [root.val] +self.preorderTraversal(root.left) + self.preorderTraversal(root.right)
+		
+#         #iterative
+#         if root is None: return []
+#         res=[root.val]
+#         stack =[root]
+		
+#         while stack:
+#             cur = stack[-1]
+#             if cur.left:
+#                 res.append(cur.left.val)
+#                 stack.append(cur.left)
+#             elif cur.right:
+#                 res.append(cur.right.val)
+#                 stack.append(cur.right)
+#             else:
+#                 while stack:
+#                     curNode = stack.pop(-1)    
+#                     if stack and stack[-1].left is curNode and stack[-1].right:
+#                         res.append(stack[-1].right.val)
+#                         stack.append(stack[-1].right)
+#                         break
+							
+#         return res
+
 
 # 94. Binary Tree Inorder Traversal My Submissions Question
 # Total Accepted: 105771 Total Submissions: 275600 Difficulty: Medium
@@ -110,7 +142,31 @@
 		# 		res.append(root.val)
 		# 		root = root.right
 		# return res
+
+# class Solution(object):
+	# def inorderTraversal(self, root):
+	#     """
+	#     iteratively:::
+	#     :type root: TreeNode
+	#     :rtype: List[int]
+	#     """
+	#     if root is None: return []
+	#     res = []
+	#     stack =[root]
+	#     while root.left is not None:
+	#         stack.append(root.left)
+	#         root = root.left
 		
+	#     while stack:
+	#         curNode = stack.pop(-1)
+	#         res.append(curNode.val)
+	#         if curNode.right:
+	#             stack.append(curNode.right)
+	#             root = curNode.right
+	#             while root.left:
+	#                 stack.append(root.left)
+	#                 root = root.left
+		# return res		
 # 145. Binary Tree Postorder Traversal My Submissions Question
 # Total Accepted: 86388 Total Submissions: 251461 Difficulty: Hard
 # Given a binary tree, return the postorder traversal of its nodes' values.
@@ -149,7 +205,108 @@
 # 			node= stack[-1]
 # 			if node.right is not None: stack.append(node.right)
 # 			if node.left is not None: stack.append(node.left)
+class TreeNode(object):
+	def __init__(self, val):
+		self.val = val
+		self.left = None
+		self.right = None
 
+class Tree:
+	def serialize(self, root):
+		"""Encodes a tree to a single string.
+		
+		:type root: TreeNode
+		:rtype: str
+		"""
+		if root is None: return '{}'
+		queue = [root]
+		idx=0
+		
+		while idx<len(queue):
+			curNode = queue[idx]
+			if curNode:
+				queue.append(curNode.left)
+				queue.append(curNode.right)
+			idx+=1
+		while queue[-1] is None: queue.pop(-1)
+		
+		return '{%s}' %','.join([str(node.val) if node else '#' for node in queue])
+
+
+	def deserialize(self, data):
+		"""Decodes your encoded data to tree
+		:type data: str
+		:rtype: TreeNode
+		"""
+		data = data.strip('\n')
+		if data=='{}': return None
+		lst = data[1:-1].split(',')
+		root=TreeNode(int(lst[0]))
+		head=root
+		queue=[root]
+		
+		idx=1
+		nextQ = []
+		while queue and idx<len(lst):
+			curNode=queue.pop(0)
+			if lst[idx] != '#':
+				leftNode = TreeNode(int(lst[idx]))
+				curNode.left = leftNode
+				nextQ.append(leftNode)
+			
+			idx+=1
+			if idx<len(lst) and lst[idx]!='#':
+				rightNode = TreeNode(int(lst[idx]))
+				curNode.right=rightNode
+				nextQ.append(rightNode)
+			
+			idx+=1    
+			if not queue:
+				queue=nextQ
+				nextQ=[]
+		return head
+
+class Solution(object):
+	# def postorderTraversal(self, root):
+	# 	if root is None: return []
+	# 	return self.postorderTraversal(root.left)+self.postorderTraversal(root.right)+[root.val]
+
+	def addStack(self, root, stack):
+		while root:
+			if root.right: stack.append(root.right)
+			if root.left: stack.append(root.left)
+			if root.left: root = root.left
+			elif root.right: root = root.right
+			else: root = None
+		return None
+			
+	def postorderTraversal(self, root):
+		"""
+		:type root: TreeNode
+		:rtype: List[int]
+		"""
+		if root is None: return []
+		stack = [root]
+		self.addStack(root, stack)
+		res = []
+		# print stack
+
+		while stack:
+			curNode = stack.pop(-1)
+			res.append(curNode.val)
+			if stack:
+				if curNode is stack[-1].left or curNode is stack[-1].right:
+					continue
+				else:
+					self.addStack(stack[-1], stack)	
+				
+		return res
+
+# if __name__ == '__main__':
+# 	treeSe = Tree()
+# 	root =treeSe.deserialize('[1,2,3,#,4,5,6]')
+# 	test = Solution()
+# 	print test.postorderTraversal(root)
 
 # 	def postorderTraversal(self, root):
 # 		"""
@@ -416,6 +573,24 @@
 #     		res.append(level_res)
 #     	return res[::-1]
 
+# # recursion method
+# class Solution:
+# 	# @param {TreeNode} root
+# 	# @return {integer[][]}
+# 	def dfs(self, root, lst, level):
+# 		if root is None: return
+# 		else:
+# 			if level<=len(lst)-1:
+# 				lst[level].append(root.val)
+# 			else:
+# 				lst.append([root.val])
+# 			self.dfs(root.left, lst, level+1)
+# 			self.dfs(root.right, lst, level+1)
+		
+# 	def levelOrder(self, root):
+# 		lst = []
+# 		self.dfs(root, lst, 0)
+# 		return lst
 
 
 # 103. Binary Tree Zigzag Level Order Traversal My Submissions Question
@@ -443,95 +618,95 @@
 # #         self.left = None
 # #         self.right = None
 
-# class Solution(object):
-# 	# def zigzagLevelOrder(self, root):
-# 		"""
-# 		:type root: TreeNode
-# 		:rtype: List[List[int]]
-# 		"""
-# 		#iterative
-# 		#method1: just reverse the each_res given the even condition
-# 		# if root is None: return []
-# 		# res=[]
-# 		# queue = [root]
-# 		# even = True
-# 		# while len(queue) > 0:
-# 		# 	each_queue=[]
-# 		# 	each_res=[]
-# 		# 	while len(queue)>0:
-# 		# 		node=queue.pop(0)
-# 		# 		each_res.append(node.val)
-# 		# 		if node.left is not None: each_queue.append(node.left)
-# 		# 		if node.right is not None: each_queue.append(node.right)
-# 		# 	#only reverse the result would work
-# 		# 	if not even:
-# 		# 		each_res= each_res[::-1]
-# 		# 	even = not even
-# 		# 	queue=each_queue
-# 		# 	res.append(each_res)
-# 		# return res
-# 		#method2: not reverse at the end, but re-structure the each_res generating order at each step
-# 		# if root is None: return []
-# 		# res=[]
-# 		# queue = [root]
-# 		# even = True
-# 		# while len(queue) > 0:
-# 		# 	each_queue=[]
-# 		# 	each_res=[]
-# 		# 	while len(queue)>0:
-# 		# 		node=queue.pop(0)
-# 		# 		if node.left is not None: each_queue.append(node.left)
-# 		# 		if node.right is not None: each_queue.append(node.right)				
-# 		# 		if even:
-# 		# 			each_res.append(node.val)
-# 		# 		else:
-# 		# 			each_res.insert(0, node.val)
-# 		# 	queue=each_queue
-# 		# 	even = not even
-# 		# 	res.append(each_res)
-# 		# return res			
-# 		#method3: not change the each_res order, but change the queue order at each step:this one  is more complicated, and not more efficient
-# 		# if root is None: return []
-# 		# res=[]
-# 		# queue = [root]
-# 		# even = True
-# 		# while len(queue) > 0:
-# 		# 	each_queue=[]
-# 		# 	each_res=[]
-# 		# 	while len(queue)>0:
-# 		# 		node=queue.pop(-1)
-# 		# 		each_res.insert(0,node.val)
-# 		# 		if even: 
-# 		# 			if node.right is not None: each_queue.append(node.right)				
-# 		# 			if node.left is not None: each_queue.append(node.left)
-# 		# 		else:
-# 		# 			if node.left is not None: each_queue.append(node.left)
-# 		# 			if node.right is not None: each_queue.append(node.right)				
-# 		# 	queue=each_queue
-# 		# 	even = not even
-# 		# 	res.append(each_res)
-# 		# return res
+class Solution(object):
+	# def zigzagLevelOrder(self, root):
+		"""
+		:type root: TreeNode
+		:rtype: List[List[int]]
+		"""
+		#iterative
+		#method1: just reverse the each_res given the even condition
+		# if root is None: return []
+		# res=[]
+		# queue = [root]
+		# even = True
+		# while len(queue) > 0:
+		# 	each_queue=[]
+		# 	each_res=[]
+		# 	while len(queue)>0:
+		# 		node=queue.pop(0)
+		# 		each_res.append(node.val)
+		# 		if node.left is not None: each_queue.append(node.left)
+		# 		if node.right is not None: each_queue.append(node.right)
+		# 	#only reverse the result would work
+		# 	if not even:
+		# 		each_res= each_res[::-1]
+		# 	even = not even
+		# 	queue=each_queue
+		# 	res.append(each_res)
+		# return res
+		#method2: not reverse at the end, but re-structure the each_res generating order at each step
+		# if root is None: return []
+		# res=[]
+		# queue = [root]
+		# even = True
+		# while len(queue) > 0:
+		# 	each_queue=[]
+		# 	each_res=[]
+		# 	while len(queue)>0:
+		# 		node=queue.pop(0)
+		# 		if node.left is not None: each_queue.append(node.left)
+		# 		if node.right is not None: each_queue.append(node.right)				
+		# 		if even:
+		# 			each_res.append(node.val)
+		# 		else:
+		# 			each_res.insert(0, node.val)
+		# 	queue=each_queue
+		# 	even = not even
+		# 	res.append(each_res)
+		# return res			
+		#method3: not change the each_res order, but change the queue order at each step:this one  is more complicated, and not more efficient
+		# if root is None: return []
+		# res=[]
+		# queue = [root]
+		# even = True
+		# while len(queue) > 0:
+		# 	each_queue=[]
+		# 	each_res=[]
+		# 	while len(queue)>0:
+		# 		node=queue.pop(-1)
+		# 		each_res.insert(0,node.val)
+		# 		if even: 
+		# 			if node.right is not None: each_queue.append(node.right)				
+		# 			if node.left is not None: each_queue.append(node.left)
+		# 		else:
+		# 			if node.left is not None: each_queue.append(node.left)
+		# 			if node.right is not None: each_queue.append(node.right)				
+		# 	queue=each_queue
+		# 	even = not even
+		# 	res.append(each_res)
+		# return res
 
 
-# 	#recursive method
-# 	#add even variable
-# 	#which way to go first , left/right? you need some simple exmaple to test it to get it clear:more efficient
+	#recursive method
+	#add even variable
+	#which way to go first , left/right? you need some simple exmaple to test it to get it clear:more efficient
 
-# 	def preorder(self, root, level, res, even):
-# 		if root:
-# 			if len(res)<level+1: res.append([])
-# 			if even:
-# 				res[level].append(root.val)
-# 			else:
-# 				res[level].insert(0, root.val)
-# 			self.preorder(root.left, level+1, res, not even)
-# 			self.preorder(root.right, level+1, res, not even)
+	# def preorder(self, root, level, res, even):
+	# 	if root:
+	# 		if len(res)<level+1: res.append([])
+	# 		if even:
+	# 			res[level].append(root.val)
+	# 		else:
+	# 			res[level].insert(0, root.val)
+	# 		self.preorder(root.left, level+1, res, not even)
+	# 		self.preorder(root.right, level+1, res, not even)
 
-# 	def zigzagLevelOrder(self, root):
-# 		res=[]
-# 		even=True
-# 		self.preorder(root, 0, res, even)
-# 		return res
+	# def zigzagLevelOrder(self, root):
+	# 	res=[]
+	# 	even=True
+	# 	self.preorder(root, 0, res, even)
+	# 	return res
 
 
 	  
@@ -550,12 +725,12 @@
 # #         self.left = None
 # #         self.right = None
 
-class Solution:
-	# @param {TreeNode} p
-	# @param {TreeNode} q
-	# @return {boolean}
-	def isSameTree(self, p, q):
-		'''use recursive method to solve the problem'''
+# class Solution:
+# 	# @param {TreeNode} p
+# 	# @param {TreeNode} q
+# 	# @return {boolean}
+# 	def isSameTree(self, p, q):
+# 		'''use recursive method to solve the problem'''
 		#recursion
 		#TO(n), SO(logn)--because you have to hold 1/2 nodes at each level's results, so at the ending level, it would be O(n) nodes
 		#however, due to recursion's calling, first left,and then right, we dnot haveto remember all the results at each level at the same time
@@ -651,6 +826,24 @@ class Solution:
 #     		stack = each_stack
 #     	return True
 
+# class Solution:
+#     # @param {TreeNode} root
+#     # @return {boolean}
+#     def isSymmetric(self, root):
+#     	if root is None: return True
+    	
+#     	queue = [(root.left, root.right)]
+#     	while queue:
+#     	    left, right = queue.pop(0)
+#     	    if left is not None and right is not None:
+#     	        if left.val != right.val: return False
+#     	        else:
+#     	            queue.append((left.left, right.right))
+#     	            queue.append((left.right, right.left))
+#     	    elif left is None and right is None: continue
+#     	    else: return False
+    	        
+#     	return True
 
 # 110. Balanced Binary Tree My Submissions Question
 # Total Accepted: 92809 Total Submissions: 279510 Difficulty: Easy
@@ -681,18 +874,18 @@ class Solution:
 #     # 	else:
 #     # 		return False
 #     # we need TO(n) method:
-#     def balanceHeight(self, root):
-#     	''' we donot return the exact height, but whether the height for its two subtree balance or not
-#     	#if balance returnt the HEIGHT; otherwise, return -1'''
-#     	#TO(n)
-#     	if not root:
-#     		return 0
-#     	left = self.balanceHeight(root.left)
-#     	right = self.balanceHeight(root.right)
-#     	if left < 0 or right < 0 or abs(left-right)>1: return -1
-#     	return max(left,right)+1
-#     def isBalanced(self, root):	
-#     	return self.balanceHeight(root)>=0
+    # def balanceHeight(self, root):
+    # 	''' we donot return the exact height, but whether the height for its two subtree balance or not
+    # 	#if balance returnt the HEIGHT; otherwise, return -1'''
+    # 	#TO(n)
+    # 	if not root:
+    # 		return 0
+    # 	left = self.balanceHeight(root.left)
+    # 	right = self.balanceHeight(root.right)
+    # 	if left < 0 or right < 0 or abs(left-right)>1: return -1
+    # 	return max(left,right)+1
+    # def isBalanced(self, root):	
+    # 	return self.balanceHeight(root)>=0
 
 
 # 114. Flatten Binary Tree to Linked List My Submissions Question
@@ -918,6 +1111,42 @@ class Solution:
 	# 			parent = parent.next
 	# 		self.connect(nextnode)
 
+
+# class Solution(object):
+#     def connect(self, root):
+# 		"""
+# 		:type root: TreeLinkNode
+# 		:rtype: nothing
+# 		"""
+# 		if root is None: return None
+# 		if root.left: nextLevel0 = root.left
+# 		elif root.right: nextLevel0 = root.right
+# 		else: nextLevel0 = None
+		
+# 		pre = root
+
+# 		while nextLevel0:
+		    
+# 		    cur = None
+# 		    nextLevel0 = None
+# 		    while pre:
+# 		        if pre.left is not None:
+# 		            if cur is None:
+# 		                cur = pre.left
+# 		                nextLevel0 = cur
+# 		            else:
+# 		                cur.next = pre.left
+# 		                cur = cur.next
+# 		        if pre.right is not None:
+# 		            if cur is None:
+# 		                cur = pre.right
+# 		                nextLevel0 = cur
+# 		            else:
+# 		                cur.next = pre.right
+# 		                cur = cur.next
+# 		        pre = pre.next
+# 		    pre = nextLevel0  
+
 # if __name__ == '__main__':
 # 	sk = Solution()
 # 	node1=TreeLinkNode(1)
@@ -958,9 +1187,36 @@ class Solution:
 # #         self.left = None
 # #         self.right = None
 
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
 class Solution(object):
     def recoverTree(self, root):
         """
         :type root: TreeNode
         :rtype: void Do not return anything, modify root in-place instead.
-        """     					            		                                    			    	                        
+        """
+        if root is None: return
+        lst = []
+        self.inorder(root, lst)
+        if len(lst)==2: err1, err2 = lst[0], lst[1]
+        else:
+            newLst = sorted([(node.val, node) for node in lst], key= lambda x:x[0])
+            err1, err2 = newLst[0][1],newLst[3][1]
+        err1.val, err2.val = err2.val, err1.val
+        return 
+        
+        
+    def inorder(self, root, lst):
+        if root.left: start, middle1 = self.inorder(root.left, lst)
+        else: start, middle1 = root, root
+        if root.right: middle2, end = self.inorder(root.right, lst)
+        else: middle2, end = root, root
+        
+        if middle1.val>root.val: lst.extend([middle1, root])
+        if root.val>middle2.val: lst.extend([root, middle2])
+        return start, end				            		                                    			    	                        

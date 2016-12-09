@@ -56,7 +56,27 @@
 # 			return self.dfs(x, half, right)
 # 		else:
 # 			return half
-
+# class Solution(object):
+#     def mySqrt(self, x):
+#         """
+#         :type x: int
+#         :rtype: int
+#         """
+#         if x==0: return 0
+#         if x==1: return 1
+#         return self.dfs(x, 1, x/2)
+    
+#     def dfs(self, x, start, end):
+#         if start==end: return start
+#         half = (start+end)/2
+#         if half*half==x: return half
+#         elif half*half>x:
+#             return self.dfs(x, start, half-1)
+#         else:
+#             if (half+1)*(half+1)>x:
+#                 return half
+#             else:
+#                 return self.dfs(x, half+1, end)
 # if __name__ == '__main__':
 # 	sk = Solution()
 # 	print sk.mySqrt(0)
@@ -94,40 +114,25 @@
 #             max_pre = max(nums[i], max_pre-1)
 #             if max_pre==0: return False
 #         return True			
-
-
-# 45. Jump Game II My Submissions Question
-# Total Accepted: 57770 Total Submissions: 231958 Difficulty: Hard
-# Given an array of non-negative integers, you are initially positioned at the first index of the array.
-# Each element in the array represents your maximum jump length at that position.
-# Your goal is to reach the last index in the minimum number of jumps.
-
-# For example:
-# Given array A = [2,3,1,1,4]
-# The minimum number of jumps to reach the last index is 2. (Jump 1 step from index 0 to 1, then 3 steps to the last index.)
-
-# Note:
-# You can assume that you can always reach the last index.
-# Subscribe to see which companies asked this question
 # class Solution(object):
-# 	def jump(self, nums):
-# 		"""
-# 		:type nums: List[int]
-# 		:rtype: int
-# 		"""
-# 		'''this greedy is really magic'''
-# 		last=0
-# 		res=0
-# 		current=0
-# 		for i in range(len(nums)):
-# 			#the index is out of the last
-# 			if i > last:
-# 				#last will be the current reach
-# 				last = current
-# 				#min steps +1
-# 				res += 1
-# 			current = max(current, i+nums[i])
-# 		return res
+#     def canJump(self, nums):
+#         """
+#         :type nums: List[int]
+#         :rtype: bool
+#         """
+#         n = len(nums)
+#         if n ==0: return False
+#         steps = 1
+#         i = 0
+#         while i <=n-1 and steps>0:
+#             steps -= 1
+#             steps = max(nums[i], steps)
+#             if steps>0: i += 1
+#         return i>=n-1
+            
+            
+
+
 
 # 121. Best Time to Buy and Sell Stock My Submissions Question
 # Total Accepted: 85081 Total Submissions: 242394 Difficulty: Medium
@@ -189,33 +194,23 @@
 # the longest substring without repeating letters for "abcabcbb" is "abc", which the length is 3. For "bbbbb" the longest substring is "b", with the length of 1.
 # Subscribe to see which companies asked this question
 
-
-# class Solution(object):
-# 	def lengthOfLongestSubstring(self, s):
-# 		"""
-# 		:type s: str
-# 		:rtype: int
-# 		"""
-# 		#greedy method: focus on the local, and hope for the right as a whole
-# 		dct = {}
-# 		n = len(s)
-# 		maxlen = 0
-# 		res = 0
-# 		last = 0
-# 		for i in  range(n):
-# 			if s[i] not in dct:
-# 				dct[s[i]] = [i]
-# 				res += 1
-# 			else:
-# 				if dct[s[i]][-1]>=last:
-# 					maxlen = max(maxlen, res)
-# 					res = i - dct[s[i]][-1]
-# 					last = dct[s[i]][-1]+1
-# 					dct[s[i]].append(i)
-# 				else:
-# 					dct[s[i]].append(i)
-# 					res += 1
-# 		return max(maxlen, res)
+class Solution(object):
+	def lengthOfLongestSubstring(self, s):
+		"""
+		:type s: str
+		:rtype: int
+		"""
+		#greedy method: focus on the local, and hope for the right as a whole
+		ans = 0
+		start = 0
+		lastPos = {}
+		
+		for i in range(len(s)):
+		    if s[i] in lastPos and lastPos[s[i]]>=start:
+		        start = lastPos[s[i]]+1
+		    lastPos[s[i]] = i
+		    ans = max(ans, i-start+1)
+		return ans
 
 
 # 11. Container With Most Water My Submissions Question
@@ -249,4 +244,35 @@ class Solution(object):
 
 		
 
-#                                                 		                                
+# 45. Jump Game II My Submissions Question
+# Total Accepted: 57770 Total Submissions: 231958 Difficulty: Hard
+# Given an array of non-negative integers, you are initially positioned at the first index of the array.
+# Each element in the array represents your maximum jump length at that position.
+# Your goal is to reach the last index in the minimum number of jumps.
+
+# For example:
+# Given array A = [2,3,1,1,4]
+# The minimum number of jumps to reach the last index is 2. (Jump 1 step from index 0 to 1, then 3 steps to the last index.)
+
+# Note:
+# You can assume that you can always reach the last index.
+# Subscribe to see which companies asked this question
+class Solution(object):
+	def jump(self, nums):
+		"""
+		:type nums: List[int]
+		:rtype: int
+		"""
+		'''this greedy is really magic'''
+		last=0
+		res=0
+		current=0
+		for i in range(len(nums)):
+			#the index is out of the last
+			if i > last:
+				#last will be the current reach
+				last = current
+				#min steps +1
+				res += 1
+			current = max(current, i+nums[i])
+		return res

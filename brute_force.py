@@ -43,6 +43,29 @@
 # 			res.append(item0)
 # 		return res_less_1+res
 
+# class Solution(object):
+# 	def subsets(self, nums):
+# 		"""
+# 		:type nums: List[int]
+# 		:rtype: List[List[int]]
+# 		"""
+# 		res = []
+# 		self.dfs(nums, res)
+# 		return res
+		
+# 	def dfs(self, lst, res):
+# 		if len(lst)==0:
+# 			res.append([])
+# 			return 
+# 		self.dfs(lst[1:], res)
+# 		i = 0
+# 		count = len(res)
+# 		while i < count:
+# 			item = res[i]
+# 			res.append([lst[0]]+item)
+# 			i+=1
+# 		return 
+
 # if __name__ == '__main__':
 # 	# nums=[1,2,3]
 # 	sk=Solution()
@@ -111,7 +134,27 @@
 # 				time += 1
 # 		return res_1+res
 
-
+# class Solution(object):
+#     def subsetsWithDup(self, nums):
+#         """
+#         :type nums: List[int]
+#         :rtype: List[List[int]]
+#         """
+#         nums.sort()
+#         return self.dfs(nums)
+        
+#     def dfs(self, lst):
+#         if len(lst)==0: 
+#             return [[]]
+        
+#         res = self.dfs(lst[1:])
+#         newRes = []
+#         for item in res:
+#             newItem = [lst[0]]+item
+#             if newItem not in res:
+#                 newRes.append(newItem)
+                
+#         return newRes+res
 
 
 # 46. Permutations My Submissions Question
@@ -226,30 +269,30 @@
 # Although the above answer is in lexicographical order, your answer could be in any order you want.    	
 
 
-class Solution(object):
-	def letterCombinations(self, digits):
-		"""
-		:type digits: str
-		:rtype: List[str]
-		"""
-		dct={'0':[' '], '1':['*'],'2':['a','b','c'],'3':['d','e','f'],'4':['g','h','i'],\
-		'5':['j','k','l'],'6':['m','n','o'],'7':['p','q','r','s'],'8':['t','u','v'],'9':['w','x','y','z']}
+# class Solution(object):
+# 	def letterCombinations(self, digits):
+# 		"""
+# 		:type digits: str
+# 		:rtype: List[str]
+# 		"""
+# 		dct={'0':[' '], '1':['*'],'2':['a','b','c'],'3':['d','e','f'],'4':['g','h','i'],\
+# 		'5':['j','k','l'],'6':['m','n','o'],'7':['p','q','r','s'],'8':['t','u','v'],'9':['w','x','y','z']}
 
-		if len(digits)==0: return []
-		return self.dfs(digits, dct)
+# 		if len(digits)==0: return []
+# 		return self.dfs(digits, dct)
 
-	def dfs(self, digits, dct):
-		n=len(digits)
-		if n==1: return dct[digits]
-		res_1 = self.dfs(digits[1:], dct)
+# 	def dfs(self, digits, dct):
+# 		n=len(digits)
+# 		if n==1: return dct[digits]
+# 		res_1 = self.dfs(digits[1:], dct)
 
-		lst = dct[digits[0]]
-		res=[]
-		for item in res_1:
-			for letter in lst:
-				res.append(letter+item)
+# 		lst = dct[digits[0]]
+# 		res=[]
+# 		for item in res_1:
+# 			for letter in lst:
+# 				res.append(letter+item)
 
-		return res
+# 		return res
 
 
 

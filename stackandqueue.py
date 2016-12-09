@@ -29,6 +29,31 @@
 # 		else:
 # 			return False
 		
+# class Solution(object):
+#     def isValid(self, s):
+#         """
+#         :type s: str
+#         :rtype: bool
+#         """
+#         n = len(s)
+#         if n<=1: return False 
+#         backP = [')','}',']']
+#         forwP = ['(','{','[']
+#         PDict = {')':'(','}':'{',']':'['}
+#         stack = []
+#         for i in range(n):
+#             if s[i] in forwP:
+#                 stack.append(s[i])
+#             else:
+#                 if len(stack)==0: return False
+#                 else:
+#                     nearP = stack.pop(-1)
+#                     if PDict[s[i]] == nearP:
+#                         continue
+#                     else:
+#                         return False
+#         if len(stack)==0: return True
+#         else: return False
 
 # 32. Longest Valid Parentheses My Submissions Question
 # Total Accepted: 54652 Total Submissions: 249120 Difficulty: Hard
@@ -73,37 +98,62 @@
 # 		# 				res=max(res, i-stack[-1])
 # 		# return res
 
-# 		# #scan twice, 1 scan ) as ending max; and second scan ( as ending max
-# 		# last=-1
-# 		# depth=0
-# 		# res=0
-# 		# for i in range(len(s)):
-# 		# 	if s[i]=='(':
-# 		# 		depth +=2
-# 		# 	else:
-# 		# 		depth -=2
-# 		# 		if depth<0:
-# 		# 			depth=0
-# 		# 			last=i
-# 		# 		elif depth==0:
-# 		# 			res=max(res, i-last)
-# 		# sr= s[::-1]
-# 		# depth=0
-# 		# last = -1
-# 		# for i in range(len(s)):
-# 		# 	if sr[i]==')':
-# 		# 		depth +=2
-# 		# 	else:
-# 		# 		depth -=2
-# 		# 		if depth<0:
-# 		# 			depth =0
-# 		# 			last = i
-# 		# 		elif depth==0:
-# 		# 			res=max(res, i-last)
-# 		# return res
+		#scan twice, 1 scan ) as ending max; and second scan ( as ending max
+		# last=-1
+		# depth=0
+		# res=0
+		# for i in range(len(s)):
+		# 	if s[i]=='(':
+		# 		depth +=2
+		# 	else:
+		# 		depth -=2
+		# 		if depth<0:
+		# 			depth=0
+		# 			last=i
+		# 		elif depth==0:
+		# 			res=max(res, i-last)
+		# sr= s[::-1]
+		# depth=0
+		# last = -1
+		# for i in range(len(s)):
+		# 	if sr[i]==')':
+		# 		depth +=2
+		# 	else:
+		# 		depth -=2
+		# 		if depth<0:
+		# 			depth =0
+		# 			last = i
+		# 		elif depth==0:
+		# 			res=max(res, i-last)
+		# return res
 
-# 		#dynamic programming
-
+		#dynamic programming
+# class Solution(object):
+# 	def longestValidParentheses(self, s):
+# 		"""
+# 		:type s: str
+# 		:rtype: int
+# 		"""
+		
+# 		stack = []
+# 		lastIdx = -1
+# 		res = 0
+		
+# 		for i in range(len(s)):
+# 			if s[i] == '(':
+# 				stack.append(i)
+# 			else: 
+# 				# for ")"
+# 				if len(stack) == 0:
+# 					lastIdx = i
+# 				else:
+# 					#nearIdx not using 
+# 					nearIdx = stack.pop(-1)
+# 					if len(stack)==0:
+# 						res = max(res, i-lastIdx)
+# 					else:
+# 						res = max(res, i-stack[-1])
+# 		return res
 
 # if __name__ == '__main__':
 # 	sk = Solution()
@@ -165,42 +215,92 @@
 # Subscribe to see which companies asked this question
 
 
+# class Solution(object):
+# 	def evalRPN(self, tokens):
+# 		"""
+# 		:type tokens: List[str]
+# 		:rtype: int
+# 		"""
+# 		#TO(n), SO(logn)--best case is SO(1), worst case is SO(n)
+# 		operator = ['+','-','*','/']
+# 		stack =[]
+# 		for i in tokens:
+# 			if i not in operator:
+# 				stack.append(int(i))
+# 			else:
+# 				num1=stack.pop(-1)
+# 				num2=stack.pop(-1)
+# 				if i == "+":
+# 					tmp=num1+num2
+# 				elif i == '-':
+# 					tmp=num2-num1
+# 				elif i == '*':
+# 					tmp=num1*num2
+# 				else:
+# 					if (num2>0 and num1<0) or (num2<0 and num1>0):	
+# 						#python for negative division is taking value to the floor, so when it is 
+# 						#wrong when you get true float division values
+# 						#reverse to positive, and then take the negate
+# 						tmp=-((-num2)/num1)
+# 					else:
+# 						tmp=num2/num1
+# 				# print tmp
+# 				stack.append(tmp)
+# 		return stack[-1]
+
+# if __name__ == '__main__':
+# 	sk=Solution()
+# 	# print sk.evalRPN(["2", "1", "+", "3", "*"])
+# 	print sk.evalRPN(["10","6","9","3","+","-11","*","/","*","17","+","5","+"])
+
 class Solution(object):
 	def evalRPN(self, tokens):
 		"""
 		:type tokens: List[str]
 		:rtype: int
 		"""
-		#TO(n), SO(logn)--best case is SO(1), worst case is SO(n)
-		operator = ['+','-','*','/']
-		stack =[]
-		for i in tokens:
-			if i not in operator:
-				stack.append(int(i))
-			else:
-				num1=stack.pop(-1)
-				num2=stack.pop(-1)
-				if i == "+":
-					tmp=num1+num2
-				elif i == '-':
-					tmp=num2-num1
-				elif i == '*':
-					tmp=num1*num2
-				else:
-					if (num2>0 and num1<0) or (num2<0 and num1>0):	
-						#python for negative division is taking value to the floor, so when it is 
-						#wrong when you get true float division values
-						#reverse to positive, and then take the negate
-						tmp=-((-num2)/num1)
+		operator = set(['+','-','*','/'])
+		stack = []
+		if len(tokens)==0: return None
+		
+		for i in range(len(tokens)):
+			if tokens[i] in operator:
+				rightNum = stack.pop(-1)
+				leftNum = stack.pop(-1)
+				if tokens[i] == '+':
+					tmp = leftNum + rightNum
+				elif tokens[i] == '-':
+					tmp = leftNum - rightNum
+				elif tokens[i] == '*':
+					tmp = leftNum * rightNum
+				else:      
+					if (leftNum>0 and rightNum<0) or (leftNum<0 and rightNum>0):
+						tmp = -(leftNum/(-rightNum))
 					else:
-						tmp=num2/num1
-				# print tmp
+						tmp = leftNum/rightNum
 				stack.append(tmp)
+			else:
+				stack.append(int(tokens[i]))
 		return stack[-1]
 
-if __name__ == '__main__':
-	sk=Solution()
-	# print sk.evalRPN(["2", "1", "+", "3", "*"])
-	print sk.evalRPN(["10","6","9","3","+","-11","*","/","*","17","+","5","+"])
+##prime number factorization
+# def primeFactor(num):
+# 	if num <=2: return [num]
+# 	res = []
+# 	for i in range(2, (num/2)+1):
+# 		if num%i == 0:
+# 			res.append(i)
+# 			res = res + primeFactor(num/i)
+# 			break
+# 		else:
+# 			continue
+# 	if len(res) ==0: res = [num]
+# 	return res
+
+# print primeFactor(2)
+# print primeFactor(100)
+# print primeFactor(100000)
+# print primeFactor(13)
+
 
 

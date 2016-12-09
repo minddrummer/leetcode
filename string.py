@@ -11,6 +11,8 @@
 # For the purpose of this problem, we define empty string as valid palindrome.
 # Subscribe to see which companies asked this question
 
+
+
 # class Solution:
 # 	# @param {string} s
 # 	# @return {boolean}
@@ -43,7 +45,28 @@
 # 				right-=1
 # 		return True
 
-
+# class Solution:
+# 	# @param {string} s
+# 	# @return {boolean}
+# 	def isPalindrome(self, s):
+# 		s=s.lower()
+# 		n=len(s)
+# 		if n==0: return True
+# 		left=0
+# 		right=n-1
+# 		lst = '0123456789abcdefghijklmnopqrstuvwxyz'
+# 		while left<right:
+# 			while s[left] not in lst and left<right:
+# 				left +=1
+# 			while s[right] not in lst and left<right:
+# 				right-=1
+# # 			print s[left],s[right]
+# 			if s[left]==s[right]:
+# 				left+=1
+# 				right-=1
+# 			else: return False
+# 		return True
+		
 
 # 28. Implement strStr() My Submissions Question
 # Total Accepted: 84227 Total Submissions: 355976 Difficulty: Easy
@@ -88,6 +111,20 @@
 # 			# 	i += 1    	
 # 		return -1
 
+# class Solution:
+# 	# @param {string} haystack
+# 	# @param {string} needle
+# 	# @return {integer}
+#     def strStr(self, haystack, needle):
+# 		nh = len(haystack)
+# 		nn = len(needle)
+# 		if nn==0: return 0
+# 		idx=0
+# 		while idx<nh:
+# 		    if haystack[idx:idx+nn] == needle: return idx
+# 		    else: idx +=1
+# 		return -1
+			
 # if __name__ == '__main__':
 # 	sk = Solution()
 # 	print sk.strStr('abaacdaa','aa')	
@@ -101,6 +138,46 @@
 # The signature of the C++ function had been updated. If you still see your function signature accepts a const char * argument, please click the reload button  to reset your code definition.
 # spoilers alert... click to show requirements for atoi
 # Subscribe to see which companies asked this question
+# class Solution:
+# 	# @param {string} str
+# 	# @return {integer}
+# 	def myAtoi(self, str):
+# 		# four input: invalid, sign, 0-9 and space
+# 		SIGN = 1
+# 		NUM = 2
+# 		SPACE = 3
+# 		#
+# 		transition = [[-1,1,2,0], #state with only space or tab
+# 					  [-1,-1,2,-1], #state with space and +/-
+# 					  [-1,-1,2,3], #state with space and +/- and number 0-9
+# 					  [-1,-1,-1,3]] # state with space and +/1 and number and space after
+# 		res=0
+# 		sign = None
+# 		lst =[]
+# 		state = 0
+		
+# 		for i in range(len(str)):
+# 			if str[i] in '+-': input = SIGN
+# 			elif str[i] in '0123456789': input = NUM
+# 			elif str[i] == ' ': input = SPACE
+# 			else: input = None
+			
+# 			if input is None: break
+# 			else:
+# 				state = transition[state][input]
+# 				if state == -1: break
+# 				else:
+# 					if str[i] in '+-': sign = str[i]
+# 					elif str[i] == ' ': continue
+# 					else: lst.append(str[i])
+# 		if len(lst)>0:            
+# 			if sign is None or sign == '+':
+# 				res = int(''.join(lst))
+# 				if res>2147483647: res = 2147483647
+# 			else:
+# 				res =  -int(''.join(lst))
+# 				if res < -2147483648: res = -2147483648
+# 		return res
 
 # class Solution:
 # 	# @param {string} str
@@ -230,16 +307,16 @@
 # 		:type s: str
 # 		:rtype: str
 # 		"""
-		#method1: from middle to two side, get the most longest length
-		#TO(n^2), SO(n)
-		# p=''
-		# count=len(s)
-		# for i in range(count):
-		# 	p_odd = self.getP(s,i,i,count)
-		# 	if len(p_odd)>len(p): p = p_odd
-		# 	p_even = self.getP(s,i,i+1,count)
-		# 	if len(p_even)>len(p): p = p_even
-		# return p
+# 		method1: from middle to two side, get the most longest length
+# 		TO(n^2), SO(n)
+# 		p=''
+# 		count=len(s)
+# 		for i in range(count):
+# 			p_odd = self.getP(s,i,i,count)
+# 			if len(p_odd)>len(p): p = p_odd
+# 			p_even = self.getP(s,i,i+1,count)
+# 			if len(p_even)>len(p): p = p_even
+# 		return p
 
 		#method2:dynamic programming
 		#To(n^2), SO(n^2)
@@ -284,6 +361,31 @@
 # isMatch("ab", ".*")  true
 # isMatch("aab", "c*a*b") true
 
+class Solution(object):
+	def isMatch(self, s, p):
+		"""
+		:type s: str
+		:type p: str
+		:rtype: bool
+		"""
+		ns = len(s)
+		np = len(p)
+		dp = [[False for j in range(ns+1)] for i in range(np+1)]
+		dp[0][0]=True
+		for i in range(1,np+1):
+			if p[i-1] == '*': dp[i][0] = dp[i-2][0]
+		
+		for i in range(1,np+1):
+			for j in range(1,ns+1):
+				if p[i-1] == '*':
+					dp[i][j] = dp[i-2][j] or dp[i-1][j] or (dp[i-1][j-1] and (p[i-2]=='.' or p[i-2]==s[j-1]))
+				elif p[i-1] == '.':
+					dp[i][j] = dp[i-1][j-1]
+				else:
+					dp[i][j] = dp[i-1][j-1] and s[j-1]==p[i-1]
+		return dp[-1][-1]
+
+		
 # class Solution(object):
 # 	def isMatch(self, s, p):
 # 		"""
@@ -400,6 +502,28 @@
 #         		break
 #         return comm_str
 
+# class Solution(object):
+#     def longestCommonPrefix(self, strs):
+#         """
+#         :type strs: List[str]
+#         :rtype: str
+#         """
+#         if len(strs)==0: return ''
+#         minLen = min([len(string) for string in strs])
+		
+#         i=0
+#         res =''
+#         while i< minLen:
+#             cur = strs[0][i]
+#             breakLoop = False
+#             for string in strs:
+#                 if string[i] != cur:
+#                     breakLoop = True
+#                     break
+#             if breakLoop: break
+#             res += cur
+#             i+=1
+#         return res
 
 # 65. Valid Number My Submissions Question
 # Total Accepted: 38762 Total Submissions: 328128 Difficulty: Hard
@@ -420,6 +544,36 @@
 #         :type s: str
 #         :rtype: bool
 #         """
+
+# class Solution:
+#     # @param s, a string
+#     # @return a boolean
+#     # @finite automation
+#     def isNumber(self, s):
+#         INVALID=0; SPACE=1; SIGN=2; DIGIT=3; DOT=4; EXPONENT=5;
+#         #0invalid,1space,2sign,3digit,4dot,5exponent,6num_inputs
+#         transitionTable=[[-1,  0,  3,  1,  2, -1],    #0 no input or just spaces 
+#                          [-1,  8, -1,  1,  4,  5],    #1 input is digits 
+#                          [-1, -1, -1,  4, -1, -1],    #2 no digits in front just Dot 
+#                          [-1, -1, -1,  1,  2, -1],    #3 sign 
+#                          [-1,  8, -1,  4, -1,  5],    #4 digits and dot in front 
+#                          [-1, -1,  6,  7, -1, -1],    #5 input 'e' or 'E' 
+#                          [-1, -1, -1,  7, -1, -1],    #6 after 'e' input sign 
+#                          [-1,  8, -1,  7, -1, -1],    #7 after 'e' input digits 
+#                          [-1,  8, -1, -1, -1, -1]]    #8 after valid input input space
+#         state=0; i=0
+#         while i<len(s):
+#             inputtype = INVALID
+#             if s[i]==' ': inputtype=SPACE
+#             elif s[i]=='-' or s[i]=='+': inputtype=SIGN
+#             elif s[i] in '0123456789': inputtype=DIGIT
+#             elif s[i]=='.': inputtype=DOT
+#             elif s[i]=='e' or s[i]=='E': inputtype=EXPONENT
+			
+#             state=transitionTable[state][inputtype]
+#             if state==-1: return False
+#             else: i+=1
+#         return state == 1 or state == 4 or state == 7 or state == 8
 		
 
 # 12. Integer to Roman My Submissions Question
@@ -429,13 +583,22 @@
 # Input is guaranteed to be within the range from 1 to 3999.
 
 # Subscribe to see which companies asked this question
-
 # class Solution(object):
 #     def intToRoman(self, num):
 #         """
 #         :type num: int
 #         :rtype: str
 #         """
+#         VALUE = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+#         ROMAN = [ 'M', 'CM','D','CD','C','XC','L','XL','X','IX','V','IV','I']
+		
+#         res = ''
+		
+#         for i in range(len(VALUE)):
+#             while num>=VALUE[i]:
+#                 num -= VALUE[i]
+#                 res += ROMAN[i]
+#         return 
 		
 
 # 13. Roman to Integer My Submissions Question
@@ -446,66 +609,28 @@
 
 # Subscribe to see which companies asked this question
 
-# public class Solution {
-#     public int romanToInt(String s) {  
-  
-#     if(s==null || s.length()==0)  
-#         return 0;  
-#     int res = 0;  
-#     for(int i=0;i<s.length();i++)  
-#     {  
-#         switch(s.charAt(i))  
-#         {  
-#             case 'I':  
-#                 if(i<s.length()-1 && (s.charAt(i+1)=='V'||s.charAt(i+1)=='X'))  
-#                 {  
-#                     res -= 1;  
-#                 }  
-#                 else  
-#                 {  
-#                     res += 1;  
-#                 }  
-#                 break;  
-#             case 'V':  
-#                 res += 5;  
-#                 break;  
-#             case 'X':  
-#                 if(i<s.length()-1 && (s.charAt(i+1)=='L'||s.charAt(i+1)=='C'))  
-#                 {  
-#                     res -= 10;  
-#                 }  
-#                 else  
-#                 {  
-#                     res += 10;  
-#                 }  
-#                 break;  
-#             case 'L':  
-#                 res += 50;  
-#                 break;  
-#             case 'C':  
-#                 if(i<s.length()-1 && (s.charAt(i+1)=='D'||s.charAt(i+1)=='M'))  
-#                 {  
-#                     res -= 100;  
-#                 }  
-#                 else  
-#                 {  
-#                     res += 100;  
-#                 }  
-#                 break;  
-#             case 'D':  
-#                 res += 500;  
-#                 break;  
-#             case 'M':  
-#                 res += 1000;  
-#                 break;  
-#             default:  
-#                 return 0;  
-#         }  
-#     }  
-#     return res;  
-# } 
-# }
-
+# class Solution(object):
+#     def romanToInt(self, s):
+#         """
+#         :type s: str
+#         :rtype: int
+#         """
+#         VALUE = [1000, 500, 100, 50, 10, 5, 1]
+#         ROMAN = [ 'M', 'D','C', 'L','X','V','I']
+#         valDict = dict(zip(ROMAN, VALUE))
+#         lst = [valDict[i] for i in s]    
+#         lst.append(1)
+#         res = 0
+#         i=0
+#         while i <= len(lst)-2:
+#             if lst[i] < lst[i+1]:
+#                 res += lst[i+1]-lst[i]
+#                 i += 2
+#             else:
+#                 res += lst[i]
+#                 i+=1
+#         return res
+	
 
 # 38. Count and Say My Submissions Question
 # Total Accepted: 65463 Total Submissions: 241667 Difficulty: Easy
@@ -521,10 +646,10 @@
 # Subscribe to see which companies asked this question
 
 # class Solution:
-#     # @param {integer} n
-#     # @return {string}
-#     def countAndSay(self, n):
-#should transform to string, and count each number in the string, and speak it
+# 	# @param {integer} n
+# 	# @return {string}
+# 	def countAndSay(self, n):
+# 		# should transform to string, and count each number in the string, and speak it
 # 		if n == 1: return '1'
 # 		res = '1'
 # 		for i in range(2,n+1):
@@ -544,7 +669,32 @@
 # 				times = len(item)
 # 				res = res + str(times)+str(item[0])
 # 		return res
-		
+
+
+# class Solution(object):
+#     def countAndSay(self, n):
+#         """
+#         :type n: int
+#         :rtype: str
+#         """
+#         n = str(n)
+#         i=0
+#         cur = None
+#         count = 0
+#         res = ''
+#         while i <len(n):
+#             if n[i] == cur:
+#                 count += 1
+#                 i +=1
+#             else:
+#                 if cur is not None:
+#                     res += str(count)+cur
+#                 cur = n[i]
+#                 count = 1
+#                 i += 1
+#         #left over
+#         res += str(count)+cur
+#         return res		
 
 # 242. Valid Anagram My Submissions Question
 # Total Accepted: 47204 Total Submissions: 119459 Difficulty: Easy
@@ -613,6 +763,18 @@
 # 		for key in strs_dict:
 # 			res = res + strs_dict[key]
 # 		return res
+# class Solution(object):
+#     def groupAnagrams(self, strs):
+#         """
+#         :type strs: List[str]
+#         :rtype: List[List[str]]
+#         """
+#         dct={}
+#         for word in strs:
+#             newWord = ''.join(sorted(word))
+#             if newWord in dct: dct[newWord].append(word)
+#             else: dct[newWord]=[word]
+#         return dct.values()
 
 # 71. Simplify Path My Submissions Question
 # Total Accepted: 42843 Total Submissions: 204499 Difficulty: Medium
@@ -656,6 +818,41 @@
 # 		if res == '': return '/'
 # 		return res
 
+
+# class Solution(object):
+#     def simplifyPath(self, path):
+#         """
+#         :type path: str
+#         :rtype: str
+#         """
+		
+#         i=0
+#		  #add one / is pretty smart!
+#         path = path+'/'
+#         n=len(path)
+#         stack = []
+#         lst=[]
+#         while i<n-1:
+#             if path[i] == '/':
+#                 cur = i
+#                 i +=1
+#                 while path[i] != '/' and i<n: i+=1
+#                 command = path[cur+1:i]
+#                 if command == '.': continue
+#                 elif command == '..': 
+#                     if stack: stack.pop(-1)
+#                     else: continue
+#                 elif command == '': continue
+#                 else:
+#                     stack.append(command)
+			
+#         if stack:
+#             res=''
+#             for item in stack:
+#                 res  += '/'+item 
+#         else:
+#             res = '/'
+#         return res
 # if __name__ == '__main__':
 # 	sk = Solution()
 # 	print  sk.simplifyPath("/a/./b/../../c/")
@@ -715,4 +912,24 @@
 # 			return lens-start+1
 # 		else:
 # 			return end - start
+
+# class Solution:
+# 	# @param {string} s
+# 	# @return {integer}
+# 	def lengthOfLastWord(self, s):
+# 		n=len(s)
+# 		if n==0: return 0
+# 		i=0; count=0; cur =None
+# 		while i<n:
+# 			if s[i]!=' ':
+# 				cur = i
+# 				while i < n and s[i]!= ' ':
+# 					i += 1
+# 				count = i - cur
+# 			else:
+# 				i += 1
+# 		#the following is when the lasting space would be counted as non-word situation		
+# 		# if cur is None or i-cur!=count: return 0
+# 		# else: return count
+# 		return count
 

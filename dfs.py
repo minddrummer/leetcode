@@ -15,9 +15,9 @@
 # 		:type s: str
 # 		:rtype: List[List[str]]
 # 		"""
-# 		# dfs, questions: 1)path, count? 2)how to save state
-# 		# 3)how to expand state and save results
-# 		# 4)remove duplicate? 5)ending condition, 6)converge condition? 7)prunning or cache ..
+# 		# dfs, questions: 1)path, count? 2.1)how to save state
+# 		# 2.2)how to expand state and save results
+# 		# 3.1)ending condition, 3.2)converge condition? 4.1)remove duplicate?  4.2)prunning or cache ..
 # 		dct = {}
 # 		return self.help(s, dct)		
 
@@ -32,17 +32,23 @@
 # 				#use space to save time: space efficiency cost for time efficiency
 # 				#but for this problem, it does NOT work, and will time limit
 # 				#just no saving would be fine
+
+# 				#more importantly, the indexing dictionary will change over time, make it
+# 				#untrackable!!!!---so this code is wrong, you have to figure out some stable tracking 
+# 				# method if you want to use space dict
 # 				if i+1 in dct: last_res = dct[i+1]
 # 				else:
 # 					last_res = self.help(s[i+1:],dct)
 # 					dct[i+1] = last_res
+
+# 				print first,':',i, ':',dct
 # 				for item in last_res:
 # 					res.append([first]+item)
 # 		return res
 
 # 	def pali(self, s):
 # 		n=len(s)
-# 		if n==1: return True
+# 		if n<=1: return True
 # 		i=0
 # 		j=n-1
 # 		while i<=j:
@@ -53,7 +59,9 @@
 # 				return False
 # 		return True
 
-
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.partition("fff")
 # class Solution(object):
 # 	def partition(self, s):
 # 		"""
@@ -85,6 +93,36 @@
 # 				return False
 # 		return True
 
+
+#the second method: maybe wrong for '' string:
+# class Solution(object):
+#     def partition(self, s):
+#         """
+#         :type s: str
+#         :rtype: List[List[str]]
+#         """
+#         n=len(s)
+#         if n<=1: return [[s]]
+#         res = []
+#         for i in range(1,n):
+#             if self.isPan(s[0:i]):
+#                 for item in self.partition(s[i:]):
+#                     res.append([s[0:i]]+item)
+#         if self.isPan(s): res.append([s])            
+#         return res
+	
+#     def isPan(self, s):
+#         n= len(s)
+#         if n<=1: return True
+#         i=0
+#         j=n-1
+#         while i<=j:
+#             if s[i]==s[j]:
+#                 i+=1
+#                 j-=1
+#             else:
+#                 return False
+#         return True
 # if __name__ == '__main__':
 # 	sk=Solution()
 # 	print sk.partition('aab')
@@ -108,10 +146,10 @@
 # 		:type n: int
 # 		:rtype: int
 # 		"""
-		##memorization method: TO(n^2), SO(n^2)
-		##if not using dict, then it would be TO(n^4), SO(n)
-		##it can be a math problem by choosing m-1 from m+n-2
-		##last method, use DP's loop-forward method, rather than DP's dict method, like the code following
+# 		#memorization method: TO(n^2), SO(n^2)
+# 		#if not using dict, then it would be TO(n^4), SO(n)
+# 		#it can be a math problem by choosing m-1 from m+n-2
+# 		#last method, use DP's loop-forward method, rather than DP's dict method, like the code following
 # 		#only count, need to count duplicate, ending in two ways: the trick is using the end point as the beginning point
 # 		#save to dict to speed up; need prunning?
 # 		#if you count from the beginning, it is hard, and more computation; if you start from the ending, it is easier and quick
@@ -125,18 +163,34 @@
 # 			self.DCT[(m,n)] = self.uniquePaths(m,n-1) + self.uniquePaths(m-1,n)
 # 			return self.DCT[(m,n)]
 
+# class Solution(object):
+#     def uniquePaths(self, m, n):
+#         """
+#         :type m: int
+#         :type n: int
+#         :rtype: int
+#         """
+#         dct={}
+#         for i in range(m): dct[(0,i)] = 1
+#         for j in range(n): dct[(j,0)] = 1
+#         #here, self.dfs will search one instance's method uniquePaths' namespace first,
+#		  #to find the local variable dct, since dct is mutable, it would be a reference, and change it within all the recursive self.dfs methods    
+#         return self.dfs(n-1, m-1, dct)
+		
+#     def dfs(self, x,y, dct):
+		
+#         if (x,y) in dct: return dct[(x,y)]
+#         else:
+#             dct[(x,y)] = self.dfs(x-1,y, dct) + self.dfs(x,y-1, dct)
+#             return dct[(x,y)]
 
 # 63. Unique Paths II My Submissions Question
 # Total Accepted: 57920 Total Submissions: 200431 Difficulty: Medium
 # Follow up for "Unique Paths":
-
 # Now consider if some obstacles are added to the grids. How many unique paths would there be?
-
 # An obstacle and empty space is marked as 1 and 0 respectively in the grid.
-
 # For example,
 # There is one obstacle in the middle of a 3x3 grid as illustrated below.
-
 # [
 #   [0,0,0],
 #   [0,1,0],
@@ -177,6 +231,40 @@
 # 			dct[(m,n)] = self.help(matrix, dct, m-1, n) + self.help(matrix, dct, m, n-1)
 # 			return dct[(m,n)]
 
+
+# class Solution(object):
+#     def uniquePathsWithObstacles(self, obstacleGrid):
+#         """
+#         :type obstacleGrid: List[List[int]]
+#         :rtype: int
+#         """
+#         m = len(obstacleGrid)
+#         if m==0: return 0
+#         n = len(obstacleGrid[0])
+#         if n==0: return 0
+#         if obstacleGrid[0][0]==1: return 0
+		
+#         dct={}
+#         #initialize
+#         dct[(0,0)]=1
+#         for i in range(1,m): 
+#             if obstacleGrid[i][0] == 1: dct[(0,i)] = 0
+#             else: dct[(0,i)] = dct[(0,i-1)]
+#         for j in range(1,n): 
+#             if obstacleGrid[0][j] == 1: dct[(j,0)] = 0
+#             else: dct[(j,0)] = dct[(j-1,0)]
+		
+#         return self.dfs(n-1,m-1, dct, obstacleGrid)
+		
+#     def dfs(self, x, y, dct, matrix):
+#         if matrix[y][x]==1:
+#             dct[(x,y)] = 0
+#             return 0
+#         else:
+#             if (x,y) in dct: return dct[(x,y)]
+#             else:
+#                 dct[(x,y)] = self.dfs(x-1,y, dct, matrix) + self.dfs(x,y-1,dct,matrix)
+#                 return dct[(x,y)]
 # if __name__ == '__main__':
 # 	sk = Solution()
 # 	print sk.uniquePathsWithObstacles([
@@ -212,7 +300,9 @@
 # 		:rtype: List[List[str]]
 # 		"""
 # 		def dfs(depth, lst):
+# 			print board
 # 			if depth == n: 
+# 				print lst
 # 				res.append(lst)
 # 				return 
 # 			for i in range(n):
@@ -235,6 +325,42 @@
 # 		dfs(0,[])
 # 		return res
 
+#coding version 2: with explanation
+# class Solution(object):
+#     def solveNQueens(self, n):
+#         """
+#         :type n: int
+#         :rtype: List[List[str]]
+#         """
+#         def dfs(depth, lst, n):
+#             if depth == n:
+#                 Res.append(lst)
+#                 return
+#             for col in range(n):
+#                 #if at Row depth, we can put Q in Col, we change Board[depth] to col, and append the corresponding String
+#                 if check(depth, col):
+#                     #the following doesnot influence later Board' check, because the check only check before depth Row of Board, and the for col in range(n) will check every 0:n-1 for each upper layer
+#                     Board[depth] = col
+#                     dfs(depth+1, lst+[String[0:col]+'Q'+String[col+1:]],n)
+		
+#         def check(depth, col):
+#             for row in range(depth):
+#                 if Board[row] ==col or abs(depth-row) == abs(Board[row]-col):
+#                     return False
+#             return True
+	
+#         Board = [-1]*n
+#         String = '.'*n
+#         Res = []
+#         #depth is from 0 to n-1, when =n, stop
+#         depth = 0
+#         lst = []
+#         dfs(depth, lst,n)
+#         return Res
+
+# if __name__ == '__main__':
+# 	sk  = Solution()
+# 	sk.solveNQueens(5)
 # 52. N-Queens II My Submissions Question
 # Total Accepted: 40139 Total Submissions: 104819 Difficulty: Hard
 # Follow up for N-Queens problem.
@@ -312,6 +438,7 @@
 # if __name__ == '__main__':
 # 	sk = Solution()
 # 	print sk.restoreIpAddresses("010010")
+# 	print sk.restoreIpAddresses("00")
 
 # 39. Combination Sum My Submissions Question
 # Total Accepted: 78729 Total Submissions: 263128 Difficulty: Medium
@@ -354,10 +481,44 @@
 # 			else:
 # 				continue
 
+##this problem is actually very hard here for the position part for debugging!!!
+#generally two ways to add results: return and use for loop and then return, 
+# or keep a list, and whenever reach the end, change the list/dict accordingly
+# class Solution(object):
+# 	def combinationSum(self, candidates, target):
+# 		"""
+# 		:type candidates: List[int]
+# 		:type target: int
+# 		:rtype: List[List[int]]
+# 		"""
+# 		#sort and remove duplicate numbers first
+# 		lst = sorted(list(set(candidates)))
+# 		res = []
+# 		self.dfs(lst, target, [], res)
+# 		return res
+		
+# 	def dfs(self, lst, target, seq, res):
+# 		# print lst, target
+# 		# print 'seq is', seq
+# 		n = len(lst)
+# 		if n==0 or target<=0:
+# 			return
+# 		#the for loop position here is so important!
+# 		for i in range(n):
+# 			if lst[i] == target:
+# 				res.append(seq+[lst[i]])
+# 				break
+# 			elif lst[i]> target:
+# 				break
+# 			elif lst[i]< target:
+# 				self.dfs(lst[i:], target-lst[i], seq+[lst[i]], res)
+# 		return 
 # if __name__ == '__main__':
 # 	sk=Solution()
 # 	print sk.combinationSum([2,3,6,7],7)
+# 	# print sk.combinationSum([1,1,1],2)
 
+	
 # 40. Combination Sum II My Submissions Question
 # Total Accepted: 59648 Total Submissions: 222533 Difficulty: Medium
 # Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
@@ -461,13 +622,41 @@
 # 					#you have to maintain a list for using purpose, rather than a range(1,10)
 # 					#in this way, it will shrinked via dfs and you would get the right answer
 # 					#setc[i:](would produce duplicate number in the set) VS setc[i+1](would produce non-duoplicate-number answer in the result)
-# 					self.dfs(k-1, n-setc[i], lst+[setc[i]], res, setc[i:])
+# 					self.dfs(k-1, n-setc[i], lst+[setc[i]], res, setc[i+1:])
+# 					# self.dfs(k-1, n-setc[i], lst+[setc[i]], res, setc[i:])
 # 				#if n== or <, then there would be no answer for the following
 # 				else: break
 
 # if __name__ == '__main__':
 # 	sk=Solution()
 # 	print sk.combinationSum3(3,9)
+
+# class Solution(object):
+# 	def combinationSum3(self, k, n):
+# 		"""
+# 		:type k: int
+# 		:type n: int
+# 		:rtype: List[List[int]]
+# 		"""
+# 		#dfs, using starting number from 1 to 9 or not
+# 		#not using binary tree/exponential search
+# 		def dfs(can, target, k, seq):
+# 			n = len(can)
+# 			if n==0 or k<=0 or target<=0: return
+			
+# 			for i in range(n):
+# 				if can[i]==target:
+# 					if k==1: res.append(seq+[target])
+# 					else: break
+# 				elif can[i]>target:
+# 					break
+# 				else: #can[i]<target
+# 					dfs(can[i+1:], target-can[i], k-1, seq+[can[i]])
+# 		can = range(1,10)
+# 		res =[]
+# 		dfs(can, n, k, [])
+# 		return res
+
 
 # 22. Generate Parentheses My Submissions Question
 # Total Accepted: 76174 Total Submissions: 214866 Difficulty: Medium
@@ -501,6 +690,32 @@
 # 		res = []
 # 		self.binaryTree_dfs(n,n,'',res)
 # 		return res  
+
+# class Solution(object):
+# 	def generateParenthesis(self, n):
+# 		"""
+# 		:type n: int
+# 		:rtype: List[str]
+# 		"""
+# 		def dfs(seq, lnum, rnum):
+# 			if lnum>rnum: return
+# 			if rnum==0:
+# 				res.append(seq)
+# 				return
+# 			if lnum>=1:    
+# 				dfs(seq+'(', lnum-1, rnum)
+# 			if rnum>=1:    	
+# 				dfs(seq+')', lnum, rnum-1)
+# 			#you can coding like following, but the above is preffered!
+# 			# # if rnum>=1:    	
+# 			# dfs(seq+')', lnum, rnum-1)
+		
+# 		res =[]
+# 		dfs('', n, n)
+# 		return res
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.generateParenthesis(3)
 
 # 37. Sudoku Solver My Submissions Question
 # Total Accepted: 44889 Total Submissions: 187041 Difficulty: Hard
@@ -615,6 +830,69 @@
 #   ['A','D','E','E']
 # ], "ABCCED")
 
+
+# class Solution(object):
+# 	def exist(self, board, word):
+# 		"""
+# 		:type board: List[List[str]]
+# 		:type word: str
+# 		:rtype: bool
+# 		"""
+# 		def dfs(board, visit,i,j,m,n, lst):
+# 			#lst is new-cutted lst, visit is a reference, board is refernce
+# 			if len(lst)==0: return True
+# 			ix,iy=i,j
+# 			# print visit
+# 			if ix-1>=0 and board[ix-1][iy] == lst[0] and visit[ix-1][iy]!=1:
+# 				visit[ix-1][iy] = 1
+# 				if dfs(board, visit, ix-1, iy,m,n, lst[1:]): return True
+# 				else: visit[ix-1][iy]=0 
+# 			if ix+1<=m-1 and board[ix+1][iy] == lst[0] and visit[ix+1][iy]!=1:
+# 				visit[ix+1][iy] = 1
+# 				if dfs(board, visit, ix+1, iy,m,n, lst[1:]): return True
+# 				else: visit[ix+1][iy]=0 
+# 			if iy-1>=0 and board[ix][iy-1] == lst[0] and visit[ix][iy-1]!=1:
+# 				visit[ix][iy-1] = 1
+# 				if dfs(board, visit, ix, iy-1,m,n, lst[1:]): return True
+# 				else: visit[ix][iy-1]=0 
+# 			if iy+1<=n-1 and board[ix][iy+1] == lst[0] and visit[ix][iy+1]!=1:
+# 				visit[ix][iy+1] = 1
+# 				if dfs(board, visit, ix, iy+1,m,n, lst[1:]): return True
+# 				else: visit[ix][iy+1]=0       
+# 			# visit[ix-1][iy]=0 
+# 			return False
+				   
+					
+			
+# 		lst = list(word)
+# 		if len(lst)==0: return True
+# 		#lst limit here?
+# 		m = len(board)
+# 		if m==0: return False
+# 		n = len(board[0])
+# 		if n==0: return False
+# 		visit = [[0 for j in range(n)] for i in range(m)]
+		
+# 		for i in range(m):
+# 			for j in range(n):
+# 				if board[i][j] == lst[0]:
+# 					visit[i][j]=1
+# 					res = dfs(board, visit, i,j,m,n,lst[1:])
+# 					if res: return True
+# 					else:
+# 						visit[i][j]=0
+# 						continue
+# 		# print 'visit board finally is', visit
+# 		return False
+
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.exist([
+#   ['A','B','C','E'],
+#   ['S','F','C','S'],
+#   ['A','D','E','E']
+# ], "ABCCED")
+		
 # 212. Word Search II My Submissions Question
 # Total Accepted: 14961 Total Submissions: 82885 Difficulty: Hard
 # Given a 2D board and a list of words from the dictionary, find all words in the board.
@@ -634,46 +912,50 @@
 # Note:
 # You may assume that all inputs are consist of lowercase letters a-z.
 
-class Solution(object):
-	def findWords(self, board, words):
-		"""
-		:type board: List[List[str]]
-		:type words: List[str]
-		:rtype: List[str]
-		"""
-		def dfs(board, i, j, word,m,n):
-			if len(word)<=1: return True
-			#you can go in, then board[i][j]= word[0]
-			tmp=board[i][j]
-			board[i][j]='*'
-			if i-1>=0 and board[i-1][j] == word[1] and dfs(board,i-1,j,word[1:],m,n):
-				return True
-			if i+1<=m-1 and board[i+1][j] == word[1] and dfs(board,i+1,j,word[1:],m,n):
-				return True	
-			if j+1<=n-1 and board[i][j+1] == word[1] and dfs(board,i,j+1,word[1:],m,n):
-				return True		
-			if j-1>=0 and board[i][j-1] == word[1] and dfs(board,i,j-1,word[1:],m,n):
-				return True			
-			board[i][j] = tmp
-			return False
+# class Solution(object):
+# 	def findWords(self, board, words):
+# 		"""
+# 		:type board: List[List[str]]
+# 		:type words: List[str]
+# 		:rtype: List[str]
+# 		"""
+# 		def dfs(board, i, j, word,m,n):
+# 			if len(word)<=1: return True
+# 			#you can go in, then board[i][j]= word[0]
+# 			tmp=board[i][j]
+# 			board[i][j]='*'
+# 			if i-1>=0 and board[i-1][j] == word[1] and dfs(board,i-1,j,word[1:],m,n):
+# 				board[i][j] = tmp
+# 				return True
+# 			if i+1<=m-1 and board[i+1][j] == word[1] and dfs(board,i+1,j,word[1:],m,n):
+# 				board[i][j] = tmp
+# 				return True	
+# 			if j+1<=n-1 and board[i][j+1] == word[1] and dfs(board,i,j+1,word[1:],m,n):
+# 				board[i][j] = tmp
+# 				return True		
+# 			if j-1>=0 and board[i][j-1] == word[1] and dfs(board,i,j-1,word[1:],m,n):
+# 				board[i][j] = tmp
+# 				return True			
+# 			board[i][j] = tmp
+# 			return False
 
 
-		m=len(board)
-		n=len(board[0])
-		res=[]
-		#cannot pass timelimit for longer words list,
-		#need better pruning for this
-		for word in words:
-			board_new=copy.deepcopy(board)
-			for i in range(m):
-				for j in range(n):
-					if board_new[i][j] == word[0]:
-						if dfs(board_new,i,j,word,m,n):
-							res.append(word)
-		return res
+# 		m=len(board)
+# 		n=len(board[0])
+# 		res=[]
+# 		#cannot pass timelimit for longer words list,
+# 		#need better pruning for this
+# 		for word in words:
+# 			# board_new=copy.deepcopy(board)
+# 			for i in range(m):
+# 				for j in range(n):
+# 					if board_new[i][j] == word[0]:
+# 						if dfs(board_new,i,j,word,m,n):
+# 							res.append(word)
+# 		return list(set(res))
 
 
 
 
 
-#         		                                                                
+# #         		                                                                

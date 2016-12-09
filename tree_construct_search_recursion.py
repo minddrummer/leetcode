@@ -1,3 +1,63 @@
+class TreeNode(object):
+	def __init__(self, val):
+		self.val = val
+		self.left = None
+		self.right = None
+
+class Tree:
+	def serialize(self, root):
+		"""Encodes a tree to a single string.
+		
+		:type root: TreeNode
+		:rtype: str
+		"""
+		if root is None: return '{}'
+		queue = [root]
+		idx=0
+		
+		while idx<len(queue):
+			curNode = queue[idx]
+			if curNode:
+				queue.append(curNode.left)
+				queue.append(curNode.right)
+			idx+=1
+		while queue[-1] is None: queue.pop(-1)
+		
+		return '{%s}' %','.join([str(node.val) if node else '#' for node in queue])
+
+
+	def deserialize(self, data):
+		"""Decodes your encoded data to tree
+		:type data: str
+		:rtype: TreeNode
+		"""
+		data = data.strip('\n')
+		if data=='{}': return None
+		lst = data[1:-1].split(',')
+		root=TreeNode(int(lst[0]))
+		head=root
+		queue=[root]
+		
+		idx=1
+		nextQ = []
+		while queue and idx<len(lst):
+			curNode=queue.pop(0)
+			if lst[idx] != '#':
+				leftNode = TreeNode(int(lst[idx]))
+				curNode.left = leftNode
+				nextQ.append(leftNode)
+			
+			idx+=1
+			if idx<len(lst) and lst[idx]!='#':
+				rightNode = TreeNode(int(lst[idx]))
+				curNode.right=rightNode
+				nextQ.append(rightNode)
+			
+			idx+=1    
+			if not queue:
+				queue=nextQ
+				nextQ=[]
+		return head
 # 105. Construct Binary Tree from Preorder and Inorder Traversal My Submissions Question
 # Total Accepted: 54633 Total Submissions: 197179 Difficulty: Medium
 # Given preorder and inorder traversal of a tree, construct the binary tree.
@@ -11,6 +71,33 @@
 # #         self.val = x
 # #         self.left = None
 # #         self.right = None
+# O(n)
+# class Solution(object):
+# 	def buildTree(self, preorder, inorder):
+# 		"""
+# 		:type preorder: List[int]
+# 		:type inorder: List[int]
+# 		:rtype: TreeNode
+# 		"""
+# 		inD = {inorder[i]:i for i in range(len(inorder))}
+# 		if len(preorder)==0: return None
+# 		root = self.dfs(inD, preorder, 0, len(preorder)-1, 0, len(preorder)-1)
+# 		return  root
+		
+# 	def dfs(self, inD, preorder, pre1, pre2, in1, in2):
+# 		if pre1>pre2: return None
+# 		if pre1==pre2: return TreeNode(preorder[pre1])
+# 		root = TreeNode(preorder[pre1])
+# 		pos0 = inD[preorder[pre1]]
+# 		root.left = self.dfs(inD, preorder, pre1+1, pre1+pos0-in1, in1, pos0-1)
+# 		root.right = self.dfs(inD, preorder,pre2-(in2-pos0)+1, pre2, pos0+1, in2)
+# 		return root
+
+# if __name__ == '__main__':
+# 	# tree= Tree()	    
+# 	# root = tree.deserialize('[1,2]')
+# 	test = Solution()
+# 	print test.buildTree([1,2],[2,1])
 
 # class Solution(object):
 # 	def buildTree(self, preorder, inorder):
@@ -68,6 +155,31 @@
 # 		root.right = right
 # 		return root
 
+# O(n)
+# class Solution(object):
+# 	def buildTree(self, inorder, postorder):
+# 		"""
+# 		:type inorder: List[int]
+# 		:type postorder: List[int]
+# 		:rtype: TreeNode
+# 		"""
+# 		n = len(inorder)
+# 		if n==0: return None
+# 		inDct = {inorder[i]:i for i in range(n)}
+		
+# 		root = self.dfs(inDct, postorder, 0, n-1, 0, n-1)
+# 		return root
+	
+# 	def dfs(self, inDct, postorder, post1, post2, in1, in2):
+# 	    if post1>post2: return None
+# 	    root = TreeNode(postorder[post2])
+# 	    if post1==post2: return root
+		
+# 	    pos0 = inDct[postorder[post2]]
+# 	    root.left =  self.dfs(inDct, postorder, post1, post1+pos0-in1-1, in1, pos0-1)
+# 	    root.right = self.dfs(inDct, postorder, post1+pos0-in1, post2-1, pos0+1, in2)
+# 	    return root
+
 # 96. Unique Binary Search Trees My Submissions Question
 # Total Accepted: 73389 Total Submissions: 200409 Difficulty: Medium
 # Given n, how many structurally unique BST's (binary search trees) that store values 1...n?
@@ -107,7 +219,22 @@
 #         	count += self.count(i)*self.count(n-1-i)
 #         dct[n] = count
 #         return count
-
+# class Solution(object):
+#     def numTrees(self, n):
+#         """
+#         :type n: int
+#         :rtype: int
+#         """
+#         dp = [-1 for i in range(n+1)]
+#         dp[0]=1
+#         dp[1]=1
+		
+#         for i in range(2,n+1):
+#             count = 0
+#             for j in range(0,i):
+#                 count += dp[j]*dp[i-1-j]
+#             dp[i] = count
+#         return dp[n]
 
 # 95. Unique Binary Search Trees II My Submissions Question
 # Total Accepted: 48514 Total Submissions: 168626 Difficulty: Medium
@@ -163,29 +290,43 @@
 # confused what "{1,#,2,3}" means? > read more on how binary tree is serialized on OJ.
 # Subscribe to see which companies asked this question
 
-# # Definition for a binary tree node.
-# # class TreeNode(object):
-# #     def __init__(self, x):
-# #         self.val = x
-# #         self.left = None
-# #         self.right = None
 # class Solution(object):
-# 	def isValidBST(self, root):
-# 		"""
-# 		:type root: TreeNode
-# 		:rtype: bool
-# 		"""
-# 		#recursion
-# 		#2**32 interger, by half, so it is 2**31+1, -2**31-1
-# 		return self.help(root, -2147483649, 2147483648)
-
-# 	def help(self, root, minv, maxv):
-# 		if root is None: return True
-# 		if root.val<= minv or root.val>= maxv: return False
-# 		return self.help(root.left, minv, min(root.val,maxv)) and self.help(root.right,  max(root.val, minv),  maxv)
-# 		#or NO need to add max() and min because the BST's attributes!!
-# 		return self.help(root.left, minv, root.val) and self.help(root.right,  root.val,  maxv)
-
+	# def isValidBST(self, root):
+	#     """
+	#     :type root: TreeNode
+	#     :rtype: bool
+	#     """
+	#     if root is None: return True
+	#     res = self.dfs(root)
+	#     if not res: return False
+	#     else: return True
+		
+	# def dfs(self, root):
+	#     if root.left:
+	#         resL = self.dfs(root.left)
+	#         if not resL: return False
+	#         else:
+	#             if root.val <= resL[1]: return False
+	#             else: minRoot = resL[0]
+	#     else:
+	#         minRoot = root.val
+	#     if root.right:
+	#         resR = self.dfs(root.right)
+	#         if not resR: return False
+	#         else:
+	#             if root.val >= resR[0]: return False
+	#             else: maxRoot = resR[1]
+	#     else:
+	#         maxRoot = root.val
+	#     return [minRoot, maxRoot]
+	# def isValidBST(self, root):
+	#     return self.help(root, float('-inf'), float('inf'))
+		
+	# def help(self, root, minv, maxv):    
+	#     if root is None: return True
+	#     if root.val <= minv or root.val>=maxv: return False
+	#     return self.help(root.left, minv, root.val) and self.help(root.right, root.val, maxv)
+					
 
 # 108. Convert Sorted Array to Binary Search Tree My Submissions Question
 # Total Accepted: 65801 Total Submissions: 182262 Difficulty: Medium
@@ -194,7 +335,7 @@
 
 # # Show Tags
 # # Show Similar Problems
-class Solution(object):
+# class Solution(object):
 	# def sortedArrayToBST(self, nums):
 	#     """
 	#     :type nums: List[int] #the ele are sorted in ascending order
@@ -226,6 +367,7 @@ class Solution(object):
 	# 	root.right=self.help(nums, half+1, end)
 	# 	return root
 
+
 	#it seems that python's one function will directly go up one level-environment
 	#not to the environment that directly calls it(within another function)??
 	#that is the reason why if you want to refer to mutable object, you need to pass it as one argument
@@ -247,7 +389,22 @@ class Solution(object):
 	# 	root.left=self.help(start, half-1)
 	# 	root.right=self.help(half+1, end)
 	# 	return root		
+
+# class Solution(object):
+#     def sortedArrayToBST(self, nums):
+#         """
+#         :type nums: List[int]
+#         :rtype: TreeNode
+#         """
+#         n = len(nums)
+#         if n ==0: return None
+#         if n==1: return TreeNode(nums[0])
 		
+#         half = n/2
+#         root = TreeNode(nums[half])
+#         root.left = self.sortedArrayToBST(nums[:half])
+#         root.right = self.sortedArrayToBST(nums[half+1:])
+#         return root		
 
 # 109. Convert Sorted List to Binary Search Tree My Submissions Question
 # Total Accepted: 61915 Total Submissions: 209249 Difficulty: Medium
@@ -302,6 +459,35 @@ class Solution(object):
 		
 # 		return parent
 
+# class Solution(object):
+#     def sortedListToBST(self, head):
+#         """
+#         :type head: ListNode
+#         :rtype: TreeNode
+#         """
+#         if head is None: return None
+#         if head.next is None: return TreeNode(head.val)
+		
+#         quick = head.next
+#         slow = head
+		
+#         while quick.next:
+#             quick = quick.next
+#             if quick.next: 
+#                 quick = quick.next
+#                 slow = slow.next
+		
+#         cur = slow.next
+#         next =  cur.next if cur.next else None
+#         slow.next = None
+		
+#         root = TreeNode(cur.val)
+#         leftNode = self.sortedListToBST(head)
+#         rightNode = self.sortedListToBST(next)
+#         root.left = leftNode
+#         root.right = rightNode
+#         return root
+
 # 111. Minimum Depth of Binary Tree My Submissions Question
 # Total Accepted: 90598 Total Submissions: 301463 Difficulty: Easy
 # Given a binary tree, find its minimum depth.
@@ -333,7 +519,18 @@ class Solution(object):
 #     		return self.minDepth(root.right) + 1
 #     	else:	
 #     		return min(self.minDepth(root.right), self.minDepth(root.left)) + 1
-		
+# class Solution(object):
+#     def minDepth(self, root):
+#         """
+#         :type root: TreeNode
+#         :rtype: int
+#         """
+#         if root is None: return 0
+#         if root.left and root.right:
+#             return 1 + min(self.minDepth(root.right), self.minDepth(root.left))
+#         else:
+#             return 1 + max(self.minDepth(root.right), self.minDepth(root.left))
+				
 
 
 # 104. Maximum Depth of Binary Tree My Submissions Question
@@ -370,7 +567,7 @@ class Solution(object):
 # Show Tags
 # Show Similar Problems
 
-class Solution:
+# class Solution:
 	# @param {TreeNode} root
 	# @param {integer} sum
 	# @return {boolean}
@@ -634,42 +831,57 @@ class Solution:
 # #         self.left = None
 # #         self.right = None
 
-class Solution(object):
-	#if you want a int to be accessed by all the def function, we create
-	# a class attribute!!!!
-	# Solution.max = None---Not this one!!
-	max = None
-	def maxPathSum(self, root):
-		"""
-		:type root: TreeNode
-		:rtype: int
-		"""         
-		if root is None: return 0
-		Solution.max = root.val
-		self.dfs(root)
-		return Solution.max
+# class Solution(object):
+# 	#if you want a int to be accessed by all the def function, we create
+# 	# a class attribute!!!!
+# 	# Solution.max = None---Not this one!!
+# 	max = None
+# 	def maxPathSum(self, root):
+# 		"""
+# 		:type root: TreeNode
+# 		:rtype: int
+# 		"""         
+# 		if root is None: return 0
+# 		Solution.max = root.val
+# 		self.dfs(root)
+# 		return Solution.max
 
-	def dfs(self, root):
-		if root is None: return 0
-		# if root.left:
-		left=self.dfs(root.left)
-		# if root.right:
-		right=self.dfs(root.right)
-		total = root.val
-		if left>0: total += left
-		if right>0: total += right
-		#tracking Solution.max
-		Solution.max = max(Solution.max, total)
-		#return half subtree, or only the root value no matter what
-		if max(left, right)>0:
-			return max(left, right) + root.val
-		else:
-			return root.val
-	
+# 	def dfs(self, root):
+# 		if root is None: return 0
+# 		# if root.left:
+# 		left=self.dfs(root.left)
+# 		# if root.right:
+# 		right=self.dfs(root.right)
+# 		total = root.val
+# 		if left>0: total += left
+# 		if right>0: total += right
+# 		#tracking Solution.max
+# 		Solution.max = max(Solution.max, total)
+# 		#return half subtree, or only the root value no matter what
+# 		if max(left, right)>0:
+# 			return max(left, right) + root.val
+# 		else:
+# 			return root.val
 
-
-
-
-
-
-
+# class Solution(object):
+# 	def maxPathSum(self, root):
+# 		"""
+# 		:type root: TreeNode
+# 		:rtype: int
+# 		"""         
+# 		self.max = float('-inf')
+# 		if root is None: return 0
+# 		self.dfs(root)
+# 		return self.max
+		
+# 	def dfs(self, root):
+# 		if root is None: return 0
+# 		total = root.val
+# 		left = self.dfs(root.left)
+# 		right = self.dfs(root.right)
+		
+# 		total += max(left,0)
+# 		total += max(right,0)
+# 		self.max = max(self.max, total)
+		
+# 		return root.val+ max(0, max(left,right))

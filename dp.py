@@ -55,6 +55,27 @@
 # the contiguous subarray [4,-1,2,1]has the largest sum = 6
 # click to show more practice.
 # Subscribe to see which companies asked this question
+# class Solution(object):
+# 	def maxSubArray(self, nums):
+# 		"""
+# 		:type nums: List[int]
+# 		:rtype: int
+# 		"""
+# 		'''first research on different conditions and make it clear and logic, and then
+# 		refine the code for brief and beautifulness
+# 		1)for different conditions os sucSum+xi >0 or <=0; 2)and then for sucSum<=0 and >0'''
+# 		n = len(nums)
+# 		if n==0: return None
+		
+# 		total = nums[0]
+# 		sucSum = nums[0]
+# 		for i in range(1,n):
+# 			if sucSum+nums[i]>0:
+# 				sucSum = sucSum + nums[i] if sucSum>0 else nums[i]
+# 			else:
+# 				sucSum = nums[i]				
+# 			total = max(total, sucSum)
+# 		return total
 
 # class Solution(object):
 # 	def maxSubArray(self, nums):
@@ -62,29 +83,34 @@
 # 		:type nums: List[int]
 # 		:rtype: int
 # 		"""
-		#greedy method
-		#add all positive from the beginning, if at some point, the total is <0, that means until this part
-		#there is no contribution to the final result, so reset total = 0
-		# total = 0
-		# cur_max = max(nums)
-		# for i in nums:
-		# 	total += i
-		# 	if total > cur_max: cur_max = total
-		# 	if total >0: continue
-		# 	else: total = 0
-		# return cur_max
+# 		greedy method
+# 		add all positive from the beginning, if at some point, the total is <0, that means until this part
+# 		there is no contribution to the final result, so reset total = 0
+# 		total = 0
+# 		cur_max = max(nums)
+# 		for i in nums:
+# 			total += i
+# 			if total > cur_max: cur_max = total
+# 			if total >0: continue
+# 			else: total = 0
+# 		return cur_max
 		
-		#dp method:
-		#we set--restrict set the array[j] -- as the max arrary that ends with array[j]
-		#and we know that at least one of the array would be the final result--because you have to end with one element of the array
-		# n=len(nums)
-		# if n==0: return 0
-		# f = nums[0]
-		# res = f
-		# for i in range(1, n):
-		# 	f = max(f+nums[i], nums[i])
-		# 	res= max(res, f)
-		# return res
+# 		dp method:
+# 		we set--restrict set the array[j] -- as the max arrary that ends with array[j]
+# 		and we know that at least one of the array would be the final result--because you have to end with one element of the array
+# 		n=len(nums)
+# 		if n==0: return 0
+# 		f = nums[0]
+# 		res = f
+# 		for i in range(1, n):
+# 			f = max(f+nums[i], nums[i])
+# 			res= max(res, f)
+# 		return res
+
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.maxSubArray([-2,1,-3,4,-1,2,1,-5,4])
+
 
 # 132. Palindrome Partitioning II My Submissions Question
 # Total Accepted: 46174 Total Submissions: 217410 Difficulty: Hard
@@ -94,7 +120,7 @@
 # Return 1 since the palindrome partitioning ["aa","b"] could be produced using 1 cut.
 # Subscribe to see which companies asked this question
 # Show Tags
-# Show Similar Problems
+# # Show Similar Problems
 
 # class Solution(object):
 # 	def minCut(self, s):
@@ -102,7 +128,7 @@
 # 		:type s: str
 # 		:rtype: int
 # 		"""
-#		# self set index for myself, now has length of n for dp, not n+1
+# 		# self set index for myself, now has length of n for dp, not n+1
 # 		#dp problem
 # 		n=len(s)
 # 		#set all ele of is_pan to False first
@@ -112,18 +138,18 @@
 # 		#set dp's all element to the max of each first
 # 		#if you have n letters, the maximum cut is n-1
 # 		#why one cell more, and  add 1 to all?
-# 		dp = [i for i in range(n-1,-1,-1)] #save one dimension, about the min cut
+# 		dp = [i-1 for i in range(n,0,-1)] #save one dimension, about the min cut
 
 # 		for i in range(n-1, -1, -1):
 # 			#each outside loop check one i
 # 			for j in range(i, n):
 # 				# print i
 # 				#the string between i and  j is panlindrome or not
-# 				if s[i]==s[j] and (i+1>=j-1 or is_pan[i+1][j-1]):
+# 				if s[i]==s[j] and (i+1>j-1 or is_pan[i+1][j-1]):
 # 					is_pan[i][j]=True
 # 					#each outside loop check one i, and update only the i based on all the information we have done/computed
 # 					# print i,j+1
-# 					if j+1<=n-1:
+# 					if j==n-1:
 # 						dp[i] = min(dp[j+1]+1, dp[i])
 # 					else:
 # 						dp[i] = min(0, dp[i])
@@ -151,7 +177,7 @@
 # 		if m==0: return 0
 # 		n=len(matrix[0])
 # 		if n==0: return 0
-# 		array = [0 for j  in range(n+1)]
+# 		array = [0 for j  in range(n+1)] #add n+1 not n here to add 0 to each row, to make computing the area right
 # 		area = 0
 # 		for i in range(m):
 # 			for j in range(n):
@@ -183,7 +209,53 @@
 # 	# print sk.maximalRectangle([[0,1,0],[0,1,1],[0,1,0]])
 # 	print sk.maximalRectangle([1])
 
-
+# class Solution(object):
+# 	def maximalRectangle(self, matrix):
+# 		"""
+# 		:type matrix: List[List[str]]
+# 		:rtype: int
+# 		"""
+# 		n = len(matrix)
+# 		if n==0: return 0
+# 		m = len(matrix[0])
+# 		if m==0: return 0
+# 		adjArray = [0 for k in range(m)]
+# 		area = 0 
+# 		for i in range(n):
+# 			array = matrix[i]
+# 			adjArray = [adjArray[j]+1 if int(array[j])==1 else 0 for j in range(m)]
+# 			area = max(area, self.curArea(adjArray) )
+# 		return area
+		
+# 	def curArea(self, array):
+# 		'''compute the current area for the array using the filtering trick'''
+# 		val = array+[0]
+# 		# n = len(val)
+# 		indStack = []
+# 		heStack = []
+# 		area = 0
+# 		# print 'the array is', val
+# 		for i in range(len(val)):
+# 			if len(heStack)==0 or val[i]>= heStack[-1]:
+# 				indStack.append(i)
+# 				heStack.append(val[i])
+# 			else: 
+# 				while len(heStack)>0 and val[i]<heStack[-1]:
+# 					tmpHe = heStack.pop(-1)
+# 					tmpIdx = indStack.pop(-1) 
+# 					area = max(area, tmpHe*(i-tmpIdx))
+# 				#add i
+# 				heStack.append(val[i])
+# 				indStack.append(tmpIdx)
+# 		return area
+		
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	# print sk.maximalRectangle([[0,1,0],[0,1,1],[0,1,0]])
+# 	# print sk.maximalRectangle([[1]])
+# 	# print sk.maximalRectangle([[int(j) for j in i] for i in ["10100","10111","11111","10010"]]),'right:6'
+# 	# print sk.maximalRectangle([[0,1,0,0,0,0],[1,1,0,0,0,0],[1,1,1,1,1,1]]),'right:6'
+# 	print sk.maximalRectangle(["10100","10111","11111","10010"])
 
 # 123. Best Time to Buy and Sell Stock III My Submissions Question
 # Total Accepted: 51305 Total Submissions: 200248 Difficulty: Hard
@@ -203,6 +275,8 @@
 #         :type prices: List[int]
 #         :rtype: int
 #         """
+#         #because if transaction twice, then for an index, one happens before, and one happens after
+#         #forward and backward to reduce the computational cost
 #         #forward once and backward once, and get the value for each point
 #         #and count the sum of the backward and forward value in total, get the maximum
 #         n = len(prices)
@@ -211,12 +285,16 @@
 #         #forward count each index(including), and forward[0]=0
 #         valley = prices[0]
 #         for i in range(1,n):
+#         	#update valley value
 #         	valley=min(valley, prices[i])
+#         	#at each index, either it is the last gain value, or the current price value - valley, so take minimum
 #         	forward.append(max(prices[i]-valley, forward[-1]))
 #         peak = prices[-1]
 #         backward=[0]
 #         for i in range(n-2,-1,-1):
+#         	#when backward, updated peak
 #         	peak = max(peak, prices[i])
+#         	#at each index, either peak-current price, or last backward value, return max of them
 #         	backward.insert(0, max(peak-prices[i], backward[0]))
 #         print forward
 #         print backward	
@@ -255,6 +333,10 @@
 #         :type s3: str
 #         :rtype: bool
 #         """
+#         '''
+#         hard quesions are all 2-dimension dp Problems;
+#         sometimes  use space to exchange for time
+#         '''
 #         n1=len(s1)
 #         n2=len(s2)
 #         n3=len(s3)
@@ -320,7 +402,7 @@
 #       t   a
 # We say that "rgtae" is a scrambled string of "great".
 # Given two strings s1 and s2 of the same length, determine if s2 is a scrambled string of s1.
-# Subscribe to see which companies asked this question
+# # Subscribe to see which companies asked this question
 
 # class Solution(object):
 # 	def isScramble(self, s1, s2):
@@ -371,8 +453,45 @@
 # 	# print sk.isScramble('great','eatgr')		 
 # 	# print sk.isScramble('great','eatrg')
 # 	print sk.isScramble("abcdefghijklmn","efghijklmncadb")		 
-	# print sk.isScramble("ab","ba")		 
+# 	print sk.isScramble("ab","ba")		 
 
+# class Solution(object):
+# 	def isScramble(self, s1, s2):
+# 		"""
+# 		:type s1: str
+# 		:type s2: str
+# 		:rtype: bool
+# 		"""
+# 		#we use dfs here
+# 		#the problem here is that as long as it is divided substring, it will work
+# 		#not necessary to be around half
+# 		n1 = len(s1)
+# 		n2 = len(s2)
+# 		if n1 != n2: return False
+# 		if n1==0: return True
+# 		if n1==1 and s1!=s2: return False
+# 		if s1==s2: return True
+		
+# 		###prunning
+# 		dct={}
+# 		for i in range(n1):
+# 			if s1[i] in dct: dct[s1[i]] +=1
+# 			else: dct[s1[i]] = 1
+# 		for j in range(n2):
+# 			if s2[j] in dct: dct[s2[j]] -=1
+# 			else: return False
+# 		for key in dct:
+# 			if dct[key] != 0: return False
+			
+# 		#recursion
+# 		for i in range(1,n1):
+# 			if (self.isScramble(s1[0:i], s2[0:i]) and self.isScramble(s1[i:], s2[i:])) or (self.isScramble(s1[0:i], s2[-i:]) and self.isScramble(s1[i:], s2[:-i])):
+# 				return True
+			
+	   
+# 		#overall and afterall, return False     
+# 		return False     
+			
 
 # 64. Minimum Path Sum My Submissions Question
 # Total Accepted: 62940 Total Submissions: 184697 Difficulty: Medium
@@ -400,7 +519,27 @@
 #         	for i in range(1,n):
 #         		dp[j][i] = min(dp[j-1][i], dp[j][i-1])+grid[j][i]
 #        	return dp[-1][-1]
+
+# class Solution(object):
+# 	def minPathSum(self, grid):
+# 		"""
+# 		:type grid: List[List[int]]
+# 		:rtype: int
+# 		"""
+# 		m = len(grid)
+# 		if m==0: return 0
+# 		n = len(grid[0])
+# 		if n==0: return 0
+# 		dp = [[0 for j in range(n)] for i in range(m)]
+# 		dp[0][0] = grid[0][0]
+# 		for j in range(1,n): dp[0][j] = dp[0][j-1] + grid[0][j]
+# 		for i in range(1,m): dp[i][0] = dp[i-1][0] + grid[i][0]
 		
+# 		for j in range(1,m):
+# 		    for i in range(1,n):
+# 		        dp[j][i] = min(dp[j-1][i], dp[j][i-1]) + grid[j][i]
+# 		return dp[m-1][n-1]
+		    		
 
 # 72. Edit Distance My Submissions Question
 # Total Accepted: 52314 Total Submissions: 187031 Difficulty: Hard
@@ -489,7 +628,35 @@
 # 	print sk.numDecodings('123')
 # 	print sk.numDecodings('30')
 # 	print sk.numDecodings('0123')
-		
+
+# class Solution(object):
+#     def numDecodings(self, s):
+#         """
+#         :type s: str
+#         :rtype: int
+#         """
+#         #because of 0 to become illegal, there are more logic judgment in the code
+#         #the following is a much  better way, with clear logic
+#         n= len(s)
+#         if n==0: return 0
+#         if s[0]=='0': return 0 
+#         dp = [0  for i in range(n+1)]
+#         dp[0]=1 #index as 0, empty string here
+#         dp[1]=1
+        
+#         for i in range(2,n+1):
+#         	#if only count the current number
+#             part1=0
+#             if int(s[i-1]) ==0: part1 = 0
+#             else: part1 = dp[i-1]
+            
+#             #if count the current + the previous numbers
+#             part2=0
+#             if int(s[i-2])==1: part2 = dp[i-2]
+#             if int(s[i-2])==2 and int(s[i-1])<=6: part2 = dp[i-2]
+#             dp[i]= part1 + part2
+        
+#         return dp[-1]		
 
 # 115. Distinct Subsequences My Submissions Question
 # Total Accepted: 46914 Total Submissions: 166243 Difficulty: Hard
@@ -592,6 +759,48 @@
 # 	print sk.wordBreak('lll',set(['l']))
 # 	print sk.wordBreak('leetcode', set(['leet','code']))
 
+#more complicated way
+# class Solution(object):
+# 	def wordBreak(self, s, wordDict):
+# 		"""
+# 		:type s: str
+# 		:type wordDict: Set[str]
+# 		:rtype: bool
+# 		"""
+# 		n=len(s)
+# 		if n<=1: 
+# 		    if s in wordDict: return True
+# 		    else: return False
+# 		dp =[False for i in range(n)]
+# 		dp[0] = True if s[0] in wordDict else False
+		
+# 		for i in range(n):
+# 		    if s[:i+1] in wordDict: 
+# 		        dp[i] = True
+# 		        continue
+# 		    for j in range(i):
+# 		        if dp[j] and s[j+1:i+1] in wordDict:
+# 		            dp[i] = True
+# 		            break
+# 		return  dp[-1]
+#dfs can NOT pass time limit
+#dfs is computing backwarding
+#and dp is computing forwarding along the string
+# def wordBreak(self, s, wordDict):
+# 	    n = len(s)
+# 	    if n<=1: 
+# 	        if s in wordDict: return True
+# 	        else: return False
+# 	    #if length is n      
+# 	    if s in wordDict: return True
+# 	    for i in range(1,n):
+# 	        if s[:i] in wordDict:
+# 	            if self.wordBreak(s[i:], wordDict):
+# 	                return True
+# 	            else:
+# 	                continue
+# 	    return False   
+
 # 140. Word Break II My Submissions Question
 # Total Accepted: 50737 Total Submissions: 264698 Difficulty: Hard
 # Given a string s and a dictionary of words dict, add spaces in s to construct a sentence where each word is a valid dictionary word.
@@ -602,73 +811,77 @@
 # A solution is ["cats and dog", "cat sand dog"].
 # Subscribe to see which companies asked this question
 
-class Solution(object):
-	def wordBreak(self, s, wordDict):
-		"""
-		:type s: str
-		:type wordDict: Set[str]
-		:rtype: List[str]
-		"""
-		#this problem uses dfs + dp
-		#1.you can either save the dp two dimension first, and use it later
-		#2.you can dfs while pruning through dp checking
-		return self.dfs(s,wordDict)
+#comments: the words in dict can be repeated infinite times
+#the string s can only be segmented by space and by order
+#use dp + dfs to solve the problem
+#use dp to prune dfs to speed up
+# class Solution(object):
+# 	def wordBreak(self, s, wordDict):
+# 		"""
+# 		:type s: str
+# 		:type wordDict: Set[str]
+# 		:rtype: List[str]
+# 		"""
+# 		#this problem uses dfs + dp
+# 		#1.you can either save the dp two dimension first, and use it later
+# 		#2.you can dfs while pruning through dp checking
+# 		return self.dfs(s,wordDict)
 
-	def dyn_prog(self, s, wordDict):
-		n=len(s)
-		dp=[False for i in range(n+1)]
-		dp[0] = True
-		for i in range(1,n+1):
-			for j in range(i):
-				if dp[j] and s[j:i] in wordDict:				
-					dp[i] = True
-					break
-		return dp[-1]
+# 	def dyn_prog(self, s, wordDict):
+# 		n=len(s)
+# 		dp=[False for i in range(n+1)]
+# 		dp[0] = True
+# 		for i in range(1,n+1):
+# 			for j in range(i):
+# 				if dp[j] and s[j:i] in wordDict:				
+# 					dp[i] = True
+# 					break
+# 		return dp[-1]
 
-	def dfs(self, s, wordDict):
-		'''dfs method, run each loop'''
-		'''for dfs, you can either from bottom to up,like what I did here;
-		or top down, like use string as each result and keep as an class variable'''
-		if self.dyn_prog(s, wordDict):
-			res = []
-			if len(s)==0: return ['']
-			for i in range(1,len(s)+1):
-				if s[:i] in wordDict:
-					if i != len(s):
-						for item in self.dfs(s[i:], wordDict):
-							res.append(s[:i] + ' ' + item)
-					else:
-						for item in self.dfs(s[i:], wordDict):
-							res.append(s[:i] + item)
+# 	def dfs(self, s, wordDict):
+# 		'''dfs method, run each loop'''
+# 		'''for dfs, you can either from bottom to up,like what I did here;
+# 		or top down, like use string as each result and keep as an class variable'''
+# 		if self.dyn_prog(s, wordDict):
+# 			res = []
+# 			if len(s)==0: return ['']
+# 			for i in range(1,len(s)+1):
+# 				if s[:i] in wordDict:
+# 					if i != len(s):
+# 						for item in self.dfs(s[i:], wordDict):
+# 							res.append(s[:i] + ' ' + item)
+# 					else:
+# 						for item in self.dfs(s[i:], wordDict):
+# 							res.append(s[:i] + item)
 
-			return res
-		else:
-			return []
+# 			return res
+# 		else:
+# 			return []
 
 
-		#this will be exploded if there are too many options at the end
-		#n^2*n at least in some cases
-		# n = len(s)
-		# dp = [False for i in range(n+1)]
-		# dp[0] = True
-		# res = [[] for i in range(n+1)]
-		# res[0] = ['']
-		# for i in range(1, n+1):
-		# 	for j in range(i+1):
-		# 		if dp[j] and s[j:i] in wordDict:
-		# 			dp[i] = True
-		# 			for item in res[j]:
-		# 				if j==0:
-		# 					res[i].append(item + s[j:i])
-		# 				else:
-		# 					res[i].append(item + ' ' + s[j:i])
+# 		#this will be exploded if there are too many options at the end
+# 		#n^2*n at least in some cases
+# 		# n = len(s)
+# 		# dp = [False for i in range(n+1)]
+# 		# dp[0] = True
+# 		# res = [[] for i in range(n+1)]
+# 		# res[0] = ['']
+# 		# for i in range(1, n+1):
+# 		# 	for j in range(i+1):
+# 		# 		if dp[j] and s[j:i] in wordDict:
+# 		# 			dp[i] = True
+# 		# 			for item in res[j]:
+# 		# 				if j==0:
+# 		# 					res[i].append(item + s[j:i])
+# 		# 				else:
+# 		# 					res[i].append(item + ' ' + s[j:i])
 
-		# return res[-1]
+# 		# return res[-1]
 																										
-if __name__ == '__main__':
-	sk = Solution()
-	print sk.wordBreak("catsanddog", ["cat", "cats", "and", "sand", "dog"])
-	print sk.wordBreak("", ["cat", "cats", "and", "sand", "dog"])
+# if __name__ == '__main__':
+# 	sk = Solution()
+# 	print sk.wordBreak("catsanddog", ["cat", "cats", "and", "sand", "dog"])
+# 	print sk.wordBreak("", ["cat", "cats", "and", "sand", "dog"])
 
 
 

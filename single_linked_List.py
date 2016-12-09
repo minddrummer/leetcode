@@ -16,52 +16,29 @@
 #         self.next = None
 #classic question to check the listNode assign and value change, such as the following head and res match and diverge
 # class Solution(object):
-# 	def addTwoNumbers(self, l1, l2):
-# 		"""
-# 		:type l1: ListNode
-# 		:type l2: ListNode
-# 		:rtype: ListNode
-# 		"""
-# 		#should be TO(n), SO(1)
-# 		up = False
-# 		head1=l1
-# 		head2=l2
-# 		#object is mutable, so the change of res's attributes would change the head's attributes
-# 		#now head and res refer to the same object, change res's partial attributes would change head's partial attributes
-# 		#but when you refer res to another object, the two would diverge, and change res would NOT change head
-# 		head = ListNode(0) 
-# 		res = head
-# 		while head1 is not None or head2 is not None:
-# 			each_digit=0
-# 			if head1 is not None:
-# 				each_digit += head1.val
-# 			if head2 is not None:
-# 				each_digit += head2.val
-# 			each_digit += up
-
-# 			if each_digit<10:
-# 				up=False
-# 				res.next = ListNode(each_digit)
-# 				#here we assign res to another ListNode, and head and res now diverge
-# 				res= res.next
-# 				if head1 is not None:
-# 					head1=head1.next
-# 				if head2 is not None:
-# 					head2=head2.next
-# 			else:
-# 				up=True
-# 				res.next=ListNode(each_digit-10)
-# 				res=res.next
-# 				if head1 is not None:
-# 					head1=head1.next
-# 				if head2 is not None:
-# 					head2=head2.next
-# 		#bugs here: there might be still one up left needed to be dealed with
-# 		if up == True:
-# 			res.next = ListNode(1)    		
-# 		return head.next
+#     def addTwoNumbers(self, l1, l2):
+#         """
+#         :type l1: ListNode
+#         :type l2: ListNode
+#         :rtype: ListNode
+#         """
+#         pre = ListNode(0)
+#         head = pre
+#         up = False
+#         while l1 or l2:
+#             res = 0
+#             if l1: res += l1.val
+#             if l2: res += l2.val
+#             res += up
+#             up = True if res>=10 else False
+#             cur = ListNode(res%10)
+#             pre.next = cur
+#             pre = cur
+#             l1 = l1.next if l1 else None
+#             l2 = l2.next if l2 else None
+#         if up: pre.next = ListNode(1)
+#         return head.next
 			
-
 
 # 92. Reverse Linked List II My Submissions Question
 # Total Accepted: 59214 Total Submissions: 221428 Difficulty: Medium
@@ -74,80 +51,44 @@
 # 1 <=m <= n <= length of list.
 # Subscribe to see which companies asked this question
 
-# class Solution:
-# 	# @param head, a ListNode
-# 	# @param m, an integer
-# 	# @param n, an integer
-# 	# @return a ListNode
-# 	def reverseBetween(self, head, m, n):
-# 		#time2
-# 		#you go through the list, and when start from m, just reverse the direction, and finally attach m and n
-# 		#boundary problems here:
-# 		if head is None or m==n: return head
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+# class Solution(object):
+#     def reverseBetween(self, head, m, n):
+#         """
+#         :type head: ListNode
+#         :type m: int
+#         :type n: int
+#         :rtype: ListNode
+#         """
+#         if head is None: return None
+#         head0 = ListNode(0)
+#         head0.next = head
+#         cutNode = head0
 		
-# 		res = ListNode(0)
-# 		res.next = head
-# 		pos = 1
-# 		while pos<m-1:
-# 			#after this loop, pos would be the m-1 position, that is where the previous before to start to reverse the Node
-# 			#and head would be the m-1 th Node
-# 			head = head.next
-# 			pos +=1
-# 		#now reverse the linked of the following node from head
-# 		#intiate the following loop
-# 		#liucun
-# 		if m!=1:
-# 			pre_m_Node = head
-# 			head = head.next
-# 			pos += 1
-# 			nextNode=head.next
-# 			#liucun
-# 			m_Node = head
-# 		else:
-# 			nextNode=head.next
-# 			m_Node = head
-# 		#it is ok now for m_node linked to its next,and its  next to itself
-# 		while pos<n: #can NOt be n, otherwise will be bug becaues of NULL
-# 			#suppose now head alreay points to a different node, not nextNode
-# 			#head, head1, head2
-# 			tmp = nextNode.next
-# 			nextNode.next=head
-# 			head=nextNode
-# 			nextNode=tmp
-# 			pos+=1
-# 		#at the n-th, head now is the nth, nextNode is the n+1 th
-# 		if m!=1:
-# 			pre_m_Node.next = head
-# 			m_Node.next = tmp
-# 		else:
-# 			res.next=head
-# 			m_Node.next=tmp
-# 		return res.next
-		# time1
-#         if head == None or head.next == None:
-#             return head
-
-#         dummy = ListNode(0)
-#         dummy.next = head
-
-#         pre = dummy
-#         cur = head
-#         for i in range(m-1):
-#             pre = cur
-#             cur = cur.next	
-#         if cur is not None:
-#             p1 = cur.next
-#         if p1 is not None:
-#             p2 = p1.next
-#         for i in range(n-m):
-#             p1.next = cur
-#             cur = p1
-#             p1 = p2
-#             if p2 is not None:
-#                 p2 = p2.next		
-#         pre.next.next = p1
-#         pre.next = cur
-#         return dummy.next
+#         pos = 1
+#         while pos<=n:
+#             if pos<m: 
+#                 cutNode = head
+#                 head = head.next
+#             if pos==m:
+#                 preNode = startNode = head
+#                 head = head.next
+#             if pos>m:
+#                 tmp = head.next
+#                 head.next = preNode
+#                 preNode = head
+#                 head = tmp
+#             pos += 1
+		
+#         startNode.next = head
+#         cutNode.next =  preNode
+#         return head0.next
+		
 
 
 
@@ -197,7 +138,31 @@
 #        	p1.next=head2.next
 #        	return head1.next
 
-
+# class Solution(object):
+#     def partition(self, head, x):
+#         """
+#         :type head: ListNode
+#         :type x: int
+#         :rtype: ListNode
+#         """
+#         if head is None: return None
+#         less0 = less = ListNode(0)
+#         more0 = more = ListNode(0)
+		
+#         while head:
+#             if head.val>=x:
+#                 more.next = head
+#                 more = head
+#                 head = head.next
+				
+#             else:
+#                 less.next = head
+#                 less = head
+#                 head = head.next
+#         less.next = more0.next
+#         more.next = None
+#         return less0.next
+		
 # 83. Remove Duplicates from Sorted List My Submissions Question
 # Total Accepted: 92337 Total Submissions: 259503 Difficulty: Easy
 # Given a sorted linked list, delete all duplicates such that each element appear only once.
@@ -304,7 +269,38 @@
 # 				node0.next=head.next
 # 				head = head.next
 # 		return res.next
-
+# class Solution(object):
+#     def deleteDuplicates(self, head):
+#         """
+#         :type head: ListNode
+#         :rtype: ListNode
+#         """
+#         if head is None: return head
+#         dum = ListNode(float('-inf'))
+#         dum.next = head
+		
+#         #initialization
+#         pre0, pre1 = dum, head
+#         head = head.next
+#         dup = False
+		
+#         #main loop
+#         while head:
+#             if head.val == pre1.val:
+#                 dup = True
+#             else:
+#                 if dup:
+#                     pre0.next = head
+#                     dup = False
+#                 else:
+#                     pre0 = pre1
+#                 pre1 = head
+#             head = head.next
+#         #the left over
+#         if dup: pre0.next = None
+#         else: pre1.next = None
+		
+#         return dum.next
 
 # 61. Rotate List My Submissions Question
 # Total Accepted: 56511 Total Submissions: 254664 Difficulty: Medium
@@ -466,81 +462,7 @@
 # 				break
 # 		return res.next
 
-# 25. Reverse Nodes in k-Group My Submissions Question
-# Total Accepted: 49488 Total Submissions: 187850 Difficulty: Hard
-# Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.
-# If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.
-# You may not alter the values in the nodes, only nodes itself may be changed.
-# Only constant memory is allowed.
-# For example,
-# Given this linked list: 1->2->3->4->5
-# For k = 2, you should return: 2->1->4->3->5
-# For k = 3, you should return: 3->2->1->4->5
-# Subscribe to see which companies asked this question
-# # Definition for singly-linked list.
-# class ListNode(object):
-# 	def __init__(self, x):
-# 		self.val = x
-# 		self.next = None
 
-# class Solution(object):
-# 	def reverseKGroup(self, head, k):
-# 		"""
-# 		:type head: ListNode
-# 		:type k: int
-# 		:rtype: ListNode
-# 		"""
-# 		if head is None or head.next is None or k<=1: return head
-# 		res = ListNode(0)
-# 		head0 = res
-# 		res.next = head
-
-# 		while head is not None:
-# 			#initiate
-# 			p=head
-# 			head=head.next
-# 			tracker = p
-# 			j=1
-# 			loop = False
-# 			while tracker is not None and j<k:
-# 				tracker = tracker.next
-# 				j+=1
-# 			if tracker is None:
-# 				# loop=False
-# 				break
-# 			#run k-1 times of the switch
-# 			for i in range(k-1):
-# 				tmp=head.next
-# 				head.next=p
-# 				p=head
-# 				head=tmp
-# 			#after the loop, head is pointing forward, and p is pointing backward
-# 			tmp0=head0.next
-# 			head0.next.next=head
-# 			head0.next=p
-# 			head0=tmp0
-# 			loop = True
-# 		if loop:
-# 			head0.next=head
-# 		else:
-# 			head0.next=p
-# 		return res.next
-
-# if __name__ == '__main__':
-# 	sk=Solution()
-# 	node1=ListNode(1)
-# 	node2=ListNode(2)
-# 	node3=ListNode(3)
-# 	node4=ListNode(4)
-# 	# node5=ListNode(5)
-# 	node1.next=node2
-# 	node2.next=node3
-# 	node3.next=node4
-# 	# node4.next=node5
-# 	node = sk.reverseKGroup(node1,2)
-# 	while node is not None:
-# 		print node.val
-# 		node=node.next
 			
 
 
@@ -590,6 +512,19 @@
 # 					if q is not None and s is q: return True
 # 		return False		
 
+# class Solution(object):
+# 	def hasCycle(self, head):
+# 	    slow = quick = head
+# 	    while quick:
+# 	        quick = quick.next
+# 	        if quick is slow: return True
+# 	        if quick:
+# 	            quick = quick.next
+# 	            if quick is slow: return True
+# 	            slow = slow.next
+# 	    return False
+			
+				
 
 # 142. Linked List Cycle II My Submissions Question
 # Total Accepted: 62790 Total Submissions: 199610 Difficulty: Medium
@@ -677,8 +612,31 @@
 		# 	s1=s1.next
 		# 	s2=s2.next
 		# return s1
-
-
+		
+# class Solution(object):
+# 	def detectCycle(self, head):
+# 		"""
+# 		:type head: ListNode
+# 		:rtype: ListNode
+# 		"""
+# 		if head is None: return None
+# 		slow = quick = head
+		
+# 		while quick:
+# 			quick = quick.next
+# 			if quick is None: return None
+# 			quick = quick.next
+# 			slow = slow.next
+# 			if quick is slow: break
+		
+# 		new = head
+# 		while slow:
+# 			if slow is new: return new
+# 			slow = slow.next
+# 			new = new.next
+		
+		
+	
 # 143. Reorder List My Submissions Question
 # Total Accepted: 55720 Total Submissions: 254913 Difficulty: Medium
 # Given a singly linked list L: L0 L1 Ln-1 Ln,
@@ -772,49 +730,98 @@
 #         """
 #         :type head: RandomListNode
 #         :rtype: RandomListNode
-#         """                                                                                               
+#         """
 #         if head is None: return None
-#         # if head.next is None: return ListNode(head.label)
-#         #deep copy means that you create a completed list nodes, rather than the original ones
-#         #make next
-#         res = RandomListNode(0)
-#         res.next = head
-#         #copy next
-#         while head is not None:
-#         	newNode = RandomListNode(head.label)
-#         	tmp = head.next
-#         	head.next=newNode
-#         	newNode.next=tmp
-#         	head=tmp
-#         #copy random
-#         head=res.next
-#         #only check the even label nodes, because each node could randomly point to None
-#         copyhead = head.next
-#         while head is not None:
-#         	if head.random is not None:
-# 	        	copyhead.random = head.random.next
-# 	        else:
-# 	        	copyhead.random = None
-#         	head = copyhead.next
-#         	if head is None:
-#         		break
-#         	copyhead = head.next
+        
+#         cur = head
+#         while cur:
+#             curCopy = RandomListNode(cur.label)
+#             tmp = cur.next
+#             cur.next = curCopy
+#             curCopy.next = tmp
+#             cur = tmp
+        
+#         cur = head
+#         while cur:
+#             if cur.random:
+#                 cur.next.random = cur.random.next
+#             cur = cur.next.next
+        
+#         root = cur = head.next
+#         while cur:
+#             head.next = head.next.next
+#             head = head.next
+#             if cur.next is None: break
+#             cur.next = cur.next.next
+#             cur = cur.next
+#         return root
 
-#         #decouple the one into two lists
-#         head1=res.next
-#         head2=head1.next
-#         res.next=head2
-#         while head1 is not None:
-#         	tmp1=head2.next
-#         	if tmp1 is None:
-#         		break
-#         	tmp2=tmp1.next
-#         	head1.next = tmp1
-#         	head2.next = tmp2
-#         	head1=tmp1
-#         	head2=tmp2
-#         head1.next=None
-#         return res.next
+
+
+
+# 25. Reverse Nodes in k-Group My Submissions Question
+# Total Accepted: 49488 Total Submissions: 187850 Difficulty: Hard
+# Given a linked list, reverse the nodes of a linked list k at a time and return its modified list.
+# If the number of nodes is not a multiple of k then left-out nodes in the end should remain as it is.
+# You may not alter the values in the nodes, only nodes itself may be changed.
+# Only constant memory is allowed.
+# For example,
+# Given this linked list: 1->2->3->4->5
+# For k = 2, you should return: 2->1->4->3->5
+# For k = 3, you should return: 3->2->1->4->5
+# Subscribe to see which companies asked this question
+# # Definition for singly-linked list.
+# class ListNode(object):
+# 	def __init__(self, x):
+# 		self.val = x
+# 		self.next = None
+
+# class Solution(object):
+# 	def reverseKGroup(self, head, k):
+# 		"""
+# 		:type head: ListNode
+# 		:type k: int
+# 		:rtype: ListNode
+# 		"""
+# 		dummy =  ListNode(0)
+# 		dummy.next = head
+		
+# 		cur = probe = head
+# 		new = pre = dummy
+# 		while True:
+# 		    i=1
+# 		    while probe and i<=k:
+# 		        probe = probe.next
+# 		        i += 1
+# 		    if i<=k: break
+		    
+# 		    j=1
+# 		    while j<=k:
+# 		        tmp = cur.next     
+# 		        cur.next = pre
+# 		        pre = cur
+# 		        cur = tmp
+# 		        j+=1
+# 		    tmp = new.next
+# 		    new.next = pre
+# 		    tmp.next = cur
+# 		    new = pre = tmp
+# 		return dummy.next
+# if __name__ == '__main__':
+# 	sk=Solution()
+# 	node1=ListNode(1)
+# 	node2=ListNode(2)
+# 	node3=ListNode(3)
+# 	node4=ListNode(4)
+# 	# node5=ListNode(5)
+# 	node1.next=node2
+# 	node2.next=node3
+# 	node3.next=node4
+# 	# node4.next=node5
+# 	node = sk.reverseKGroup(node1,2)
+# 	while node is not None:
+# 		print node.val
+# 		node=node.next
 
 
 # 146. LRU Cache My Submissions Question
@@ -826,29 +833,71 @@
 
 # Subscribe to see which companies asked this question
 
-# class LRUCache(object):
-	'''
-	use hashtable and doublelinked list to implement
-	hashtable to save keys to find node: O(1)
-	use doublelinked list to set values and move node O(1)
-	'''
-#     def __init__(self, capacity):
-#         """
-#         :type capacity: int
-#         """
-		
+class Node(object):
+    def __init__(self, key, val):
+        self.key = key
+        self.val = val
+        self.pre = None
+        self.next = None
+        
+class LRUCache(object):
 
-#     def get(self, key):
-#         """
-#         :rtype: int
-#         """
-		
+    def __init__(self, capacity):
+        """
+        :type capacity: int
+        """
+        self.size = 0
+        self.cap = capacity
+        self.dict = {}
+        self.tail = Node(0, 0)
+        self.head = self.tail
+        
 
-#     def set(self, key, value):
-#         """
-#         :type key: int
-#         :type value: int
-#         :rtype: nothing
-#         """
-#          
+    def get(self, key):
+        """
+        :rtype: int
+        """
+        entry = self.dict.get(key)
+        if entry:
+            self.renew(entry)
+            return entry.val
+        else:
+            return -1
+        
 
+    def set(self, key, value):
+        """
+        :type key: int
+        :type value: int
+        :rtype: nothing
+        """
+        if key in self.dict:
+            entry = self.dict[key]
+            entry.val = value
+            self.renew(entry)
+        else:
+            entry = Node(key, value)
+            self.dict[key] = entry
+            self.head.pre = entry
+            entry.next = self.head
+            self.head = entry
+            if self.size < self.cap:
+                #if the size is still not over cap, add more nodes
+                self.size += 1
+            else:
+                #remove the last node in the double linked list
+                lastNode = self.tail.pre
+                self.tail.pre = lastNode.pre
+                lastNode.pre.next = self.tail
+                lastNode.pre = None
+                lastNode.next = None
+                del self.dict[lastNode.key]
+    
+    def renew(self, entry):
+        if entry is not self.head:
+            entry.pre.next = entry.next
+            entry.next.pre = entry.pre
+            entry.next = self.head
+            self.head.pre = entry
+            entry.pre = None
+            self.head = entry

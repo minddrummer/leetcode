@@ -44,7 +44,33 @@
 # # 			for x in range(thres-1-i):
 # # 				A.pop(-1)
 		
-		
+# class Solution(object):
+#     def merge(self, nums1, m, nums2, n):
+#         """
+#         :type nums1: List[int]
+#         :type m: int
+#         :type nums2: List[int]
+#         :type n: int
+#         :rtype: void Do not return anything, modify nums1 in-place instead.
+#         """
+#         m0 = m
+#         i = 0
+#         j1= 0
+#         while i<=n-1 and j1<=m-1:
+#             if nums1[j1] > nums2[i]:
+#                 #add to nums1
+#                 nums1.insert(j1, nums2[i])
+#                 i += 1
+#                 j1 += 1
+#                 m += 1
+#             else:
+#                 #nums2 pointer doesnot change, j1 move to next
+#                 j1+=1
+#         for k in range(i, n):
+#             nums1.insert(j1, nums2[k])
+#             j1+=1
+#         del nums1[m0+n:]
+#         return 		
 
 
 # # 21. Merge Two Sorted Lists My Submissions Question
@@ -92,45 +118,25 @@
 # # 	    		head.next = l1
 # # 	    	return dummy
 
-
-# # 23. Merge k Sorted Lists My Submissions Question
-# # Total Accepted: 73157 Total Submissions: 324219 Difficulty: Hard
-# # Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
-# # Subscribe to see which companies asked this question
-# # # Definition for singly-linked list.
-# # # class ListNode(object):
-# # #     def __init__(self, x):
-# # #         self.val = x
-# # #         self.next = None
-
-# # class Solution(object):
-# # 	def mergeKLists(self, lists):
-# # 		"""
-# # 		:type lists: List[ListNode]
-# # 		:rtype: ListNode
-# # 		"""
-# # 	#there are several methods
-# # 	#divide and conquner sort, (n1+..nk)log(k), SO(1)        
-# # 	#merge by two: k*n1+k*n2+...(k-1)*n3...+nk
-# # 	#heap: (n1+..nk)log(k), SO(1)        
-
-# # 		heap=[]
-# # 		for node in lists:
-# # 			#remove all nodes that are None
-# # 			if node: heap.append((node.val, node))
-# # 		heapq.heapify(heap)
-# # 		dummy = ListNode(0)
-# # 		head=dummy
-# # 		#for list, while could run as long as there are elements in the list
-# # 		while heap:
-# # 			min_node=heapq.heappop(heap)	
-# # 			dummy.next=min_node[1]
-# # 			dummy=dummy.next
-# # 			#new_node can be None here
-# # 			new_node = min_node[1].next
-# # 			#only push new node if it is not None!!
-# # 			if new_node: heapq.heappush(heap, (new_node.val, new_node))
-# # 		return head.next
+# class Solution:
+#     # @param {ListNode} l1
+#     # @param {ListNode} l2
+#     # @return {ListNode}
+#     def mergeTwoLists(self, l1, l2):
+#     	pre = dum = ListNode(0)
+		
+#     	while l1 and l2:
+#     	    if l1.val>= l2.val:
+#     	        pre.next = l2
+#     	        pre = pre.next
+#     	        l2 = l2.next
+#     	    else:
+#     	        pre.next = l1
+#     	        pre = pre.next
+#     	        l1 = l1.next
+#     	if l1: pre.next = l1
+#     	if l2: pre.next = l2
+#     	return dum.next
 
 
 # # 147. Insertion Sort List My Submissions Question
@@ -150,7 +156,35 @@
 # #         :type head: ListNode
 # #         :rtype: ListNode
 # #         """
+# class Solution(object):
+#     def insertionSortList(self, head):
+#         """
+#         :type head: ListNode
+#         :rtype: ListNode
+#         """
+#         if head is None or head.next is None: return head
+#         dum = ListNode(0)
+#         dum.next = head
+#         pre = head
+#         cur = head.next
 		
+#         while cur:
+#             tmp = cur.next
+#             pre.next = None
+#             head = dum.next
+#             head0 = dum
+#             while head and head.val<cur.val:
+#                 head0 = head
+#                 head = head.next
+			
+#             head0.next = cur
+#             cur.next = head
+			
+#             if head is None:
+#                 pre = pre.next
+#             pre.next = tmp
+#             cur = tmp
+#         return dum.next		
 
 # # 148. Sort List My Submissions Question
 # # Total Accepted: 63162 Total Submissions: 263787 Difficulty: Medium
@@ -169,7 +203,46 @@
 # #         :rtype: ListNode
 # #         """
 # 	#use divide and conquer method-or merge two sorted linkedlist, and applied to the linkedlist would work
-
+# class Solution(object):
+#     def merge(self, head1, head2):
+#         #suppose head1 and head2 have already sorted
+#         if head1 is None: return head2
+#         if head2 is None: return head1
+		
+#         pre = dum = ListNode(0)
+#         while head1 and head2:
+#             if head1.val>= head2.val:
+#                 pre.next = head2
+#                 head2 = head2.next
+#             else:
+#                 pre.next = head1
+#                 head1 = head1.next
+#             pre = pre.next
+#         if head1: pre.next = head1
+#         if head2: pre.next = head2
+#         return dum.next
+		
+#     def sortList(self, head):
+#         """
+#         :type head: ListNode
+#         :rtype: ListNode
+#         """
+#         #first separate into two linkedin list
+#         #and then sorted each, and finally merge the two
+#         if head is None or head.next is None: return head
+		
+#         head1 = slow = quick = head
+#         while quick:
+#             quick = quick.next
+#             if quick:
+#                 quick = quick.next
+#                 if quick: slow = slow.next
+#         head2 = slow.next
+#         slow.next = None
+#         newhead1 = self.sortList(head1)
+#         newhead2 = self.sortList(head2)
+#         root = self.merge(newhead1, newhead2)
+#         return root
 
 # # 75. Sort Colors My Submissions Question
 # # Total Accepted: 84990 Total Submissions: 250463 Difficulty: Medium
@@ -202,42 +275,33 @@
 # #         		white += 1
 # #         		cur += 1
 				
-														
-
-
-# # 41. First Missing Positive My Submissions Question
-# # Total Accepted: 57246 Total Submissions: 244351 Difficulty: Hard
-# # Given an unsorted integer array, find the first missing positive integer.
-
-# # For example,
-# # Given [1,2,0] return 3,
-# # and [3,4,-1,1] return 2.
-
-# # Your algorithm should run in O(n) time and uses constant space.
-
-# # Subscribe to see which companies asked this question
-
-# # class Solution(object):
-# # 	def firstMissingPositive(self, nums):
-# # 		"""
-# # 		:type nums: List[int]
-# # 		:rtype: int
-# # 		"""
-# # 		#if there is no missing from 1 to n, then n+1 returned, and there should be no 0/negates
-# # 		n = len(nums)
-# # 		for i in range(n):
-# # 			#put all values <= as n+2
-# # 			if nums[i]<=0: nums[i] = n+2
-# # 		for i in range(n):
-# # 			#now if a value <= n, what we do?
-# # 			#make the corresponding value's index-1 as the negative value
-# # 			#then we just count the first postive value's index +1
-# # 			if abs(nums[i])<= n:
-# # 				index= abs(nums[i])-1
-# # 				nums[index] = -abs(nums[index])
-# # 		for i in range(n):
-# # 			if nums[i]>0: return i+1
-# # 		return n+1
+# class Solution(object):
+#     def sortColors(self, nums):
+#         """
+#         :type nums: List[int]
+#         :rtype: void Do not return anything, modify nums in-place instead.
+#         """
+#        	count = len(nums)
+#        	if count <=1: return
+#        	cur = idx0 =0
+#        	idx2 = count -1
+# basically,  idx2 moves itself, and cur and idx0 move together: you can use logic to analyze       	
+#        	while cur <= idx2:
+#        	    if nums[cur] ==1:
+#        	        cur +=1
+#        	    elif nums[cur] == 0:
+#        	        tmp = nums[cur]
+#        	        nums[cur] = nums[idx0]
+#        	        nums[idx0] = tmp
+#                 idx0 += 1
+#                 cur += 1
+#             else:
+#                 tmp = nums[cur]
+#        	        nums[cur] = nums[idx2]
+#        	        nums[idx2] = tmp
+#        	        idx2 -=1
+#         return 		
+																
 
 
 # 34. Search for a Range My Submissions Question
@@ -282,10 +346,6 @@
 # Given a sorted array and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
 # You may assume no duplicates in the array.
 # Here are few examples.
-# [1,3,5,6], 5 → 2
-# [1,3,5,6], 2 → 1
-# [1,3,5,6], 7 → 4
-# [1,3,5,6], 0 → 0
 
 # Subscribe to see which companies asked this question
 # class Solution(object):
@@ -317,6 +377,30 @@
 #     	if right == -2: return -2
 #     	return max(left, right)
 
+# class Solution(object):
+# 	def searchInsert(self, nums, target):
+# 		"""
+# 		:type nums: List[int]
+# 		:type target: int
+# 		:rtype: int
+# 		"""
+# 		#log(n), 1
+# 		if len(nums) == 0: return 0        
+# 		return self.search(nums, target, 0, len(nums)-1)
+	
+# 	def search(self, nums, target, start, end):
+# 		if start==end:
+# 			if nums[start]>=target: return start
+# 			else: return start+1
+		
+# 		half = (start+end)/2
+# 		#only search half, not the whole
+# 		if nums[half]>= target:
+# 			return self.search(nums, target, start, half)
+# 		else:
+# 			return self.search(nums, target, half+1, end)
+		
+			
 
 
 # 74. Search a 2D Matrix My Submissions Question
@@ -332,48 +416,158 @@
 #   [23, 30, 34, 50]
 # ]
 # Given target = 3, return true.
-class Solution(object):
-	def searchMatrix(self, matrix, target):
-		"""
-		:type matrix: List[List[int]]
-		:type target: int
-		:rtype: bool
-		"""
-		m=len(matrix)
-		n=len(matrix[0])
-		if m==0 or n==0: return False
-		return self.searchRow(matrix, target, 0, m-1)
+# class Solution(object):
+# 	def searchMatrix(self, matrix, target):
+# 		"""
+# 		:type matrix: List[List[int]]
+# 		:type target: int
+# 		:rtype: bool
+# 		"""
+# 		m=len(matrix)
+# 		n=len(matrix[0])
+# 		if m==0 or n==0: return False
+# 		return self.searchRow(matrix, target, 0, m-1)
 
 
-	def searchRow(self, matrix, target,start, end):
-		if matrix[start][0] == target: return True
-		if matrix[end][-1] == target: return True
-		if matrix[start][0]>target: return False
-		if matrix[end][-1]<target: return False
+# 	def searchRow(self, matrix, target,start, end):
+# 		if matrix[start][0] == target: return True
+# 		if matrix[end][-1] == target: return True
+# 		if matrix[start][0]>target: return False
+# 		if matrix[end][-1]<target: return False
 
-		if matrix[start][0]<target and matrix[start][-1]>=target:
-			return self.searchCol(matrix, target, start, 0, len(matrix[start])-1)
-		if matrix[end][0]<=target and matrix[end][-1]>target:
-			return self.searchCol(matrix, target, end, 0, len(matrix[end])-1)
-		half=(start+end)/2
-		return self.searchRow(matrix, target, start, half) or self.searchRow(matrix, target, half+1, end)
+# 		if matrix[start][0]<target and matrix[start][-1]>=target:
+# 			return self.searchCol(matrix, target, start, 0, len(matrix[start])-1)
+# 		if matrix[end][0]<=target and matrix[end][-1]>target:
+# 			return self.searchCol(matrix, target, end, 0, len(matrix[end])-1)
+# 		half=(start+end)/2
+# 		return self.searchRow(matrix, target, start, half) or self.searchRow(matrix, target, half+1, end)
 
-	def searchCol(self, matrix, target, row, start, end):
-		if matrix[row][start]==target: return True
-		if matrix[row][end]==target: return True
-		if matrix[row][start]>target: return False
-		if matrix[row][end]<target: return False
+# 	def searchCol(self, matrix, target, row, start, end):
+# 		if matrix[row][start]==target: return True
+# 		if matrix[row][end]==target: return True
+# 		if matrix[row][start]>target: return False
+# 		if matrix[row][end]<target: return False
 
-		half= (start+end)/2
-		return self.searchCol(matrix, target, row, start, half) or self.searchCol(matrix, target, row, half+1, end)
+# 		half= (start+end)/2
+# 		return self.searchCol(matrix, target, row, start, half) or self.searchCol(matrix, target, row, half+1, end)
+
+# class Solution(object):
+# 	def searchMatrix(self, matrix, target):
+# 		"""
+# 		:type matrix: List[List[int]]
+# 		:type target: int
+# 		:rtype: bool
+# 		"""
+# 		numRow = len(matrix)
+# 		if numRow ==0: return False
+# 		numCol = len(matrix[0])
+# 		if numCol==0: return False
+		
+# 		rowRes = self.searchRow(matrix, target, 0, numRow-1)
+# 		return self.searchCol(matrix[rowRes], target, 0, numCol-1)
+		
+		
+# 	def searchRow(self, matrix, target, start, end):
+# 		if start == end:
+# 			if matrix[start][0] > target: return start-1
+# 			else: return start
+# 		#difference because it is a row, not just a number	
+# 		if end-start==1:
+# 			half = end
+# 		else:	
+# 			half = (start+end)/2
+
+# 		if matrix[half][0]> target:
+# 			return self.searchRow(matrix, target, start, half-1)
+# 		else:
+# 			return self.searchRow(matrix, target, half, end)
+		
+	
+# 	def searchCol(self, row, target, start, end):
+# 		if start>end: return False
+# 		if start == end:
+# 			if row[start] == target: return True
+# 			else: return False
+			
+# 		half = (start+end)/2
+# 		if row[half]==target: return True
+# 		elif row[half]>target:
+# 			return self.searchCol(row, target, start, half-1)
+# 		else: return self.searchCol(row, target, half+1, end)	
+
+# # 23. Merge k Sorted Lists My Submissions Question
+# # Total Accepted: 73157 Total Submissions: 324219 Difficulty: Hard
+# # Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+# # Subscribe to see which companies asked this question
+# # # Definition for singly-linked list.
+# # # class ListNode(object):
+# # #     def __init__(self, x):
+# # #         self.val = x
+# # #         self.next = None
+
+# # class Solution(object):
+# # 	def mergeKLists(self, lists):
+# # 		"""
+# # 		:type lists: List[ListNode]
+# # 		:rtype: ListNode
+# # 		"""
+# # 	#there are several methods
+# # 	#divide and conquner sort, (n1+..nk)log(k), SO(1)        
+# # 	#merge by two: k*n1+k*n2+...(k-1)*n3...+nk
+# # 	#heap: (n1+..nk)log(k), SO(1)        
+
+# # 		heap=[]
+# # 		for node in lists:
+# # 			#remove all nodes that are None
+# # 			if node: heap.append((node.val, node))
+# # 		heapq.heapify(heap)
+# # 		dummy = ListNode(0)
+# # 		head=dummy
+# # 		#for list, while could run as long as there are elements in the list
+# # 		while heap:
+# # 			min_node=heapq.heappop(heap)	
+# # 			dummy.next=min_node[1]
+# # 			dummy=dummy.next
+# # 			#new_node can be None here
+# # 			new_node = min_node[1].next
+# # 			#only push new node if it is not None!!
+# # 			if new_node: heapq.heappush(heap, (new_node.val, new_node))
+# # 		return head.next
 
 
+# # 41. First Missing Positive My Submissions Question
+# # Total Accepted: 57246 Total Submissions: 244351 Difficulty: Hard
+# # Given an unsorted integer array, find the first missing positive integer.
 
+# # For example,
+# # Given [1,2,0] return 3,
+# # and [3,4,-1,1] return 2.
 
+# # Your algorithm should run in O(n) time and uses constant space.
 
+# # Subscribe to see which companies asked this question
 
-
-				
+# # class Solution(object):
+# # 	def firstMissingPositive(self, nums):
+# # 		"""
+# # 		:type nums: List[int]
+# # 		:rtype: int
+# # 		"""
+# # 		#if there is no missing from 1 to n, then n+1 returned, and there should be no 0/negates
+# # 		n = len(nums)
+# # 		for i in range(n):
+# # 			#put all values <= as n+2
+# # 			if nums[i]<=0: nums[i] = n+2
+# # 		for i in range(n):
+# # 			#now if a value <= n, what we do?
+# # 			#make the corresponding value's index-1 as the negative value
+# # 			#then we just count the first postive value's index +1
+# # 			if abs(nums[i])<= n:
+# # 				index= abs(nums[i])-1
+# # 				nums[index] = -abs(nums[index])
+# # 		for i in range(n):
+# # 			if nums[i]>0: return i+1
+# # 		return n+1				
 		
 				
 

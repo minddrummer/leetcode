@@ -1,9 +1,7 @@
 # Remove Element
 # Total Accepted: 90410 Total Submissions: 278908 Difficulty: Easy
 # Given an array and a value, remove all instances of that value in place and return the new length.
-
 # The order of elements can be changed. It doesn't matter what you leave beyond the new length.
-
 # Subscribe to see which companies asked this question
 
 # class Solution:
@@ -20,14 +18,27 @@
 #         count = len(nums)
 #         while i < count:
 #         	if nums[i] == val:
-#				#inplace delete one element in the list: del lst[i]
+# 				#inplace delete one element in the list: del lst[i]
 #         		del nums[i]
 #         		count -= 1
 #         	else:
 #         		i += 1	
 #         return count
 #         #method ??: move all the element ahead--but for array, each time it can take up to T_O(n), so totally T_O(n^2)
+# class Solution:
+#     # @param {integer[]} nums
+#     # @param {integer} val
+#     # @return {integer}
+#     def removeElement(self, nums, val):
+#     	newIdx = 0
+#     	oldIdx = 0
 		
+#     	while oldIdx < len(nums):
+#     	    if nums[oldIdx] != val:
+#     	        nums[newIdx] = nums[oldIdx]
+#     	        newIdx += 1
+#     	    oldIdx += 1
+#         return newIdx		
 
 
 # Next Permutation 
@@ -92,6 +103,32 @@
 #         # print nums
 #         return 
 
+# class Solution(object):
+#     def nextPermutation(self, nums):
+#         """
+#         :type nums: List[int]
+#         :rtype: void Do not return anything, modify nums in-place instead.
+#         TO(n),SO(1)
+#         """
+#         n = len(nums)
+#         if n<=1: return 
+#         idx = 1
+#         while idx<=n-1 and nums[-idx] <= nums[-(idx+1)]: 
+#         #add <= will adapt to situations where have duplicate numbers in the array
+#             idx+=1
+#         if idx == n: 
+#             nums.reverse()
+#             return 
+		
+#         s1 = idx+1
+#         for i in range(1, idx+1):
+#             if nums[-i]>nums[-s1]:
+#                 s2=i
+#                 break
+#         nums[-s1], nums[-s2] = nums[-s2], nums[-s1]
+#         nums[-idx:] = nums[-idx:][::-1]
+#         return 
+		
 # if __name__ == '__main__':
 # 	sk  = Solution()
 # 	s = [1,3,2]
@@ -104,7 +141,8 @@
 
 # 4Sum 
 # Total Accepted: 56316 Total Submissions: 250031 Difficulty: Medium
-# Given an array S of n integers, are there elements a, b, c, and d in S such that a + b + c + d = target? Find all unique quadruplets in the array which gives the sum of target.
+# Given an array S of n integers, are there elements a, b, c, and d in S such that a + b + c + d = target? 
+# Find all unique quadruplets in the array which gives the sum of target.
 
 # Note:
 # Elements in a quadruplet (a,b,c,d) must be in non-descending order. (ie a<= b<= c <= d)
@@ -117,6 +155,7 @@
 #     (-2,  0, 0, 2)
 
 
+#         # method1: double close O(n^3)--but not good enough
 # class Solution(object):
 #     def fourSum(self, nums, target):
 #         """
@@ -124,38 +163,29 @@
 #         :type target: int
 #         :rtype: List[List[int]]
 #         """
-#         #method1: double close O(n^3)--but not good enough
-#         # nums.sort()
-#         # count = len(nums)
-#         # if count <= 3: return []
-#         # res= []
-#         # for i in range(count-3):
-#         # 	#it is not about speed first, it is more about the repeated/rightness about the algorithm
-#         # 	#not adding the following will result in duplicates in the return res
-#         # 	if i == 0 or nums[i]>nums[i-1]:
-# 	       #  	for j in range(i+1, count-2):
-# 	       #  		#it is not about speed first, it is more about the repeated/rightness about the algorithm
-# 		      #   	#not adding the following will result in duplicates in the return res
-# 	       #  		if j==i+1 or nums[j]>nums[j-1]:
-# 		      #   		left,right = j+1, count-1
-# 		      #   		while left < right:
-# 		      #   			if nums[i]+nums[j]+nums[left]+nums[right] == target:
-# 		      #   				res.append([nums[i],nums[j],nums[left],nums[right]])
-# 		      #   				right -= 1
-# 		      #   				#this part is not about speed, it is more about remove duplicates and debuging....
-# 		      #   				while nums[right]==nums[right+1] and left<right: right -=1
-# 		      #   				left +=1
-# 		      #   				#this part is not about speed, it is more about remove duplicates and debuging....
-# 		      #   				while nums[left] == nums[left-1] and left<right: left+=1
-# 		      #   			elif nums[i]+nums[j]+nums[left]+nums[right] > target:
-# 		      #   				right -= 1
-# 		      #   				#this part is more about speed
-# 		      #   				while nums[right]==nums[right+1] and left<right: right -=1
-# 		      #   			else:
-# 		      #   				left += 1
-# 		      #   				#this part is more about speed
-# 		      #   				while nums[left] == nums[left-1] and left<right: left+=1
-#        	# return res
+#         n=len(nums)
+#         nums.sort()
+#         res=[]
+		
+#         for i in range(n-3):
+#             if i>=1 and nums[i]==nums[i-1]: continue
+#             for j in range(i+1,n-2):
+#                 if j>=i+2 and nums[j]==nums[j-1]: continue
+#                 newT = target-nums[i]-nums[j]
+#                 left,right = j+1,n-1
+#                 while left<right:
+#                     if nums[left]+nums[right]==newT:
+#                         res.append([nums[i],nums[j],nums[left],nums[right]])
+#                         left+=1
+#                         right-=1
+#                         while left<right and nums[left]==nums[left-1]: left+=1
+#                         while left<right and nums[right]==nums[right+1]: right -=1
+#                     elif nums[left]+nums[right]>newT: 
+#                         right-=1
+#                     else:
+#                         left+=1
+						
+#         return res     
 
 
 # class Solution(object):
@@ -272,6 +302,28 @@
 # 		#join inside has to be str, not other type of data
 # 		res = res + ''.join(str(i) for i in lst)	
 # 		return res
+
+# class Solution(object):
+#     def getPermutation(self, n, k):
+#         """
+#         :type n: int
+#         :type k: int
+#         :rtype: str
+#         """
+#         if n<=0 or n>=10: return None
+#         return self.dfs(range(1,n+1), k)
+	
+#     def dfs(self, lst, k):
+#         n=len(lst)
+#         if n==1: return str(lst[0])
+#         denominator = 1
+#         for i in range(1,n):
+#             denominator = denominator*i
+#         cur = (k-1)/denominator
+#         # print cur
+#         # print str(lst[cur])
+#         # print self.dfs(lst[:cur]+lst[cur+1:], k-cur*denominator)
+#         return str(lst[cur]) + self.dfs(lst[:cur]+lst[cur+1:], k-cur*denominator)
 # if __name__ == '__main__':
 # 	sk = Solution()
 # 	print sk.getPermutation(4,24)        
@@ -345,53 +397,53 @@
 # 		:type height: List[int]
 # 		:rtype: int
 # 		"""
-# 		#this seems not so hard: from left count the max, from the right count the max
-# 		#it is the first or the max, just make it as the value; take the min of the two, and use the min of max - value to get the water for each cell
-# 		#it is TO(n), SO(n)
-# 		# count = len(height)
-# 		# if count <=2: return 0
-# 		# left0 = height[0]
-# 		# left_max = [left0]
-# 		# for i in range(1,count):
-# 		# 	if height[i]>left0:
-# 		# 		left0 = height[i]
-# 		# 		left_max.append(left0)
-# 		# 	else:
-# 		# 		left_max.append(left0)
+		#this seems not so hard: from left count the max, from the right count the max
+		#it is the first or the max, just make it as the value; take the min of the two, and use the min of max - value to get the water for each cell
+		#it is TO(n), SO(n)
+		# count = len(height)
+		# if count <=2: return 0
+		# left0 = height[0]
+		# left_max = [left0]
+		# for i in range(1,count):
+		# 	if height[i]>left0:
+		# 		left0 = height[i]
+		# 		left_max.append(left0)
+		# 	else:
+		# 		left_max.append(left0)
 
-# 		# right0 = height[-1]
-# 		# right_max = [right0]
-# 		# for i in range(count-2,-1,-1):
-# 		# 	if height[i]>right0:
-# 		# 		right0=height[i]
-# 		# 		right_max.append(right0)
-# 		# 	else:
-# 		# 		right_max.append(right0)
-# 		# right_max = right_max[::-1]
-# 		# water = 0
-# 		# for i in range(count):
-# 		# 	water += min(right_max[i],left_max[i])-height[i]
-# 		# return water
+		# right0 = height[-1]
+		# right_max = [right0]
+		# for i in range(count-2,-1,-1):
+		# 	if height[i]>right0:
+		# 		right0=height[i]
+		# 		right_max.append(right0)
+		# 	else:
+		# 		right_max.append(right0)
+		# right_max = right_max[::-1]
+		# water = 0
+		# for i in range(count):
+		# 	water += min(right_max[i],left_max[i])-height[i]
+		# return water
 
-# 		#now we want a it is TO(n), SO(1) solution
-# 		#divide into the left and right by the maxheight index
-# 		max_index = 0
-# 		count = len(height)
-# 		if count <=2: return 0
-# 		for i in range(count):
-# 			if height[i]>height[max_index]: max_index = i
-# 		water = 0
-# 		#for the left
-# 		peak = 0
-# 		for i in range(max_index):
-# 			if height[i]>peak: peak=height[i]
-# 			else: water += peak-height[i]
-# 		#for the right
-# 		peak=0
-# 		for i in range(count-1,max_index,-1):
-# 			if height[i]>peak: peak=height[i]
-# 			else: water += peak-height[i]
-# 		return water
+		#now we want a it is TO(n), SO(1) solution
+		#divide into the left and right by the maxheight index
+		# max_index = 0
+		# count = len(height)
+		# if count <=2: return 0
+		# for i in range(count):
+		# 	if height[i]>height[max_index]: max_index = i
+		# water = 0
+		# #for the left
+		# peak = 0
+		# for i in range(max_index):
+		# 	if height[i]>peak: peak=height[i]
+		# 	else: water += peak-height[i]
+		# #for the right
+		# peak=0
+		# for i in range(count-1,max_index,-1):
+		# 	if height[i]>peak: peak=height[i]
+		# 	else: water += peak-height[i]
+		# return water
 
 
 
@@ -403,23 +455,28 @@
 # Rotate Image My Submissions Question
 # Total Accepted: 54462 Total Submissions: 164249 Difficulty: Medium
 # You are given an n x n 2D matrix representing an image.
-
 # Rotate the image by 90 degrees (clockwise).
-
 # Follow up:
 # Could you do this in-place?
-
 # Subscribe to see which companies asked this question
-
 # Show Tags
-
 # class Solution(object):
 #     def rotate(self, matrix):
 #         """
 #         :type matrix: List[List[int]]
 #         :rtype: void Do not return anything, modify matrix in-place instead.
 #         """
-
+#         n=len(matrix)
+#         if n<=1: return
+		
+#         for i in range(n):
+			
+#             for j in range(i,n-1-i):
+				
+#                 matrix[i][j], matrix[j][n-1-i], matrix[n-1-i][n-1-j], matrix[n-1-j][i] = matrix[n-1-j][i], matrix[i][j], matrix[j][n-1-i], matrix[n-1-i][n-1-j]
+#         return
+		
+		
 
 
 # Plus One My Submissions Question
@@ -465,7 +522,26 @@
 # 			digits.insert(0,1)
 # 		return digits
 
-
+# class Solution:
+# 	def plusOne(self, digits):  
+		
+# 		n = len(digits)
+# 		i = 1
+# 		up = 1
+# 		while up and i<=n:
+# 			if digits[-i]+up<10:
+# 				digits[-i] += 1
+# 				up=0
+# 				break
+# 			else:
+# 				digits[-i] = 0
+# 				up=1
+# 				i += 1
+		
+# 		if up==1:
+# 			digits.insert(0,1)
+		
+# 		return digits
 # Climbing Stairs My Submissions Question
 # Total Accepted: 84084 Total Submissions: 236761 Difficulty: Easy
 # You are climbing a stair case. It takes n steps to reach to the top.
@@ -514,7 +590,7 @@
 #     		#then change pre1 to cur
 #     		pre1=cur
 #     	return cur
-			
+
 # if __name__ == '__main__':
 # 	sk = Solution()
 # 	print sk.climbStairs(2)
@@ -628,7 +704,51 @@
 # 	test = [[1,2,3],[4,5,0],[0,1,2]]
 # 	sk.setZeroes(test)
 # 	print test
-
+# class Solution(object):
+#     def setZeroes(self, matrix):
+#         """
+#         :type matrix: List[List[int]]
+#         :rtype: void Do not return anything, modify matrix in-place instead.
+#         """
+#         #want TO(m*n) SO(1), mark the first row and col, so that we track which col and row would be 0
+#         #the easy bug is missing checking and saving the first col and first row info, 
+#         #because later,we will mess their info with other row/col info
+		
+#         m = len(matrix)
+#         n = len(matrix[0])
+		
+#         for i in range(m):
+#             if matrix[i][0] == 0: matrix[i][0] = 'X'
+#         for i in range(n):
+#             if matrix[0][i] == 0: matrix[0][i] = 'X'    
+		
+#         for i in range(1,m):
+#             for j in range(1,n):
+#                 if matrix[i][j] == 0:
+#                     if matrix[0][j] != 'X': matrix[0][j]=0
+#                     if matrix[i][0] != 'X': matrix[i][0]=0
+		
+#         for i in range(1, m):
+#             if matrix[i][0]==0 or matrix[i][0]=='X':
+#                 matrix[i][1:] = [0]*(n-1)
+#         for j in range(1,n):
+#             if matrix[0][j]==0 or matrix[0][j] =='X':
+#                 for k in range(1,m):
+#                     matrix[k][j] = 0
+		
+#         if matrix[0][0] == 'X':
+#             matrix[0][:] = [0]*n
+#             for i in range(m): matrix[i][0] = 0
+#         else:
+#             for i in range(m):
+#                 if matrix[i][0] == 'X':
+#                     for k in range(m): matrix[k][0] = 0
+#                     break
+#             for j in range(n):
+#                 if matrix[0][j] == 'X':
+#                     matrix[0][:] = [0]*n
+#                     break
+#         return 
 
 # Gas Station My Submissions Question
 # Total Accepted: 52562 Total Submissions: 198745 Difficulty: Medium
@@ -862,59 +982,44 @@
 # 				i += 1
 # 		return c
 
+
+# lass Solution(object):
+# 	def removeDuplicates(self, nums):
+# 		"""
+# 		:type nums: List[int]
+# 		:rtype: int
+# 		"""
+# 		n = len(nums)
+# 		if n<=2: return n
+		
+# 		repeat=0
+# 		count = 1
+# 		end = n-1
+# 		i = 1
+		
+# 		while i <= end:
+# 			if nums[i]>nums[i-1]:
+# 				repeat = 0 
+# 				count +=1
+# 				i += 1
+# 			else:
+# 				if repeat==0: 
+# 					repeat +=1
+# 					count +=1
+# 					i += 1
+# 				else:
+# 					repeat +=1
+# 					del nums[i]
+# 					end -= 1
+# 		return count
 # if __name__ == '__main__':
 # 	sk =Solution()
 # 	#s = [3,3,3,1,1,1,1]
-# 	s=[1,1,1,1,1]
-# 	sk.removeDuplicates(s)
-# 	print s
-
+# 	s=[1,1,1,2]
+# 	print  sk.removeDuplicates(s)
+	
 
 # =============================================================
-# Search in Rotated Sorted Array II My Submissions Question
-# Total Accepted: 51852 Total Submissions: 165205 Difficulty: Medium
-# Follow up for "Search in Rotated Sorted Array":
-# What if duplicates are allowed?
-# Would this affect the run-time complexity? How and why?
-# Write a function to determine if a given target is in the array.
-# class Solution(object):
-#     def search(self, nums, target):
-#         """
-#         :type nums: List[int]
-#         :type target: int
-#         :rtype: bool
-#         """
-#         #method that could be on average log(n), but at worst would be O(n)
-#         count = len(nums)
-#         if count==0: return False
-#         if nums[0]==target: return True
-#         if count==1: return False
-#         if nums[count/2]==target: return True
-#         if nums[0]>nums[count/2]:
-#         	if nums[0]>target and nums[count/2]<target:
-#         		#on the right
-#         		return self.search(nums[count/2+1:],target)
-#         	else:
-#         		#to the left
-#         		return self.search(nums[1:count/2],target)
-#         elif nums[0]<nums[count/2]:
-#         	if nums[0]<target and nums[count/2]>target:
-#         		#to the left
-#         		return self.search(nums[1:count/2], target)
-#         	else:
-#         		#to the right
-#         		return self.search(nums[count/2+1:],target)
-#         else: #nums[0]=nums[count/2]
-#         	#can either to the right or to the left
-#         	#to the left
-#         	if self.search(nums[1:count/2],target):
-#         		return True
-#         	#to the right
-#          	if self.search(nums[count/2+1:],target):
-#         		return True
-#         	return False
-
-		
 # Search in Rotated Sorted Array My Submissions Question
 # Total Accepted: 82275 Total Submissions: 280662 Difficulty: Hard
 # Suppose a sorted array is rotated at some pivot unknown to you beforehand.
@@ -964,6 +1069,7 @@
 # 		# 	y=self.search(nums[(c/2+1):], target)	
 # 		# 	if y != -1: return c/2+1+y
 # 		# 	return -1
+
 # 		#method2: consider the relation between first VS middle point first,  and then VS target point
 # 		#this method is truly O(log(n))
 # 		count =len(nums)
@@ -1003,6 +1109,63 @@
 # 				else:
 # 					return tmp
 
+# class Solution(object):
+# 	def search(self, nums, target):
+# 		n = len(nums)
+# 		if n==0: return -1
+		
+# 		return self.divideConquer(nums, 0, n-1, target)
+	
+	
+# 	def divideConquer(self, nums, start, end, target):
+# 		if start>end: return -1
+# 		if start==end: 
+# 			if nums[start]==target: return start
+# 			else: return -1
+# 		half = (start+end)/2
+# 		if nums[start]==target: return start
+# 		if nums[end]==target: return end
+# 		if nums[half]==target: return half
+		
+# 		if nums[start]>nums[half]:
+# 			if nums[start]<target: return self.divideConquer(nums, start+1, half-1, target)
+# 			if nums[start]>target:
+# 				if nums[half]>target: return self.divideConquer(nums, start+1, half-1, target)
+# 				else: return self.divideConquer(nums, half+1, end-1, target)
+# 		elif nums[start]<nums[half]:
+# 			if nums[start]>target: return self.divideConquer(nums, half+1, end-1, target)
+# 			elif nums[start]<target:
+# 				if nums[half]>target: return self.divideConquer(nums, start+1, half-1, target)
+# 				else: return self.divideConquer(nums, half+1, end-1, target)
+# 		return -1
+		
+# class Solution(object):
+# 	def search(self, nums, target):
+# 		n = len(nums)
+# 		if n==0: return -1
+		
+# 		return self.divideConquer(nums, 0, n-1, target)
+	
+# 	def divideConquer(self, nums, start, end, target):
+# 		if start>end: return -1
+# 		if start==end: 
+# 			if nums[start]==target: return start
+# 			else: return -1
+# 		half = (start+end)/2
+# 		if nums[start]==target: return start
+# 		if nums[end]==target: return end
+# 		if nums[half]==target: return half
+		
+# 		if nums[start]>nums[half]:
+# 			if nums[start]>target and nums[half]<target: return self.divideConquer(nums, half+1, end-1, target)
+# 			else: return self.divideConquer(nums, start+1, half-1, target)
+# 		elif nums[start]<nums[half]:
+# 			if nums[start]<target and nums[half]>target: return self.divideConquer(nums, start+1, half-1, target)
+# 			else: return self.divideConquer(nums, half+1, end-1, target)
+# 		return -1		
+		
+		
+		
 # if __name__ == '__main__':
 # 	sk = Solution()
 # 	print sk.search([4,5,6,7,8,0,1,2], 2)
@@ -1012,12 +1175,58 @@
 # 	print sk.search([3,4,6,-1,0,1], 2)
 # 	print sk.search([1,3],2)	
 
+
+
+# Search in Rotated Sorted Array II My Submissions Question
+# Total Accepted: 51852 Total Submissions: 165205 Difficulty: Medium
+# Follow up for "Search in Rotated Sorted Array":
+# What if duplicates are allowed?
+# Would this affect the run-time complexity? How and why?
+# Write a function to determine if a given target is in the array.
+# class Solution(object):
+#     def search(self, nums, target):
+#         """
+#         :type nums: List[int]
+#         :type target: int
+#         :rtype: bool
+#         """
+#         #method that could be on average log(n), but at worst would be O(n)
+#         count = len(nums)
+#         if count==0: return False
+#         if nums[0]==target: return True
+#         if count==1: return False
+#         if nums[count/2]==target: return True
+#         if nums[0]>nums[count/2]:
+#         	if nums[0]>target and nums[count/2]<target:
+#         		#on the right
+#         		return self.search(nums[count/2+1:],target)
+#         	else:
+#         		#to the left
+#         		return self.search(nums[1:count/2],target)
+#         elif nums[0]<nums[count/2]:
+#         	if nums[0]<target and nums[count/2]>target:
+#         		#to the left
+#         		return self.search(nums[1:count/2], target)
+#         	else:
+#         		#to the right
+#         		return self.search(nums[count/2+1:],target)
+#         else: #nums[0]=nums[count/2]
+#         	#can either to the right or to the left
+#         	#to the left
+#         	if self.search(nums[1:count/2],target):
+#         		return True
+#         	#to the right
+#          	if self.search(nums[count/2+1:],target):
+#         		return True
+#         	return False
+
+		
+
 # Two Sum 
 # Total Accepted: 164673 Total Submissions: 834667 Difficulty: Medium
 # Given an array of integers, find two numbers such that they add up to a specific target number.
-
-# The function twoSum should return indices of the two numbers such that they add up to the target, where index1 must be less than index2. Please note that your returned answers (both index1 and index2) are not zero-based.
-
+# The function twoSum should return indices of the two numbers such that they add up to the target, where index1 must be less than index2. 
+# Please note that your returned answers (both index1 and index2) are not zero-based.
 # You may assume that each input would have exactly one solution.
 
 # Input: numbers={2, 7, 11, 15}, target=9
@@ -1032,7 +1241,7 @@
 # 		:type target: int
 # 		:rtype: List[int]
 # 		"""
-		#nlog(n)::sort and check:but because return the index, you then have to get a match up of index in order to do this
+		# nlog(n)::sort and check:but because return the index, you then have to get a match up of index in order to do this
 		# lst = sorted(list(zip(nums, range(len(nums)))), key = lambda x:x[0])
 		# #nums.sort()
 		# count = len(nums)
@@ -1048,8 +1257,8 @@
 		# 	else:
 		# 		left += 1
 		# return res.values()
-		# #
-		#method2:O(n) unique -> duplicate
+		#
+		# method2:O(n) unique -> duplicate
 		# c_dct = {}
 		# res = {}
 		# for i in range(len(nums)):
@@ -1062,6 +1271,23 @@
 		# 		if key not in res: res[key] = [c_dct[target-nums[i]],i+1]
 		# return res.values() #in the leetcode, you need to add res.values()[0] to get the first elements assume there is only one pair
 
+# class Solution(object):
+#     def twoSum(self, nums, target):
+#         """
+#         :type nums: List[int]
+#         :type target: int
+#         :rtype: List[int]
+#         """
+#         #value as key, idx as value
+#         dct={}
+#         n=len(nums)
+		
+#         for idx in range(n):
+#             if target-nums[idx] not in dct:
+#                 dct[nums[idx]] =idx
+#             else:
+#                 break
+#         return [dct[target-nums[idx]], idx]
 # if __name__ == '__main__':
 # 	sk = Solution()
 # 	print sk.twoSum([1,2,3,4,4,5,5,5,5,6,7,3,1],8)
@@ -1116,7 +1342,37 @@
 # 	        		# print res.values()
 #        	return res
 
+# class Solution(object):
+#     def threeSum(self, nums):
+#         """
+#         :type nums: List[int]
+#         :rtype: List[List[int]]
+#         """
+#         n=len(nums)
+#         nums.sort()
 		
+#         res=[]
+#         for i in range(n-2): #n-2 here!
+#             if i>=1 and nums[i]==nums[i-1]:
+#                 continue
+#             target = -nums[i]
+#             left, right = i+1, n-1
+#             # if nums[left]>target: break    
+#             while left<right:
+#                 if nums[left]+nums[right]==target:
+#                     res.append([nums[i], nums[left],nums[right]])
+#                     left += 1
+#                     right -= 1
+#                     while left<right and nums[left]==nums[left-1]:
+#                         left += 1
+#                     while left<right and nums[right]==nums[right+1]:
+#                         right -= 1
+#                 elif nums[left]+nums[right]>target:
+#                     right -= 1
+#                 else: #<target
+#                     left += 1
+				
+#         return res		
 
 # if __name__ == '__main__':
 # 	sk = Solution()
@@ -1179,13 +1435,47 @@
 # 						while nums[left] == nums[left-1] and left < right: left+=1
 # 		return sum(res_lst)
 
+# class Solution(object):
+# 	def threeSumClosest(self, nums, target):
+# 		"""
+# 		:type nums: List[int]
+# 		:type target: int
+# 		:rtype: int
+# 		"""
+# 		n=len(nums)
+# 		if n<=2: return None
+# 		res = sum(nums[0:3])
+# 		nums.sort()
+		
+# 		for i in range(0,n-2):
+# 			if i>=1 and nums[i]==nums[i-1]: continue
+# 			else:
+# 				rest = target-nums[i]
+# 				left,right=i+1, n-1
+# 				# print nums[i],nums[left],nums[right]
+# 				while left<right:
+# 					if nums[left]+nums[right]==rest:
+# 						res=target
+# 						return res
+# 					elif nums[left]+nums[right]>rest:
+# 						if abs(nums[i]+nums[left]+nums[right]-target)<abs(res-target):
+# 							res=nums[i]+nums[left]+nums[right]
+# 						right-=1
+# 						while left<right and nums[right]==nums[right+1]: right -=1
+						
+# 					elif nums[left]+nums[right]<rest:         
+# 						if abs(nums[i]+nums[left]+nums[right]-target)<abs(res-target):
+# 							res=nums[i]+nums[left]+nums[right]
+# 						left +=1
+# 						while left<right and nums[left]==nums[left-1]: left +=1
+# 		return res
 # if __name__ == '__main__':
 # 	sk = Solution()
 # 	# print sk.threeSumClosest([-1, 2 ,1 ,-4],1)
 # 	# print sk.threeSumClosest([-1, 0 ,0 ,0],0)
 # 	# print sk.threeSumClosest([0 ,0 ,0],0)
 # 	# print sk.threeSumClosest(range(100),100)
-# 	print sk.threeSumClosest([0,2,1,-3],1)
+# 	print sk.threeSumClosest([1,1,1,0],-100)
 
 
 
@@ -1265,6 +1555,40 @@
 #         # print lst,k,p1, p2
 #        	return (lst[index-1]+lst[index-1-next])/2.0
 
+# class Solution(object):
+#     def findMedianSortedArrays(self, nums1, nums2):
+#         """
+#         :type nums1: List[int]
+#         :type nums2: List[int]
+#         :rtype: float
+#         """
+#         n1=len(nums1)
+#         n2=len(nums2)
+#         if (n1+n2)%2:
+#             return self.findKth(nums1,nums2, (n1+n2)/2+1)
+#         else:
+#             m1=self.findKth(nums1,nums2, (n1+n2)/2)
+#             m2=self.findKth(nums1,nums2, (n1+n2)/2+1)
+#             return (m1+m2)/2.0
+        
+#     def findKth(self, num1, num2, k):
+#         if len(num1)==0: return num2[k-1]
+#         if len(num2)==0: return num1[k-1]
+#         if k==1: return min(num1[0], num2[0])
+        
+#         a1 = num1[k/2-1] if len(num1)>=k/2 else None
+#         a2 = num2[k/2-1] if len(num2)>=k/2 else None
+        
+#         if a1 is None:
+#             return self.findKth(num1, num2[k/2:],k-k/2)
+#         if a2 is None:
+#             return self.findKth(num1[k/2:], num2,k-k/2)
+        
+#         if a1<a2:
+#             return self.findKth(num1[k/2:], num2,k-k/2)
+#         else: #here could be a1>=a2
+#             return self.findKth(num1, num2[k/2:],k-k/2)
+
 # if __name__ == '__main__':
 # 	sk=Solution()
 # 	print sk.findMedianSortedArrays([1,2,3], [4,5,6])
@@ -1286,50 +1610,50 @@
 # Your algorithm should run in O(n) complexity.
 # Subscribe to see which companies asked this question
 
-class Solution(object):
-	def check_each_key(self,dct,i):
-		#i is the key already in dct
-		# if i not in dct:
-		# 	return None
-		count = 1
-		key = i
-		while key+1 in dct:
-			count += 1
-			key += 1
-			del dct[key]
-		key = i
-		while key-1 in dct:
-			count += 1
-			key -= 1
-			del dct[key]
-		return count
+# class Solution(object):
+# 	def check_each_key(self,dct,i):
+# 		#i is the key already in dct
+# 		# if i not in dct:
+# 		# 	return None
+# 		count = 1
+# 		key = i
+# 		while key+1 in dct:
+# 			count += 1
+# 			key += 1
+# 			del dct[key]
+# 		key = i
+# 		while key-1 in dct:
+# 			count += 1
+# 			key -= 1
+# 			del dct[key]
+# 		return count
 
 
-	def longestConsecutive(self, nums):
-		"""
-		:type nums: List[int]
-		:rtype: int
-		"""
-		total = len(nums)
-		if total<=1: return total
-		dct = {}
-		for i in nums:
-			dct[i] = 1
-		res = 0
-		# while total>0:
-		for i in nums:
-			if i in dct:
-				count = self.check_each_key(dct,i)
-				del dct[i]
-			res=max(res,count)
+# 	def longestConsecutive(self, nums):
+# 		"""
+# 		:type nums: List[int]
+# 		:rtype: int
+# 		"""
+# 		total = len(nums)
+# 		if total<=1: return total
+# 		dct = {}
+# 		for i in nums:
+# 			dct[i] = 1
+# 		res = 0
+# 		# while total>0:
+# 		for i in nums:
+# 			if i in dct:
+# 				count = self.check_each_key(dct,i)
+# 				del dct[i]
+# 			res=max(res,count)
 
-		return res
+# 		return res
 
-if __name__ == '__main__':
-	sk =Solution()
-	print sk.longestConsecutive([100, 4, 200, 1, 3, 2])
-	print sk.longestConsecutive([100,100,100])
-	print sk.longestConsecutive(range(10))
+# if __name__ == '__main__':
+# 	sk =Solution()
+# 	print sk.longestConsecutive([100, 4, 200, 1, 3, 2])
+# 	print sk.longestConsecutive([100,100,100])
+# 	print sk.longestConsecutive(range(10))
 
 
 
